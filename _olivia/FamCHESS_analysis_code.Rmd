@@ -1,0 +1,676 @@
+---
+title: "FamCHESS analysis for main outcomes paper"
+output:
+  html_document:
+    toc: yes
+    df_print: paged
+    toc_float: true
+    toc_depth: 2
+  html_notebook:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+
+#note: if include=FALSE, output from code won't be displayed in R-markdown document but the code is still evaluated
+
+library(haven)
+library(sjlabelled)
+library(dplyr)
+library(reshape2)
+library(kableExtra)
+library(fitdistrplus)
+library(lme4)
+library(DHARMa)
+library(sjPlot)
+
+
+FamCHESS <- read_sav("R:/Projects/FAM-CHESS/Data/Famchess_clean_combined_FINAL.sav") #you will need to change the path to match where you stored the data
+
+# Remove participants with inaccurate data
+# 167PT (baseline and 4 month): FAM passed away after baseline
+# 208FAM & 208PT (noted on all timepoints): Might be wholly unreliable since we suspect he is his own partner
+# 365PT (noted on 1 timepoint): Answered relationship questions about her dog, not her son
+# 365FAM (noted on 1 timepoint): Answered relationship questions about romantic partner, not his mom
+FamCHESS = FamCHESS %>%
+  filter(study_id != "167PT") %>%
+  filter(study_id != "208FAM") %>%
+  filter(study_id != "208PT") %>%
+  filter(study_id != "365PT") %>%
+  filter(study_id != "365FAM")
+
+
+#Make gender have 2 levels (male / non-male) - TLFB is also coded this way
+#195PT: prefer not to say reported on baseline but reported male in TLFB data. Changing to male to match TLFB
+FamCHESS$gender[FamCHESS$study_id == "195PT"] = 2
+#500PT: non-binary
+#128FAM: Transgender women
+FamCHESS$gender_original = FamCHESS$gender
+FamCHESS$gender = as.numeric(FamCHESS$gender)
+FamCHESS$gender[FamCHESS$gender != 2] = 1 #Non-male
+FamCHESS$gender = as.factor(FamCHESS$gender)
+#Check new gender factor against orginal data
+FamCHESS %>%
+  filter(Time == 0)%>%
+  dplyr::mutate(gender_label = sjlabelled::as_label(gender_original, .names = '{col}_label')) %>%
+  group_by(gender, gender_label)%>%
+  tally()
+
+
+#Create binary covariate for race/ethnicity defined as: white only vs. not only white
+FamCHESS$race_white_only[FamCHESS$ethnicity == 0 & FamCHESS$race___1 == 1 & FamCHESS$race___2 == 0 & FamCHESS$race___3 == 0 & FamCHESS$race___4 == 0 & FamCHESS$race___5 == 0 & FamCHESS$race___6 == 0] = 1 #"Yes"
+FamCHESS$race_white_only[is.na(FamCHESS$race_white_only)] = 0 # "No"
+
+
+#Formatting of variables for analysis
+#recode data to have baseline scores of outcomes as covariate
+Baseline_values = FamCHESS %>%
+  filter(Time == 0) %>%
+  dplyr::select(study_id, HDD_0 = Per.HeavyDrinkDays, PDA_0 = Per.DaysAbstinent, OQ45_0 = oq45_scored, relationsatisf_0 = relationsatisf_scored, abuse_0 = abuse_scored)
+
+FamCHESS_Analysis = FamCHESS %>%
+  filter(Time != 0)
+FamCHESS_Analysis = merge(FamCHESS_Analysis, Baseline_values, by = "study_id", all = T)
+
+#Time will be centered at the end of the intervention period (8 months). Center baseline values of outcomes
+FamCHESS_Analysis <- FamCHESS_Analysis %>%
+  dplyr::mutate(
+         study_id = factor(study_id),
+         HDD_0 = as.numeric(scale(HDD_0, scale = FALSE)),
+         PDA_0 = as.numeric(scale(HDD_0, scale = FALSE)),
+         OQ45_0 = as.numeric(scale(OQ45_0, scale = FALSE)),
+         relationsatisf_0 = as.numeric(scale(relationsatisf_0, scale = FALSE)),
+         abuse_0 = as.numeric(scale(abuse_0, scale = FALSE)),
+         Time = as.numeric(as.character(Time))-2)
+
+#center non-binary covariates: age and edu
+FamCHESS_Analysis <- FamCHESS_Analysis %>%
+  dplyr::mutate(
+         age_c = as.numeric(scale(age, scale = FALSE)),
+         edu_c = as.numeric(scale(edu, scale = FALSE))
+  )
+
+
+#create integer variable for heavy drinking days and days abstinent (needed for negative binomial model)
+FamCHESS_Analysis$r_HDD = round(FamCHESS_Analysis$Per.HeavyDrinkDays, digits = 0)
+FamCHESS_Analysis$r_HDD_0 = round(FamCHESS_Analysis$HDD_0, digits = 0)
+
+FamCHESS_Analysis$r_PDA = round(FamCHESS_Analysis$Per.DaysAbstinent, digits = 0)
+FamCHESS_Analysis$r_PDA_0 = round(FamCHESS_Analysis$PDA_0, digits = 0)
+
+
+#Set contrasts for arm
+#Currently contrasts
+FamCHESS_Analysis$Arm = as.factor(FamCHESS_Analysis$Arm)
+contrasts(FamCHESS_Analysis$Arm)
+
+#Change factor comparisons:
+col_names <- c(" Fam.&.ACHESS.vs.C", "ACHESS.vs.Fam")
+arm_contrasts <- matrix(c(-2/3, 1/3, 1/3, 0, 1/2, -1/2),
+                          nrow = 3, ncol = 2,
+                          dimnames = list(levels(FamCHESS_Analysis$Arm), col_names))
+
+#Set new comparisons
+FamCHESS_Analysis$Arm_c = FamCHESS_Analysis$Arm
+contrasts(FamCHESS_Analysis$Arm_c) <- arm_contrasts
+contrasts(FamCHESS_Analysis$Arm_c)
+
+
+
+
+```
+
+
+# **Quantitative Analysis**
+Below are the analyses and outcomes specified in the unpublished protocol paper. 
+
+**Assumptions and randomization effect:** Participants will be assigned at random, with constraints that study arms will have roughly equal proportions for our stratified variables (e.g., IP’s gender identity and alcohol use severity (moderate or severe AUD)). Variables will be examined using standard summary statistics, visualizations, and tests for normality and homoscedasticity. Data will be transformed as needed. 
+
+**Covariates:** We will consider several potential covariates. Those that significantly predict the outcome will be included in that model (models will only include covariates significant to that outcome). Those covariates include age, education, race/ethnicity, concurrent treatment (over time), and psychiatric treatment history (over time).
+
+*List of covariate variable names:*
+
+* race_white_only
+* age (age_c)
+* edu (edu_c)
+* Concurrent treatment variables:
+    + Meetings_YN
+    + Outpatient_YN_ever
+    + ER_YN_ever
+    + MAT_YN
+    + Inpatient_YN_ever
+
+* Psychiatric treatment history variables:
+    + Other_psych_treatment_yn
+    + healthservice_6 (yes/no)
+
+
+**Analysis of study arm effects:** Linear mixed models will be used to assess effects of study arm on each of our primary and secondary outcomes over time. There will be fixed effects for study arm, time, and their interaction. When applicable, a fixed effect will be added for the baseline values of the outcome variables. A by-subject random intercept and by-subject random slope for time will be included to accommodate the repeated measures on time. Time will be centered at the end of the intervention period (8 months). Baseline scores on the outcomes will be mean centered. 
+
+Study hypotheses will focus on the test of the parameter estimates for the two study arm effects. We will also test the study arm by time interaction to determine if the study arm effect is consistent or varies in magnitude over the intervention period. If significant study arm by time effects are observed, we will test simple effects of study arm at the timepoints (4, 8, and 12 months).
+We will consider a number of potential covariates as listed previously. Of this list, those variables that significantly predict our primary outcomes will be included in the final analysis.
+
+*Note:* We did not specify how to handle dyad. Below ran them separatly 
+
+**Analysis of mediators:** We will test for mediators of the study arm effects on our primary outcomes (IP % risky drinking days, dyad psychological distress) using the Joint Test of Significance method that has been recommended for its balance with respect to Type 1 and 2 error rates. To establish mediation, this method requires and simultaneously tests that both the effect of study arm on the mediator (α) and the effect of the mediator on the outcome (β) are jointly significant. Separate mediation analyses will be conducted for each combination of mediator and outcome. Measures of the mediators will be obtained at 4 months, and measures of the outcomes will be obtained at 8 months. Both mediator and outcome measures will be adjusted for their respective baseline values when baseline measures are available.
+
+**Analysis of moderators:** Analyses of study arm moderators including patient and partner gender (two variables, each man vs. women), type of relationship at baseline (romantic partner, family, other), partner relationship satisfaction (at baseline) will be conducted in follow-up analyses that add each moderator separately to the linear mixed models described above. Specifically, we will add fixed effects for the moderator and its interactions with study arm contrasts. Study hypotheses about moderation will focus on the test of the parameter estimates for the study arm contrasts by moderator interaction effects. 
+
+
+<br>
+
+
+<br>
+<br>
+
+
+# **Assumptions and randomization effect**
+
+## Assumption: normal distribution of outcomes
+```{r}
+#Function: Check normal distribution assumption
+#This function is for long data sets and requires the time variable be named "Time" and start at 0. Library package "fitdistrplus" must be loaded.
+
+check_norm_dist = function(df, outcome) {
+  ds = filter(df, Time == 0)
+  ds = filter(ds, !is.na(outcome))
+  ds = dplyr::pull(ds, outcome)
+  ds = c(na.omit(ds))
+  
+  fn = fitdist(ds, "norm")
+
+  par(mfrow = c(2, 2))
+  denscomp(list(fn))
+  qqcomp(list(fn))
+  cdfcomp(list(fn))
+  ppcomp(list(fn))
+}
+
+
+check_nb_dist = function(df, outcome) {
+  ds = filter(df, Time == 0)
+  ds = filter(ds, !is.na(outcome))
+  ds = dplyr::pull(ds, outcome)
+  ds = c(na.omit(ds))
+  
+  fn = fitdist(ds, "nbinom")
+
+  par(mfrow = c(2, 2))
+  denscomp(list(fn))
+  qqcomp(list(fn))
+  cdfcomp(list(fn))
+  ppcomp(list(fn))
+}
+
+```
+
+### Primary outcome: heavy drinking days
+```{r}
+#Outcomes (check distribution, this code uses only baseline values):
+#Primary: Per.HeavyDrinkDays, oq45_scored
+check_norm_dist(FamCHESS, "Per.HeavyDrinkDays") #might be a problem
+
+#normal distribution 
+model = lmer(Per.HeavyDrinkDays ~ Time*Arm_c + HDD_0 + (1 | study_id), data = filter(FamCHESS_Analysis, Dyad == 2)) #2 = patient 
+#Diagnostic check: 
+plot(simulateResiduals(model), rank = T) # doesn't look great
+
+#try as nb distribution
+check = FamCHESS %>%
+  mutate(hdd = Per.HeavyDrinkDays*100) #NB needs whole numbers
+check_nb_dist(check, "hdd") 
+
+model = glmer.nb(r_HDD ~ Time*Arm_c + r_HDD_0 + (1 | study_id), data = filter(FamCHESS_Analysis, Dyad == 2)) #convergence warning
+#Diagnostic check: 
+plot(simulateResiduals(model), rank = T) #This looks a bit better than the lmer model but there is a convergence warning (normal distribution)
+```
+- both normal and negative binomial models don't have great fit
+
+### Primary outcome: Dyad Psychological Distress
+```{r, include=F}
+check_norm_dist(FamCHESS, "oq45_scored") #looks normal
+```
+- appears to by a normal distribution 
+
+### Secondary outcome: IP Abstinence
+```{r, include=F}
+check_norm_dist(FamCHESS, "Per.DaysAbstinent")  # might be an issue
+#normal distribution 
+model = lmer(Per.DaysAbstinent ~ Time*Arm_c + PDA_0 + (1 | study_id), data = filter(FamCHESS_Analysis, Dyad == 2)) #2 = patient 
+#Diagnostic check: 
+plot(simulateResiduals(model), rank = T) # doesn't look great
+
+#try as nb distribution
+check = FamCHESS %>%
+  mutate(pad = Per.DaysAbstinent*100) #Needs whole numbers
+check_nb_dist(check, "pad") # looks worse
+
+```
+- appears to best fit a normal distribution?
+
+### Secondary outcome: Dyad Relationship Satisfaction
+```{r, include=F}
+check_norm_dist(FamCHESS, "relationsatisf_scored") # looks normal
+```
+- appears to by a normal distribution
+
+### Secondary outcome: Dyad Abusive behaviors
+```{r, include=F}
+check_norm_dist(FamCHESS, "abuse_scored") # might not be normal distribution 
+#normal distribution 
+model = lmer(abuse_scored ~ Time*Arm_c + abuse_0 + (1 | study_id), data = filter(FamCHESS_Analysis, Dyad == 1)) #1 = partner 
+#Diagnostic check: 
+plot(simulateResiduals(model), rank = T) # not good
+
+model = lmer(abuse_scored ~ Time*Arm_c + abuse_0 + (1 | study_id), data = filter(FamCHESS_Analysis, Dyad == 2)) #2 = patient 
+#Diagnostic check: 
+plot(simulateResiduals(model), rank = T) # 
+
+# Try nb distribution 
+check_nb_dist(check, "abuse_scored") #This looks better
+
+model = glmer.nb(abuse_scored ~ Time*Arm_c + abuse_0 + (1 | study_id), data = filter(FamCHESS_Analysis, Dyad == 1)) #1 = partner 
+#Diagnostic check: 
+plot(simulateResiduals(model), rank = T) # better
+
+model = glmer.nb(abuse_scored ~ Time*Arm_c + abuse_0 + (1 | study_id), data = filter(FamCHESS_Analysis, Dyad == 2)) #2 = patient 
+#Diagnostic check: 
+plot(simulateResiduals(model), rank = T) # better but convergence warining
+
+```
+- appears to by a negative binomial distribution
+
+### Mediators: CSO Couple alcohol-related communication
+```{r, include=F}
+check_norm_dist(FamCHESS, "treatmentskills_scored") # looks normal
+```
+- appears to by a normal distribution
+
+### Mediators: CSO Peer support
+```{r, include=F}
+check_norm_dist(FamCHESS, "peersupport_scored") # looks normal
+```
+- appears to by a normal distribution
+
+### Mediators: IP Motivation
+```{r, include=F}
+check_norm_dist(FamCHESS, "socrates_scored") # this looks more like a count variable, possibly convert into nb variable
+```
+- appears to by a normal distribution
+
+### Mediators: IP Extent of use of app
+```{r, include=F}
+#App use days has no values at baseline, code by hand:
+ds = FamCHESS %>%
+  filter(Time == 1) %>%
+  filter(!is.na(Days_app_use)) %>%
+  dplyr::pull(Days_app_use)
+ds = c(na.omit(ds))
+fn = fitdist(ds, "norm")
+par(mfrow = c(2, 2))
+denscomp(list(fn))
+qqcomp(list(fn))
+cdfcomp(list(fn))
+ppcomp(list(fn))
+
+#actually, the days of use is not too bad, could probably just treat as normal distribution 
+```
+- appears to by a normal distribution
+
+<br>
+
+## **Assumption of randomization:** study arms will have roughly equal proportions for our stratified variables 
+```{r}
+#study arms will have roughly equal proportions for our stratified variables 
+#IP’s gender identity 
+FamCHESS %>%
+  filter(Time == 0)%>%
+  group_by(Group, gender_original)%>%
+  tally()%>%
+  dplyr::mutate(gender_original = sjlabelled::as_label(gender_original))%>%
+  dplyr::mutate(Group = sjlabelled::as_label(Group))%>%
+  dcast(., gender_original ~ Group, value.var = "n")%>%
+  kbl(align='c') %>%   
+  kable_styling("striped", full_width = F, position = "left", font_size = 14) 
+
+#alcohol use severity (moderate or severe AUD) - DSM5
+Dsm5 <- read_sav("R:/Projects/FAM-CHESS/Data/FamCHESS_DSM5.sav") #you will need to change the path to match where you stored the data
+
+Dsm5 %>%
+  group_by(Group, dsm5_criteria)%>%
+  tally()%>%
+  dplyr::mutate(dsm5_criteria = sjlabelled::as_label(dsm5_criteria))%>%
+  dplyr::mutate(Group = sjlabelled::as_label(Group))%>%
+  dcast(., dsm5_criteria ~ Group, value.var = "n")%>%
+  kbl(align='c') %>%   
+  kable_styling("striped", full_width = F, position = "left", font_size = 14)
+
+
+```
+
+
+
+<br>
+<br>
+
+
+
+# **Primary Outcomes**
+
+## **IP % Risky Drinking Days**
+*	Time period: between survey dates
+*	Measure: Timeline follow-back
+*	Calculation Source: Beth
+*	Scored: R code, see Measures and Scales document
+*	Scored variable names: NDays, MeanDrinksPerDay, Per.DaysAbstinent, Per.DrinkDays, Per.HeavyDrinkDays
+*	Use “Per.HeavyDrinkDays” for this outcome
+
+```{r, eval=FALSE}
+# Step 0: check distribution - normal distribution and negative binomial not fitting great
+
+# Step 1: test for significant covariates to include
+
+
+```
+
+```{r}
+# Step 2: run final models
+
+```
+
+
+
+## **Dyad Psychological Distress**
+*	Measure: OQ45
+*	Variable names: oq45_#
+*	Time period asked about: in the last week
+*	Calculation Source: https://www.ehrs.com/forms/pei/oq45scoreguide.pdf
+*	Scored:
+      + Please note that the numeric values for items 1, 12, 13, 20, 21, 24, 31, 37, 43 are in reverse.
+      + Missing data: If a client leaves an item blank, use the average score for the remaining subscale items rounded to the nearest whole number in place of the missing value.
+      + This score is calculated by summing all 45 items.
+*	Possible Range: Range: 0-180
+*	Scored variable name: oq45_scored
+*	Interpretation:
+      + The higher the score, the more disturbed the client.
+      + Cut-off score: 63 or more – indicates symptoms of clinical significance
+      + A high score suggests that the client is admitting to a large number of symptoms of distress (mainly anxiety, depression, somatic problems and stress) as well as difficulties in interpersonal relationships, social role (such as work or school), and in their general quality of life.
+      + Reliable change: indicated when a client’s score changes by 14 points or more (useful if you give the OQ-45 at two different points in time).
+```{r, eval=FALSE}
+# Step 0: check distribution - normal distribution (see above)
+
+# Step 1: test for significant covariates to include
+
+#race (race_white_only) - not significant
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + race_white_only + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 1))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("race_white_only")) 
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + race_white_only + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 2))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("race_white_only")) 
+
+# age (age_c) - not significant 
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + age_c + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 1))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("age_c")) 
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + age_c + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 2))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("age_c")) 
+
+# edu (edu_c) - not significant (on the line for Partner)
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + edu_c + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 1))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("edu_c")) 
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + edu_c + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 2))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("edu_c")) 
+
+# Meetings_YN - not significant
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + Meetings_YN + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 1))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("Meetings_YN")) 
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + Meetings_YN + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 2))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("Meetings_YN")) 
+
+# Outpatient_YN_ever - not significant
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + Outpatient_YN_ever + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 1))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("Outpatient_YN_ever")) 
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + Outpatient_YN_ever + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 2))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("Outpatient_YN_ever")) 
+
+# ER_YN_ever - not significant
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + ER_YN_ever + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 1))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("ER_YN_ever")) 
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + ER_YN_ever + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 2))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("ER_YN_ever")) 
+
+# MAT_YN - not significant
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + MAT_YN + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 1))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("MAT_YN")) 
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + MAT_YN + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 2))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("MAT_YN")) 
+
+# Inpatient_YN_ever - not significant
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + Inpatient_YN_ever + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 1))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("Inpatient_YN_ever")) 
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + Inpatient_YN_ever + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 2))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("Inpatient_YN_ever")) 
+
+# Other_psych_treatment_yn - significant for partner (1)
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + Other_psych_treatment_yn + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 1))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("Other_psych_treatment_yn")) 
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + Other_psych_treatment_yn + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 2))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("Other_psych_treatment_yn")) 
+
+# healthservice_6 (yes/no) - significant for partner (1)
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + healthservice_6 + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 1))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("healthservice_6")) 
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + healthservice_6 + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 2))
+tab_model(model, show.re.var = F, show.icc = F, terms = c("healthservice_6")) 
+
+```
+
+```{r}
+# Step 2: run final models
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + Other_psych_treatment_yn + healthservice_6 + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 1)) #partner
+tab_model(model, show.re.var = F, show.icc = F, title = "Primary outcome: Partner Psychological Distress") 
+
+model = lmer(oq45_scored ~ Time*Arm_c + OQ45_0 + (1 + Time | study_id), data = filter(FamCHESS_Analysis, Dyad == 2)) #Patient
+tab_model(model, show.re.var = F, show.icc = F, title = "Primary outcome: Patient Psychological Distress") 
+
+```
+
+
+<br>
+<br>
+
+# **Secondary Outcomes**
+
+## **IP Abstinence**
+*	Measure: See above
+*	Use “Per.DaysAbstinent” for this outcome
+```{r, eval=FALSE}
+# Step 0: check distribution - normal distribution and negative binomial not fitting great, normal is fitting better than NB
+
+# Step 1: test for significant covariates to include
+
+
+```
+
+```{r}
+# Step 2: run final models
+
+```
+
+
+## **Dyad Relationship Satisfaction**
+*	Measure: DAS 7 both patient and partner
+*	Variable names: relationsatisf_#
+*	Time period asked about: No timeline given
+*	Calculation Source: https://www.eif.org.uk/files/resources/measure-report-ipr-das-7.pdf
+*	Scored: The total score for the DAS-7 is the sum of the responses to the seven items
+*	Possible Range: 0 to 36
+*	Scored variable name: relationsatisf_scored  (#8 is not included)
+*	Interpretation: Higher scores indicate more positive relationship quality. Scores less than 21 are considered to indicate a relationship in distress
+```{r, eval=FALSE}
+# Step 0: check distribution - normal distribution
+
+# Step 1: test for significant covariates to include
+
+
+```
+
+```{r}
+# Step 2: run final models
+
+```
+
+
+## **Dyad Abusive behaviors**
+*	Measure: Composite Abuse Scale Revised – Short Form (CASR-SF)
+*	Variable names: abuse_#_yes
+*	Time period asked about: Past 4 months
+*	Calculation Source: https://gtvincubator.uwo.ca/wp-content/uploads/2022/10/Wathen_CASrSF_FinalReport_Fall2022.pdf (see pg 34: Appendix 2: Scoring and Syntax for the 16-Item CASr-SF)
+*	Scored: SUM of all 16 items for cases where there are responses to at least 70% of items. 
+The source identifies ways to calculate for each type of abuse: physical, sexual, and psychological. For the purpose of this calculation, we are just totaling the frequencies of all answers where participants completed at least 11 of the questions. The syntax uses the case-specific mean of the remaining items to impute the value of missing responses. If a case does not contain responses to at least 70% of items, it should be counted as missing (no score computed).
+*	Possible Range: The possible range of scores is 0 to 80.
+*	Scored variable name: abuse_scored
+*	Interpretation: Higher scores indicate more violence
+```{r, eval=FALSE}
+# Step 0: check distribution - negative binomial distribution
+
+# Step 1: test for significant covariates to include
+
+
+```
+
+```{r}
+# Step 2: run final models
+
+```
+
+
+<br>
+<br>
+
+# **Mediators**
+
+## **CSO Couple alcohol-related communication**
+*	Measure: Use of ABCT treatment skills
+*	Variable names: treatmentskills_#_recode
+*	Time period asked about: past 4 months
+*	Calculation Source: Beth
+*	Scored: Average with dropping of does not apply questions
+*	Possible Range: 1-4
+*	Scored variable name: treatmentskills_scored
+*	Interpretation: Higher scores indicate (ask Beth)?
+
+## **CSO Peer support**
+*	Measure: Bonding Scale
+*	Variable names: bonding_#
+*	Time period asked about: past 4 months
+*	Calculation Source: CHESS
+*	Scored: Average
+*	Possible Range: 1-5
+*	Scored variable name: peersupport_scored
+*	Interpretation: Higher scores indicate more peer support
+
+## **IP Motivation**
+*	Measure: SOCRATES Abstinence Goal Survey - Taking steps subscale
+*	Variable names: socrates_#
+*	Time period asked about: “right now”
+*	Calculation Source: https://www.guilford.com/add/miller11_old/socrates.pdf?t=1
+*	Scored: sum of items:
+      + I have already started making some changes in my drinking.
+      + I was drinking too much at one time, but I’ve managed to change my drinking.
+      + I’m not just thinking about changing my drinking, I’m already doing something about it.
+      + I have already changed my drinking, and I am looking for ways to keep from slipping back to my old pattern
+      + I am actively doing things now to cut down or stop drinking.
+      + I want help to keep from going back to the drinking problems that I had before.
+      + I am working hard to change my drinking.
+      + I have made some changes in my drinking, and I want some help to keep from going back to the way I used to drink.
+*	Possible Range: see below
+*	Scored variable name: socrates_scored
+*	Interpretation: 
+    + Possible range 8-40
+    + HIGH scorers report that they are already doing things to make a positive change in their drinking and may have experienced some success in this regard. Change is underway, and they may want help to persist or to prevent backsliding. A high score on this scale has been found to be predictive of successful change. 
+    + LOW scorers report that they are not currently doing things to change their drinking and have not made such changes recently.
+
+## **IP Extent of use of app**
+*	Time period: between survey dates
+*	Calculation Source: CHESS
+*	Scored: Days of use, calculated with R code, see Measures and Scales document
+*	Scored variable name: Days_app_use
+*	Interpretation: Higher scores indicate more days of use of app
+
+
+
+<br>
+<br>
+
+# **Moderator**
+
+## **Gender**
+*	Variable name: gender, gender_open
+(not enough non-man/ women responses to have 3rd level. For patients, those who don’t fall into groups set to missing)
+*	Possible Responses:
+    + Woman
+    + Man
+    + Transgender Woman
+    + Transgender Man
+    + Non-binary
+    + Prefer to self-describe ___________
+    + Prefer not to say
+
+## **Type of relationship (some change over the course of the study)**
+*	Variable name: partner_relationship
+*	Possible Responses:
+    + Romantic partner/spouse
+    + Parent
+    + Adult child
+    + Other family member
+    + Friend
+    + Recovery Coach
+
+## **Partner Relationship Satisfaction**
+*	Measure: DAS-7 for partner at baseline
+*	Variable names: relationsatisf_#
+*	Time period asked about: No timeline given
+*	Calculation Source: https://www.eif.org.uk/files/resources/measure-report-ipr-das-7.pdf
+*	Scored: The total score for the DAS-7 is the sum of the responses to the seven items
+*	Possible Range: 0 to 36
+*	Scored variable name: relationsatisf_scored
+*	Interpretation: Higher scores indicate more positive relationship quality. Scores less than 21 are considered to indicate a relationship in distress
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
