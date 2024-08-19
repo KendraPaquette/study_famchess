@@ -1,0 +1,15 @@
+{
+  "hash": "86dc9057e8d7d2324507cc1b0c1803a8",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: famCHESS Primary Analyses\nauthor: Kendra Wyant\neditor_options: \n  chunk_output_type: console\n---\n\n\n\n\n\n\n\n\n## Notes\n\nThis script performs primary analyses for famCHESS study.\n\n\n## Setup\n\n\n\n\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code .hidden}\noptions(conflicts.policy = \"depends.ok\")\nlibrary(tidyverse)\n```\n\n::: {.cell-output .cell-output-stderr .hidden}\n\n```\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.1     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.1\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors\n```\n\n\n:::\n\n```{.r .cell-code .hidden}\ntheme_set(theme_classic()) \n\ndevtools::source_url(\"https://github.com/jjcurtin/lab_support/blob/main/format_path.R?raw=true\")\n```\n\n::: {.cell-output .cell-output-stderr .hidden}\n\n```\nℹ SHA-1 hash of file is \"a58e57da996d1b70bb9a5b58241325d6fd78890f\"\n```\n\n\n:::\n\n```{.r .cell-code .hidden}\npath_data <- format_path(\"studydata/famchess\")\n```\n:::\n\n\n\n\n\n\n\n\n\n## Data\n\n\n\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code .hidden}\ndata <- read_csv(here::here(path_data, \"famchess_data_ana.csv\"),\n                 show_col_types = FALSE)\n```\n:::\n\n\n\n\n\n\n\n\n\n## Analyses\n\nCreate contrasts  \n\n\n\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code .hidden}\ncol_names <- c(\"fam_and_achess_vs_C\", \"achess_vs_fam\")\narm_contrasts <- matrix(c(-2/3, 1/3, 1/3, 0, 1/2, -1/2),\n                          nrow = 3, ncol = 2,\n                          dimnames = list(levels(data$arm), col_names))\n\ndata <- data |> \n  mutate(arm_c = as.factor(arm))\n\ncontrasts(data$arm_c) <- arm_contrasts\ncontrasts(data$arm_c)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n  fam_and_achess_vs_C achess_vs_fam\n0          -0.6666667           0.0\n1           0.3333333           0.5\n2           0.3333333          -0.5\n```\n\n\n:::\n:::\n\n\n\n\n\n\n\n\n\n\nNote: use time_c in analyses",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
