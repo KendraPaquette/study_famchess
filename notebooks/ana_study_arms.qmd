@@ -1,0 +1,152 @@
+---
+title: famCHESS Study Arm Analyses
+author: Kendra Wyant
+editor_options: 
+  chunk_output_type: console
+---
+
+## Notes
+
+This script performs analyses of study arm effects for famCHESS study.
+
+
+## Setup
+
+```{r}
+options(conflicts.policy = "depends.ok")
+suppressMessages(library(tidyverse))
+library(Matrix, exclude = c("expand", "pack", "unpack"))
+library(lme4)
+theme_set(theme_classic()) 
+
+devtools::source_url("https://github.com/jjcurtin/lab_support/blob/main/format_path.R?raw=true")
+path_data <- format_path("studydata/famchess")
+```
+
+
+## Data
+```{r}
+data <- read_csv(here::here(path_data, "famchess_data_ana.csv"),
+                 show_col_types = FALSE)
+```
+
+
+## Analyses
+
+From protocol paper:   
+
+*Analysis of study arm effects. Linear mixed models will be used to assess effects of study arm on each of our primary and secondary outcomes over time. There will be fixed effects for study arm, time, and their interaction. When applicable, a fixed effect will be added for the baseline values of the outcome variables. A by-subject random intercept and by-subject random slope for time will be included to accommodate the repeated measures on time. Time will be measured quantitatively (in months) and centered at the end of the intervention period (8 months).  Baseline scores on the outcomes will be mean centered.*    
+
+*Study hypotheses will focus on the test of the parameter estimates for the two study arm effects. We will also test the study arm by time interaction to determine if the study arm effect is consistent or varies in magnitude over the intervention period. If significant study arm by time effects are observed, we will test simple effects of study arm at the timepoints (4, 8, and 12 months).*    
+
+*We will consider a number of potential covariates as listed previously. Of this list, those variables that significantly predict our primary outcomes will be included in the final analysis.*   
+
+
+patient primary outcome = `per_heavy_drink_days`   
+partner primary outcome = `oq45_scored`   
+
+patient secondary outcome = `per_days_abstinent`   
+partner secondary outcomes = `relationsatisf_scored` and `abuse_scored`    
+
+
+List of potential covariate variable names: `race_white_only`, `age_c`, `edu_c`, `meetings_yn`, `outpatient_yn_ever`, `er_yn_ever`, `mat_yn`, `inpatient_yn_ever`, `other_psych_treatment_yn`, `other_medications_yn`      
+
+
+### Create contrasts  
+```{r}
+col_names <- c("fam_and_achess_vs_C", "achess_vs_fam")
+arm_contrasts <- matrix(c(-2/3, 1/3, 1/3, 0, 1/2, -1/2),
+                          nrow = 3, ncol = 2,
+                          dimnames = list(levels(data$arm), col_names))
+
+data <- data |> 
+  mutate(arm_c = as.factor(arm))
+
+contrasts(data$arm_c) <- arm_contrasts
+contrasts(data$arm_c)
+```
+
+### Primary Patient Outcome: `per_heavy_drink_days` (Model 1)
+
+
+*Significant time by arm interaction*
+```{r}
+model_patient_prim <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
+                             inpatient_yn_ever + er_yn_ever +
+                             (1 + time_c | study_id), data = subset(data, dyad == 2))
+
+sjPlot::tab_model(model_patient_prim, show.re.var = F, show.icc = F)
+```
+
+### Primary Partner Outcome: `oq45_scored` (Model 2-3)
+
+Partner Dyad
+```{r}
+model_partner_prim_part <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + edu_c +
+                             outpatient_yn_ever + other_psych_treatment_yn +
+                             other_medications_yn +
+                             (1 + time_c | study_id), data = subset(data, dyad == 1))
+sjPlot::tab_model(model_partner_prim_part, show.re.var = F, show.icc = F)
+```
+
+Patient Dyad   
+
+*sig arm effect*
+```{r}
+model_partner_prim_pat <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + mat_yn +
+                             (1 + time_c | study_id), data = subset(data, dyad == 2))
+sjPlot::tab_model(model_partner_prim_pat, show.re.var = F, show.icc = F)
+```
+
+### Secondary Patient Outcome: `per_days_abstinent` (Model 3)
+
+```{r}
+model_patient_sec <- lmer(per_days_abstinent ~ time_c*arm_c + pda_0 +
+                            outpatient_yn_ever + meetings_yn +
+                            inpatient_yn_ever + (1 + time_c | study_id), 
+                                data = subset(data, dyad == 2))
+sjPlot::tab_model(model_patient_sec, show.re.var = F, show.icc = F)
+```
+
+#### Secondary Partner Outcome 1: `relationsatisf_scored` (Model 4-5)
+
+Partner Dyad
+```{r}
+model_partner_sec_1_part <- lmer(relationsatisf_scored ~ time_c*arm_c + 
+                                   relationsatisf_0 + inpatient_yn_ever +
+                             (1 + time_c | study_id), 
+                             data = subset(data, dyad == 1))
+sjPlot::tab_model(model_partner_sec_1_part, show.re.var = F, show.icc = F)
+```
+
+Patient Dyad
+```{r}
+model_partner_sec_1_pat <- lmer(relationsatisf_scored ~ time_c*arm_c + 
+                                   relationsatisf_0 + edu_c +
+                             (1 + time_c | study_id), 
+                             data = subset(data, dyad == 2))
+sjPlot::tab_model(model_partner_sec_1_pat, show.re.var = F, show.icc = F)
+```
+
+#### Secondary Partner Outcome 2: `abuse_scored` (Model 6)
+
+*Note: large amount of missing data for this outcome*
+```{r}
+model_partner_sec_2 <- lmer(abuse_scored ~ time_c*arm_c + abuse_0 + mat_yn +
+                                   inpatient_yn_ever + (1 + time_c | study_id), 
+                                 data = subset(data, dyad == 1))
+sjPlot::tab_model(model_partner_sec_2, show.re.var = F, show.icc = F)
+```
+
+```{r}
+data |> 
+  filter(dyad == 1) |> 
+  select(abuse_scored, abuse_0) |> 
+  naniar::miss_var_summary()
+
+data |> 
+  filter(dyad == 2) |> 
+  select(abuse_scored, abuse_0) |> 
+  naniar::miss_var_summary()
+```
+
