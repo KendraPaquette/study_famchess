@@ -1,5 +1,5 @@
 ---
-title: famCHESS EDA
+title: famCHESS Cleaning EDA
 author: Kendra Wyant
 editor_options: 
   chunk_output_type: console
@@ -16,6 +16,8 @@ This script reads in the cleaned famCHESS data and performs EDA on final variabl
 options(conflicts.policy = "depends.ok")
 suppressMessages(library(tidyverse))
 suppressMessages(library(janitor))
+library(Matrix, exclude = c("expand", "pack", "unpack"))
+library(lme4)
 theme_set(theme_classic()) 
 
 devtools::source_url("https://github.com/jjcurtin/lab_support/blob/main/format_path.R?raw=true")
@@ -92,13 +94,16 @@ data <- data |>
   mutate(age_c = age - mean(age, na.rm = TRUE))
 ```
 
-*KW: education is not continuous. Is centering best transformation? Maybe instead pick a certain level?*
+*KW: education is not continuous. Is centering best transformation? Maybe instead pick a certain level? Centering on mean for now*
 ```{r}
 sjlabelled::get_labels(data$edu)
 
 mean(data$edu, na.rm = TRUE)
 
 tabyl(data$edu)
+
+data <- data |> 
+  mutate(edu_c = edu - mean(edu, na.rm = TRUE))
 ```
 
 Recode data to have baseline scores of outcomes as covariate   
@@ -176,21 +181,13 @@ data <- data |>
 ```
 
 
-Create integer variable for heavy drinking days and days abstinent (baseline and followup values) - needed for negative binomial model
-```{r}
-data <- data |> 
-  mutate(r_hdd = round(per_heavy_drink_days),
-         r_hdd_0 = round(hdd_0),
-         r_pda = round(per_days_abstinent),
-         r_pda_0 = round(pda_0))
-```
-
-
 ### EDA
 
-Remove vars not used in analyses (e.g., keep scale score and remove individual items).
+Remove vars not used in analyses (e.g., keep scale score and remove individual items).   
 
-*KW: phq, promis, loneliness, coping, interaction scales not scored or in measures doc. Removed from analyses data set.*
+*KW: COVID acute/residual symptoms was originally listed as covariate but was removed per measures doc (Participants interpreted question differently).*  
+
+*KW: phq, promis, loneliness, coping, interaction scales not scored or in measures doc. Removed from analyses data set.*  
 
 ```{r}
 data <- data |> 
@@ -207,10 +204,10 @@ data <- data |>
             socrates_1:socrates_20, coping_1:coping_25, 
             drinkinggoals:drinkinggoal_7_text, covid_1:covid_3f,
             interaction_1:interaction_20, drink_druguse_1:drinkdruguse_8d,
-            abuse_0, employmentstatus:notemployed_open, ethnicity:race_open, 
-            livewith_1:livewith_open, meetings_yn, er_yn, outpatient_yn, inpatient_yn,
-            n_days, mean_drinks_per_day, per_drink_days, covid_scored,
-            redcap_event_name, recruitment_id)) |> 
+            employmentstatus:notemployed_open, ethnicity:race_open, 
+            livewith_1:livewith_open, er_yn, outpatient_yn, 
+            inpatient_yn, n_days, mean_drinks_per_day, per_drink_days, 
+            covid_scored,redcap_event_name, recruitment_id)) |> 
   rename(other_medications_yn = healthservice_6,
          readmits_yn = r_eadmits_yn) |>  # renaming for descriptive/consistency
   relocate(study_id) |> 
@@ -372,8 +369,8 @@ data |>
 univariate descriptives of covariates, mediators, moderators and outcome variables
 ```{r}
 data |> 
-  select(age, edu, days_app_use:r_pda_0, -gender_original, -age_c, 
-         -relationship_status, - relationship_status_open, -c(time_c:r_pda_0)) |> 
+  select(age, edu, days_app_use:abuse_0, -gender_original, -age_c, 
+         -relationship_status, - relationship_status_open) |> 
   skimr::skim()
 ```
 
@@ -381,39 +378,14 @@ Bivariate correlations for Patient
 
 *KW: simplify?*    
 
-Notes:   
-
-patient primary outcome = `per_heavy_drink_days`   
-partner primary outcome = `oq45_scored`   
-
-patient secondary outcome = `per_days_abstinent`   
-partner secondary outcomes = `relationsatisf_scored` and `abuse_scored`    
-
 ```{r}
 data |> 
   filter(dyad == 2) |> 
-  select(age, edu, days_app_use:r_pda_0, -gender_original, -age_c,
+  select(age, edu, days_app_use:abuse_0, -gender_original, -age_c,
          -treatmentskills_scored, -relationship_status, 
-         -relationship_status_open, -c(time_c:r_pda_0)) |> 
+         -relationship_status_open) |> 
   cor(use = "pairwise.complete.obs") |> 
   round(2)
-```
-
-
-Look for significant covariates (We will only include covariates that significantly predict the outcome).         
-
-List of covariate variable names: race_white_only, age_c, edu_c, meetings_yn, outpatient_yn_ever, er_yn_ever, mat_yn, inpatient_yn_ever, other_psych_treatment_yn, other_medications_yn   
-
-*KW: COVID acute/residual symptoms was originally listed as covariate but is removed per measures doc (Participants interpreted question differently).*
-
-```{r}
-
-```
-
-Check distribution of residuals
-
-```{r}
-
 ```
 
 

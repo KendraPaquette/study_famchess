@@ -16,6 +16,8 @@ This script reads in the cleaned famCHESS data and performs EDA on final variabl
 options(conflicts.policy = "depends.ok")
 suppressMessages(library(tidyverse))
 suppressMessages(library(janitor))
+library(Matrix, exclude = c("expand", "pack", "unpack"))
+library(lme4)
 theme_set(theme_classic()) 
 
 devtools::source_url("https://github.com/jjcurtin/lab_support/blob/main/format_path.R?raw=true")
@@ -92,13 +94,16 @@ data <- data |>
   mutate(age_c = age - mean(age, na.rm = TRUE))
 ```
 
-*KW: education is not continuous. Is centering best transformation? Maybe instead pick a certain level?*
+*KW: education is not continuous. Is centering best transformation? Maybe instead pick a certain level? Centering on mean for now*
 ```{r}
 sjlabelled::get_labels(data$edu)
 
 mean(data$edu, na.rm = TRUE)
 
 tabyl(data$edu)
+
+data <- data |> 
+  mutate(edu_c = edu - mean(edu, na.rm = TRUE))
 ```
 
 Recode data to have baseline scores of outcomes as covariate   
@@ -176,21 +181,13 @@ data <- data |>
 ```
 
 
-Create integer variable for heavy drinking days and days abstinent (baseline and followup values) - needed for negative binomial model
-```{r}
-data <- data |> 
-  mutate(r_hdd = round(per_heavy_drink_days),
-         r_hdd_0 = round(hdd_0),
-         r_pda = round(per_days_abstinent),
-         r_pda_0 = round(pda_0))
-```
-
-
 ### EDA
 
-Remove vars not used in analyses (e.g., keep scale score and remove individual items).
+Remove vars not used in analyses (e.g., keep scale score and remove individual items).   
 
-*KW: phq, promis, loneliness, coping, interaction scales not scored or in measures doc. Removed from analyses data set.*
+*KW: COVID acute/residual symptoms was originally listed as covariate but was removed per measures doc (Participants interpreted question differently).*  
+
+*KW: phq, promis, loneliness, coping, interaction scales not scored or in measures doc. Removed from analyses data set.*  
 
 ```{r}
 data <- data |> 
@@ -207,10 +204,10 @@ data <- data |>
             socrates_1:socrates_20, coping_1:coping_25, 
             drinkinggoals:drinkinggoal_7_text, covid_1:covid_3f,
             interaction_1:interaction_20, drink_druguse_1:drinkdruguse_8d,
-            abuse_0, employmentstatus:notemployed_open, ethnicity:race_open, 
-            livewith_1:livewith_open, meetings_yn, er_yn, outpatient_yn, inpatient_yn,
-            n_days, mean_drinks_per_day, per_drink_days, covid_scored,
-            redcap_event_name, recruitment_id)) |> 
+            employmentstatus:notemployed_open, ethnicity:race_open, 
+            livewith_1:livewith_open, er_yn, outpatient_yn, 
+            inpatient_yn, n_days, mean_drinks_per_day, per_drink_days, 
+            covid_scored,redcap_event_name, recruitment_id)) |> 
   rename(other_medications_yn = healthservice_6,
          readmits_yn = r_eadmits_yn) |>  # renaming for descriptive/consistency
   relocate(study_id) |> 
@@ -372,8 +369,8 @@ data |>
 univariate descriptives of covariates, mediators, moderators and outcome variables
 ```{r}
 data |> 
-  select(age, edu, days_app_use:r_pda_0, -gender_original, -age_c, 
-         -relationship_status, - relationship_status_open, -c(time_c:r_pda_0)) |> 
+  select(age, edu, days_app_use:abuse_0, -gender_original, -age_c, 
+         -relationship_status, - relationship_status_open) |> 
   skimr::skim()
 ```
 
@@ -381,7 +378,18 @@ Bivariate correlations for Patient
 
 *KW: simplify?*    
 
-Notes:   
+```{r}
+data |> 
+  filter(dyad == 2) |> 
+  select(age, edu, days_app_use:abuse_0, -gender_original, -age_c,
+         -treatmentskills_scored, -relationship_status, 
+         -relationship_status_open) |> 
+  cor(use = "pairwise.complete.obs") |> 
+  round(2)
+```
+
+
+### Check Assumptions for Analyses of Study Arm Effects 
 
 patient primary outcome = `per_heavy_drink_days`   
 partner primary outcome = `oq45_scored`   
@@ -389,32 +397,311 @@ partner primary outcome = `oq45_scored`
 patient secondary outcome = `per_days_abstinent`   
 partner secondary outcomes = `relationsatisf_scored` and `abuse_scored`    
 
+*KW: Cannot run primary and secondary patient models for partners (outcomes don't exist). We could run primary and secondary partner models for patients, but why would we want to do this?*   
+
+List of potential covariate variable names: `race_white_only`, `age_c`, `edu_c`, `meetings_yn`, `outpatient_yn_ever`, `er_yn_ever`, `mat_yn`, `inpatient_yn_ever`, `other_psych_treatment_yn`, `other_medications_yn`      
+
+Set contrasts
 ```{r}
-data |> 
-  filter(dyad == 2) |> 
-  select(age, edu, days_app_use:r_pda_0, -gender_original, -age_c,
-         -treatmentskills_scored, -relationship_status, 
-         -relationship_status_open, -c(time_c:r_pda_0)) |> 
-  cor(use = "pairwise.complete.obs") |> 
-  round(2)
+col_names <- c("fam_and_achess_vs_C", "achess_vs_fam")
+arm_contrasts <- matrix(c(-2/3, 1/3, 1/3, 0, 1/2, -1/2),
+                          nrow = 3, ncol = 2,
+                          dimnames = list(levels(data$arm), col_names))
+
+data <- data |> 
+  mutate(arm_c = as.factor(arm))
+
+contrasts(data$arm_c) <- arm_contrasts
+contrasts(data$arm_c)
 ```
 
 
-Look for significant covariates (We will only include covariates that significantly predict the outcome).         
+#### Primary Patient Outcome: `per_heavy_drink_days`
 
-List of covariate variable names: race_white_only, age_c, edu_c, meetings_yn, outpatient_yn_ever, er_yn_ever, mat_yn, inpatient_yn_ever, other_psych_treatment_yn, other_medications_yn   
+##### Check distribution of residuals
 
-*KW: COVID acute/residual symptoms was originally listed as covariate but is removed per measures doc (Participants interpreted question differently).*
-
+*KW: seems normal enough?*
 ```{r}
+model_patient_prim <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
+                             (1 + time_c | study_id), data = subset(data, dyad == 2))
 
+tibble(error = residuals(model_patient_prim)) |> 
+  ggplot(aes(x = error)) +
+  geom_histogram(color = "black", fill = "light grey", bins = 30)
 ```
 
-Check distribution of residuals
 
+##### Look for significant covariates (We will only include covariates that significantly predict the outcome).         
+
+`race_white_only` - not significant
 ```{r}
+model_patient_prim_race <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
+                                  race_white_only + (1 + time_c | study_id), 
+                                data = subset(data, dyad == 2))
 
+sjPlot::tab_model(model_patient_prim_race, show.re.var = F, show.icc = F, terms = c("race_white_only"))
 ```
+
+`age_c` - not significant
+```{r}
+model_patient_prim_age <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
+                                  age_c + (1 + time_c | study_id), 
+                                data = subset(data, dyad == 2))
+
+sjPlot::tab_model(model_patient_prim_age, show.re.var = F, show.icc = F, terms = c("age_c"))
+```
+
+`edu_c` - not significant
+```{r}
+model_patient_prim_edu <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
+                                  edu_c + (1 + time_c | study_id), 
+                                data = subset(data, dyad == 2))
+
+sjPlot::tab_model(model_patient_prim_edu, show.re.var = F, show.icc = F, terms = c("edu_c"))
+```
+
+`meetings_yn` - not significant
+```{r}
+model_patient_prim_meetings <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
+                                  meetings_yn + (1 + time_c | study_id), 
+                                data = subset(data, dyad == 2))
+
+sjPlot::tab_model(model_patient_prim_meetings, show.re.var = F, show.icc = F, terms = c("meetings_yn"))
+```
+
+`outpatient_yn_ever` - not significant
+```{r}
+model_patient_prim_outpatient <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
+                                  outpatient_yn_ever + (1 + time_c | study_id), 
+                                data = subset(data, dyad == 2))
+
+sjPlot::tab_model(model_patient_prim_outpatient, show.re.var = F, show.icc = F, terms = c("outpatient_yn_ever"))
+```
+
+`er_yn_ever` - **significant**
+```{r}
+model_patient_prim_er <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
+                                er_yn_ever + (1 + time_c | study_id), 
+                                data = subset(data, dyad == 2))
+
+sjPlot::tab_model(model_patient_prim_er, show.re.var = F, show.icc = F, terms = c("er_yn_ever"))
+```
+
+`mat_yn` - not significant
+```{r}
+model_patient_prim_mat <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
+                                mat_yn + (1 + time_c | study_id), 
+                                data = subset(data, dyad == 2))
+
+sjPlot::tab_model(model_patient_prim_mat, show.re.var = F, show.icc = F, terms = c("mat_yn"))
+```
+
+`inpatient_yn_ever` - **significant**
+```{r}
+model_patient_prim_inpatient <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
+                                inpatient_yn_ever + (1 + time_c | study_id), 
+                                data = subset(data, dyad == 2))
+
+sjPlot::tab_model(model_patient_prim_inpatient, show.re.var = F, show.icc = F, terms = c("inpatient_yn_ever"))
+```
+
+`other_psych_treatment_yn` - not significant
+```{r}
+model_patient_prim_psych <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
+                                other_psych_treatment_yn + (1 + time_c | study_id), 
+                                data = subset(data, dyad == 2))
+
+sjPlot::tab_model(model_patient_prim_psych, show.re.var = F, show.icc = F, terms = c("other_psych_treatment_yn"))
+```
+
+`other_medications_yn` - not significant
+```{r}
+model_patient_prim_psych_meds <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
+                                other_medications_yn + (1 + time_c | study_id), 
+                                data = subset(data, dyad == 2))
+
+sjPlot::tab_model(model_patient_prim_psych_meds, show.re.var = F, show.icc = F, terms = c("other_medications_yn"))
+```
+
+
+##### Final Model with Significant Covariates
+```{r}
+model_patient_prim <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
+                             inpatient_yn_ever + er_yn_ever +
+                             (1 + time_c | study_id), data = subset(data, dyad == 2))
+
+sjPlot::tab_model(model_patient_prim, show.re.var = F, show.icc = F)
+```
+
+
+#### Primary Partner Outcome: `oq45_scored`
+
+Distribution of residuals    
+*KW: Looks fine*
+```{r}
+model_partner_prim <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
+                             (1 + time_c | study_id), data = subset(data, dyad == 1))
+
+tibble(error = residuals(model_partner_prim)) |> 
+  ggplot(aes(x = error)) +
+  geom_histogram(color = "black", fill = "light grey", bins = 30)
+```
+
+##### Look for significant covariates (We will only include covariates that significantly predict the outcome).         
+
+`race_white_only` - not significant
+```{r}
+model_partner_prim_race <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + race_white_only +
+                             (1 + time_c | study_id), data = subset(data, dyad == 1))
+
+sjPlot::tab_model(model_partner_prim_race, show.re.var = F, show.icc = F, terms = c("race_white_only"))
+```
+
+`age_c` - not significant
+```{r}
+model_partner_prim_age <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + age_c +
+                             (1 + time_c | study_id), 
+                             data = subset(data, dyad == 1))
+
+sjPlot::tab_model(model_partner_prim_age, show.re.var = F, show.icc = F, terms = c("age_c"))
+```
+
+`edu_c` - **significant**
+```{r}
+model_partner_prim_edu <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + edu_c +
+                             (1 + time_c | study_id), 
+                             data = subset(data, dyad == 1))
+
+sjPlot::tab_model(model_partner_prim_edu, show.re.var = F, show.icc = F, terms = c("edu_c"))
+```
+
+`meetings_yn` - not significant
+```{r}
+model_partner_prim_meetings <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + meetings_yn +
+                             (1 + time_c | study_id), 
+                             data = subset(data, dyad == 1))
+
+sjPlot::tab_model(model_partner_prim_meetings, show.re.var = F, show.icc = F, terms = c("meetings_yn"))
+```
+
+`outpatient_yn_ever` - **significant**
+```{r}
+model_partner_prim_outpatient <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
+                                       outpatient_yn_ever + (1 + time_c | study_id), 
+                                 data = subset(data, dyad == 1))
+
+sjPlot::tab_model(model_partner_prim_outpatient, show.re.var = F, show.icc = F, terms = c("outpatient_yn_ever"))
+```
+
+`er_yn_ever` - Not significant
+```{r}
+model_partner_prim_er <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
+                              er_yn_ever + (1 + time_c | study_id), 
+                          data = subset(data, dyad == 1))
+
+sjPlot::tab_model(model_partner_prim_er, show.re.var = F, show.icc = F, terms = c("er_yn_ever"))
+```
+
+`mat_yn` - not significant
+```{r}
+model_partner_prim_mat <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
+                              mat_yn + (1 + time_c | study_id), 
+                          data = subset(data, dyad == 1))
+
+sjPlot::tab_model(model_partner_prim_mat, show.re.var = F, show.icc = F, terms = c("mat_yn"))
+```
+
+`inpatient_yn_ever` - not significant 
+```{r}
+model_partner_prim_inpatient <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
+                              inpatient_yn_ever + (1 + time_c | study_id), 
+                          data = subset(data, dyad == 1))
+
+sjPlot::tab_model(model_partner_prim_inpatient, show.re.var = F, show.icc = F, terms = c("inpatient_yn_ever"))
+```
+
+`other_psych_treatment_yn` - **significant**
+```{r}
+model_partner_prim_psych <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
+                              other_psych_treatment_yn + (1 + time_c | study_id), 
+                          data = subset(data, dyad == 1))
+
+sjPlot::tab_model(model_partner_prim_psych, show.re.var = F, show.icc = F, terms = c("other_psych_treatment_yn"))
+```
+
+`other_medications_yn` - **significant**
+```{r}
+model_partner_prim_psych_meds <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
+                              other_medications_yn + (1 + time_c | study_id), 
+                          data = subset(data, dyad == 1))
+
+sjPlot::tab_model(model_partner_prim_psych_meds, show.re.var = F, show.icc = F, terms = c("other_medications_yn"))
+```
+
+
+##### Final Model with Significant Covariates
+```{r}
+model_partner_prim <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + edu_c +
+                             outpatient_yn_ever + other_psych_treatment_yn +
+                             other_medications_yn +
+                             (1 + time_c | study_id), data = subset(data, dyad == 1))
+
+sjPlot::tab_model(model_partner_prim, show.re.var = F, show.icc = F)
+```
+
+
+
+#### Secondary Patient Outcome: `per_days_abstinent` 
+
+Distribution of residuals   
+*Looks fine*
+```{r}
+model_patient_sec <- lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + 
+                             (1 + time_c | study_id), data = subset(data, dyad == 2))
+
+tibble(error = residuals(model_patient_sec)) |> 
+  ggplot(aes(x = error)) +
+  geom_histogram(color = "black", fill = "light grey", bins = 30)
+```
+
+
+#### Secondary Partner Outcome 1: `relationsatisf_scored`
+
+Distribution of residuals  
+```{r}
+model_partner_sec_1 <- lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + 
+                             (1 + time_c | study_id), data = subset(data, dyad == 1))
+
+tibble(error = residuals(model_partner_sec_1)) |> 
+  ggplot(aes(x = error)) +
+  geom_histogram(color = "black", fill = "light grey", bins = 30)
+```
+
+#### Secondary Partner Outcome 2: `abuse_scored`
+
+Distribution of residuals    
+*KW: Look into potential outliers?*
+```{r}
+model_partner_sec_2 <- lmer(abuse_scored ~ time_c*arm_c + abuse_0 +
+                             (1 + time_c | study_id), data = subset(data, dyad == 1))
+
+tibble(error = residuals(model_partner_sec_2)) |> 
+  ggplot(aes(x = error)) +
+  geom_histogram(color = "black", fill = "light grey", bins = 30)
+```
+
+
+### Check Assumptions for Analyses of Mediators
+
+**KW: mediators only for primary outcomes**   
+
+List of mediators: 
+
+### Check Assumptions for Analyses of Moderators 
+
+**KW: moderators only for primary outcomes**   
+
+List of moderators:
 
 
 ### Save out processed data for analyses
