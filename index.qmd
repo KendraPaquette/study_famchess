@@ -1,33 +1,8 @@
 ---
-title: A Super Cool Study - Take 2
+title: FamCHESS Results
 author:
-  - name: Josephine Student 
-    orcid: 0000-0002-7859-8394
-    corresponding: false
-    roles: []
-    affiliations:
-      - Department of Psychology, University of Wisconsin-Madison
+  - name: Kendra Wyant
   - name: John J. Curtin 
-    orcid: 0000-0002-3286-938X
-    corresponding: true
-    email: jjcurtin@wisc.edu
-    roles:
-      - Investigation
-      - Project administration
-      - Software
-      - Visualization
-    affiliations:
-      - Department of Psychology, University of Wisconsin-Madison 
-keywords:
-  - Substance use disorders
-  - Precision mental health 
-abstract: |
-  This study found some pretty cool results that have both high impact and important clinical implications.  For example ...
-plain-language-summary: |
-  The ARC produces some of the best science around! ...
-key-points:
-  - Take away point 1 
-  - Take away point 2
 date: last-modified
 bibliography: references.bib
 citation:
@@ -37,120 +12,44 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Introduction
-
-You can write your text using markdown.  
-
-- Top level section headings use ## because # is reserved for the manuscript title. 
-- APA (and other?) formats support ##, ###, and #### at least.
-
-
-### Sub-heading - level 3
-
-This is the ### level
-
-
-#### Sub-heading - level 4
-
-This is the #### level
-
-
-##### Sub-heading - level 5
-
-This is the ##### level
-
-
-### Symbols and Equations
-
-You can use quarto inline or display math equations as needed.  Quarto provides [details](https://quarto.org/docs/authoring/markdown-basics.html#equations) on the use of these equations.
-
-For example $x$ and $y$ are two variables. And here is an important formula:
-
-$$
-p(x) = \frac{e^{-\lambda} \lambda^{x}}{x !}
-$$ 
-
-
-### Citations & References
-
-We can use cite relevant research in multiple formats.  The two most common are: 
-
-- @knuth84 concluded something.  
-- These are the conclusions[@knuth84].
-
-Article references are stored in a .bib file using betterbibtex (BBT) format.  We create these references in Zotero collections.
-
-Although we don't do this regularly I think, if needed you can reference figures elsewhere using the @ symbol.   Here is a reference to @fig-1
-
-
-## Methods
-
-This is the methods section.
-
-
 ## Results
 
-Results include
+### Demographics
 
-- Markdown text
-- Figures from data
-- Figures from images (maybe included table images)
-- Analysis output (i.e. statistics)
+### Study Arm Effects
 
-We demonstrate each (other than markdown text, which you should know!) below
+From Protocol Paper:   
 
+*Linear mixed models will be used to assess effects of study arm on each of our primary and secondary outcomes over time. There will be fixed effects for study arm, time, and their interaction. When applicable, a fixed effect will be added for the baseline values of the outcome variables. A by-subject random intercept and by-subject random slope for time will be included to accommodate the repeated measures on time. Time will be measured quantitatively (in months) and centered at the end of the intervention period (8 months).  Baseline scores on the outcomes will be mean centered.*  
 
-### Data Figures
+*Study hypotheses will focus on the test of the parameter estimates for the two study arm effects. We will also test the study arm by time interaction to determine if the study arm effect is consistent or varies in magnitude over the intervention period. If significant study arm by time effects are observed, we will test simple effects of study arm at the timepoints (4, 8, and 12 months).*  
 
-Figures are also generally created in separate notebooks and embedded into your manuscript.
+*We will consider a number of potential covariates as listed previously. Of this list, those variables that significantly predict our primary outcomes will be included in the final analysis.*
 
-{{< embed notebooks/fig1.qmd#fig-1 >}}
+#### Primary Outcomes
 
-### Figures from images
+#### Secondary Outcomes
 
-Images from figures can be included using the standard code to insert image files.  These images should generally be saved in the image folder at the root of the study template by convention.  The quarto website provides [additional details](https://quarto.org/docs/authoring/figures.html)
+### Mediator Effects
 
-![ARC Logo](images/arc_logo.png){#fig-2}
+From Protocol Paper:  
 
-### Tables
+*We will test for mediators of the study arm effects on our primary outcomes (IP % risky drinking days, dyad psychological distress) using the Joint Test of Significance method that has been recommended for its balance with respect to Type 1 and 2 error rates.a,b  To establish mediation, this method requires and simultaneously tests that both the effect of study arm on the mediator (α) and the effect of the mediator on the outcome (β) are jointly significant. Separate mediation analyses will be conducted for each combination of mediator and outcome. Measures of the mediators will be obtained at 4 months, and measures of the outcomes will be obtained at 8 months. Both mediator and outcome measures will be adjusted for their respective baseline values when baseline measures are available.*
 
-We create tables using the kableExtra package.  We are working on the optimal method to embed these from notebooks.  It may be to save the tables as high res image files and then embed those images.  Stay tuned.
+### Moderator Effects
 
-Alternatively, this is an example of a simple table that is hard-coded using markdown table format.  We don't recommend this for tables built from data. Tables values should come directly from data so they don't need to be typed in and will update if your data change.  However, you may have other uses for simple tables where this method is helpful.
+From Protocol Paper:  
 
-| Name                | Year |
-|---------------------|------|
-| Current             | 2021 |
-| Teneguía            | 1971 |
-| Nambroque           | 1949 |
-| El Charco           | 1712 |
-| Volcán San Antonio  | 1677 |
-| Volcán San Martin   | 1646 |
-| Tajuya near El Paso | 1585 |
-| Montaña Quemada     | 1492 |
-
-: Recent historic eruptions on La Palma {#tbl-history}
-
-### Analysis Results
-
-To add results that are not figures or tables, you will need to open the objects you saved from these analyses.  See lm.qmd as an example. Generally you will open csv files that contain tidied results. For example
-```{r}
-library(tidyverse)
-
-coeffs <- read_csv(here::here("objects/coeff_table.csv"),
-                   col_types = cols())
-```
-
-A significant effect of speed was observed ($\beta$ = `r sprintf("%1.1f", coeffs |> filter(term == "speed") |> pull(estimate))`, t = `r sprintf("%1.2f", coeffs |> filter(term == "speed") |> pull(statistic))`, p = `r sprintf("%1.3f", coeffs |> filter(term == "speed") |> pull(p.value))`).
-
-NOTES: 
-
-- We should write a function that works with tidied coeffs tables and takes the row, column, and number of decimal  places to make this code simpler.
-- This table doesnt contain df.  Need to add that to table when saving in lm
+*Analyses of study arm moderators including patient and partner gender (two variables, each man vs. women), type of relationship at baseline (romantic partner, family, other), partner relationship satisfaction (at baseline) will be conducted in follow-up analyses that add each moderator separately to the linear mixed models described above. Specifically, we will add fixed effects for the moderator and its interactions with study arm contrasts. Study hypotheses about moderation will focus on the test of the parameter estimates for the study arm contrasts by moderator interaction effects.*
 
 
+### Missing Data 
 
-## Discussion
+From Protocol Paper:   
+
+*In previous RCTs, we completed 85% of interviews through 12 months and limited missing data on core interview items to about 2%; we expect similar rates in this study. In SUD studies, data are not likely to be missing at random (i.e., the probability that data are missing relates to what the data would have been had the data been observed).c  We will conduct a sensitivity analysis on missing data, using logistic regression in order to examine whether dropout at follow-up is associated with observed/assigned factors, covariates, or outcomes at baseline. If missing data affects power or is significantly not missing at random, linear mixed models or multiple imputation will be used.*
+
+
 
 ## References
 

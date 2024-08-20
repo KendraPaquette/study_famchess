@@ -215,6 +215,13 @@
   <li><a href="#primary-patient-outcome-per_heavy_drink_days-model-1" id="toc-primary-patient-outcome-per_heavy_drink_days-model-1" class="nav-link" data-scroll-target="#primary-patient-outcome-per_heavy_drink_days-model-1">Primary Patient Outcome: <code>per_heavy_drink_days</code> (Model 1)</a></li>
   <li><a href="#primary-partner-outcome-oq45_scored-model-2-3" id="toc-primary-partner-outcome-oq45_scored-model-2-3" class="nav-link" data-scroll-target="#primary-partner-outcome-oq45_scored-model-2-3">Primary Partner Outcome: <code>oq45_scored</code> (Model 2-3)</a></li>
   <li><a href="#secondary-patient-outcome-per_days_abstinent-model-3" id="toc-secondary-patient-outcome-per_days_abstinent-model-3" class="nav-link" data-scroll-target="#secondary-patient-outcome-per_days_abstinent-model-3">Secondary Patient Outcome: <code>per_days_abstinent</code> (Model 3)</a></li>
+  <li><a href="#secondary-partner-outcome-1-relationsatisf_scored-model-4-5" id="toc-secondary-partner-outcome-1-relationsatisf_scored-model-4-5" class="nav-link" data-scroll-target="#secondary-partner-outcome-1-relationsatisf_scored-model-4-5">Secondary Partner Outcome 1: <code>relationsatisf_scored</code> (Model 4-5)</a></li>
+  <li><a href="#secondary-partner-outcome-2-abuse_scored-model-6" id="toc-secondary-partner-outcome-2-abuse_scored-model-6" class="nav-link" data-scroll-target="#secondary-partner-outcome-2-abuse_scored-model-6">Secondary Partner Outcome 2: <code>abuse_scored</code> (Model 6)</a></li>
+  </ul></li>
+  <li><a href="#moderators" id="toc-moderators" class="nav-link" data-scroll-target="#moderators">Moderators</a>
+  <ul class="collapse">
+  <li><a href="#patient-primary-outcome" id="toc-patient-primary-outcome" class="nav-link" data-scroll-target="#patient-primary-outcome">Patient Primary Outcome</a></li>
+  <li><a href="#partner-primary-outcome" id="toc-partner-primary-outcome" class="nav-link" data-scroll-target="#partner-primary-outcome">Partner Primary Outcome</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -286,11 +293,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 <h3 class="anchored" data-anchor-id="primary-patient-outcome-per_heavy_drink_days-model-1">Primary Patient Outcome: <code>per_heavy_drink_days</code> (Model 1)</h3>
 <p><em>Significant time by arm interaction</em></p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [4]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>model_patient_prim <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                             inpatient_yn_ever <span class="sc">+</span> er_yn_ever <span class="sc">+</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_prim, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> inpatient_yn_ever <span class="sc">+</span> er_yn_ever <span class="sc">+</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -379,11 +384,10 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 <h3 class="anchored" data-anchor-id="primary-partner-outcome-oq45_scored-model-2-3">Primary Partner Outcome: <code>oq45_scored</code> (Model 2-3)</h3>
 <p>Partner Dyad</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [5]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_part <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> edu_c <span class="sc">+</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                             outpatient_yn_ever <span class="sc">+</span> other_psych_treatment_yn <span class="sc">+</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                             other_medications_yn <span class="sc">+</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_part, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> edu_c <span class="sc">+</span> outpatient_yn_ever <span class="sc">+</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>       other_psych_treatment_yn <span class="sc">+</span> other_medications_yn <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -482,9 +486,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 <p>Patient Dyad</p>
 <p><em>sig arm effect</em></p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [6]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_pat <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> mat_yn <span class="sc">+</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_pat, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> mat_yn <span class="sc">+</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -566,11 +570,10 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 <section id="secondary-patient-outcome-per_days_abstinent-model-3" class="level3">
 <h3 class="anchored" data-anchor-id="secondary-patient-outcome-per_days_abstinent-model-3">Secondary Patient Outcome: <code>per_days_abstinent</code> (Model 3)</h3>
 <div class="cell-container"><div class="cell-decorator"><pre>In [7]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>model_patient_sec <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                            outpatient_yn_ever <span class="sc">+</span> meetings_yn <span class="sc">+</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                            inpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_sec, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> outpatient_yn_ever <span class="sc">+</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>       meetings_yn <span class="sc">+</span> inpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -660,15 +663,15 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 
 </div>
 </div></div>
-<section id="secondary-partner-outcome-1-relationsatisf_scored-model-4-5" class="level4">
-<h4 class="anchored" data-anchor-id="secondary-partner-outcome-1-relationsatisf_scored-model-4-5">Secondary Partner Outcome 1: <code>relationsatisf_scored</code> (Model 4-5)</h4>
+</section>
+<section id="secondary-partner-outcome-1-relationsatisf_scored-model-4-5" class="level3">
+<h3 class="anchored" data-anchor-id="secondary-partner-outcome-1-relationsatisf_scored-model-4-5">Secondary Partner Outcome 1: <code>relationsatisf_scored</code> (Model 4-5)</h3>
 <p>Partner Dyad</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [8]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_part <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> inpatient_yn_ever <span class="sc">+</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_part, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>       inpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -748,11 +751,10 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p>Patient Dyad</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [9]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_pat <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> edu_c <span class="sc">+</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_pat, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>       edu_c <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -831,14 +833,13 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div>
 </div></div>
 </section>
-<section id="secondary-partner-outcome-2-abuse_scored-model-6" class="level4">
-<h4 class="anchored" data-anchor-id="secondary-partner-outcome-2-abuse_scored-model-6">Secondary Partner Outcome 2: <code>abuse_scored</code> (Model 6)</h4>
+<section id="secondary-partner-outcome-2-abuse_scored-model-6" class="level3">
+<h3 class="anchored" data-anchor-id="secondary-partner-outcome-2-abuse_scored-model-6">Secondary Partner Outcome 2: <code>abuse_scored</code> (Model 6)</h3>
 <p><em>Note: large amount of missing data for this outcome</em></p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [10]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_2 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(abuse_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> abuse_0 <span class="sc">+</span> mat_yn <span class="sc">+</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                                   inpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_2, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(abuse_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> abuse_0 <span class="sc">+</span> mat_yn <span class="sc">+</span> inpatient_yn_ever <span class="sc">+</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -947,6 +948,633 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div>
 </div></div>
 </section>
+</section>
+<section id="moderators" class="level2">
+<h2 class="anchored" data-anchor-id="moderators">Moderators</h2>
+<p>From Protocol Paper:<br>
+<em>Analysis of moderators. Analyses of study arm moderators including patient and partner gender (two variables, each man vs.&nbsp;women), type of relationship at baseline (romantic partner, family, other), partner relationship satisfaction (at baseline) will be conducted in follow-up analyses that add each moderator separately to the linear mixed models described above. Specifically, we will add fixed effects for the moderator and its interactions with study arm contrasts. Study hypotheses about moderation will focus on the test of the parameter estimates for the study arm contrasts by moderator interaction effects.</em></p>
+<p>Note these moderators differ from figure that list the following:</p>
+<p>Patient moderators: <code>dsm5_criteria</code><br>
+Partner moderators: <code>gender</code>, <code>days_app_use</code></p>
+<section id="patient-primary-outcome" class="level3">
+<h3 class="anchored" data-anchor-id="patient-primary-outcome">Patient Primary Outcome</h3>
+<p>Patient moderators: <code>dsm5_criteria</code></p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [12]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> inpatient_yn_ever <span class="sc">+</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>       er_yn_ever <span class="sc">+</span> dsm5_criteria <span class="sc">+</span> arm_c<span class="sc">:</span>dsm5_criteria <span class="sc">+</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table style="border-collapse:collapse; border:none;">
+<tbody><tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">&nbsp;</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">per heavy drink days</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">Predictors</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">Estimates</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">CI</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">p</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">(Intercept)</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">30.11</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">5.72&nbsp;–&nbsp;54.51</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>0.016</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">time c</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-5.11</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-7.67&nbsp;–&nbsp;-2.55</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>&lt;0.001</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cfam and achess vs C</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-9.65</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-64.93&nbsp;–&nbsp;45.62</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.732</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cachess vs fam</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">1.80</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-50.97&nbsp;–&nbsp;54.56</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.947</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">hdd 0</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.47</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.36&nbsp;–&nbsp;0.57</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>&lt;0.001</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">inpatient yn ever</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-7.20</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-17.82&nbsp;–&nbsp;3.41</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.183</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">er yn ever</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-8.58</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-17.69&nbsp;–&nbsp;0.54</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.065</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">dsm5 criteria</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-2.10</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-25.23&nbsp;–&nbsp;21.02</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.858</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">time c × arm cfam and<br>achess vs C</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-6.72</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-12.11&nbsp;–&nbsp;-1.32</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>0.015</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">time c × arm cachess vs<br>fam</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">2.31</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-4.00&nbsp;–&nbsp;8.62</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.472</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cfam and achess vs C<br>× dsm5 criteria</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">7.03</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-46.39&nbsp;–&nbsp;60.45</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.796</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cachess vs fam × dsm5<br>criteria</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">2.81</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-47.31&nbsp;–&nbsp;52.93</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.912</td>
+</tr>
+
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">N <sub>study_id</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">157</td>
+</tr><tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">Observations</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">427</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">Marginal R<sup>2</sup> / Conditional R<sup>2</sup></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.283 / 0.763</td>
+</tr>
+
+</tbody></table>
+
+</div>
+</div></div>
+</section>
+<section id="partner-primary-outcome" class="level3">
+<h3 class="anchored" data-anchor-id="partner-primary-outcome">Partner Primary Outcome</h3>
+<p>Partner moderators: <code>gender</code>, <code>days_app_use</code></p>
+<p><em>Add separately into model.</em></p>
+<p>Center <code>days_app_use</code> and add second dyad gender (<code>gender_1</code> and <code>gender_2</code>)</p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [13]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">days_app_use_c =</span> days_app_use <span class="sc">-</span> <span class="fu">mean</span>(days_app_use, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>gender_1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dyad_id =</span> <span class="fu">str_sub</span>(study_id, <span class="dv">1</span>, <span class="dv">3</span>),</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">gender_1 =</span> gender) <span class="sc">|&gt;</span> </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(dyad_id, gender_1) <span class="sc">|&gt;</span> </span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() </span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>gender_2 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dyad_id =</span> <span class="fu">str_sub</span>(study_id, <span class="dv">1</span>, <span class="dv">3</span>),</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">gender_2 =</span> gender) <span class="sc">|&gt;</span> </span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(dyad_id, gender_2) <span class="sc">|&gt;</span> </span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() </span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>gender <span class="ot">&lt;-</span> <span class="fu">full_join</span>(gender_1, gender_2, <span class="at">by =</span> <span class="st">"dyad_id"</span>)</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">dyad_id =</span> <span class="fu">str_sub</span>(study_id, <span class="dv">1</span>, <span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(gender, <span class="at">by =</span> <span class="st">"dyad_id"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div>
+<p>Partner Gender (<code>gender_1</code>) for Partner</p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [14]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> edu_c <span class="sc">+</span> outpatient_yn_ever <span class="sc">+</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>       other_psych_treatment_yn <span class="sc">+</span> other_medications_yn <span class="sc">+</span> gender_1 <span class="sc">+</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>       arm_c<span class="sc">:</span>gender_1 <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table style="border-collapse:collapse; border:none;">
+<tbody><tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">&nbsp;</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">oq 45 scored</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">Predictors</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">Estimates</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">CI</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">p</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">(Intercept)</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">47.73</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">41.01&nbsp;–&nbsp;54.45</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>&lt;0.001</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">time c</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-0.90</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-2.28&nbsp;–&nbsp;0.49</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.205</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cfam and achess vs C</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-3.35</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-16.95&nbsp;–&nbsp;10.25</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.629</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cachess vs fam</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">10.58</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-4.72&nbsp;–&nbsp;25.88</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.175</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">oq45 0</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.71</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.61&nbsp;–&nbsp;0.81</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>&lt;0.001</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">edu c</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-2.47</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-4.49&nbsp;–&nbsp;-0.44</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>0.017</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">outpatient yn ever</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">6.56</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-2.60&nbsp;–&nbsp;15.71</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.160</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">other psych treatment yn</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">3.86</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-1.31&nbsp;–&nbsp;9.02</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.143</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">other medications yn</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">6.01</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">1.83&nbsp;–&nbsp;10.20</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>0.005</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">gender 1</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">4.99</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.26&nbsp;–&nbsp;9.72</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>0.039</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">time c × arm cfam and<br>achess vs C</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-1.60</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-4.59&nbsp;–&nbsp;1.38</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.292</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">time c × arm cachess vs<br>fam</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.83</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-2.49&nbsp;–&nbsp;4.15</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.622</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cfam and achess vs C<br>× gender 1</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.94</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-8.99&nbsp;–&nbsp;10.87</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.853</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cachess vs fam ×<br>gender 1</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-9.44</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-20.69&nbsp;–&nbsp;1.81</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.100</td>
+</tr>
+
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">N <sub>study_id</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">170</td>
+</tr><tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">Observations</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">452</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">Marginal R<sup>2</sup> / Conditional R<sup>2</sup></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.519 / 0.769</td>
+</tr>
+
+</tbody></table>
+
+</div>
+</div></div>
+<p>Partner Gender (<code>gender_1</code>) for Patient</p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [15]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> mat_yn <span class="sc">+</span> gender_1 <span class="sc">+</span> arm_c<span class="sc">:</span>gender_1 <span class="sc">+</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table style="border-collapse:collapse; border:none;">
+<tbody><tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">&nbsp;</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">oq 45 scored</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">Predictors</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">Estimates</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">CI</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">p</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">(Intercept)</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">54.87</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">47.19&nbsp;–&nbsp;62.56</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>&lt;0.001</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">time c</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-3.34</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-4.92&nbsp;–&nbsp;-1.76</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>&lt;0.001</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cfam and achess vs C</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-11.81</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-28.22&nbsp;–&nbsp;4.60</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.158</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cachess vs fam</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-0.40</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-19.08&nbsp;–&nbsp;18.28</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.966</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">oq45 0</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.70</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.59&nbsp;–&nbsp;0.80</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>&lt;0.001</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">mat yn</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">6.84</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">2.02&nbsp;–&nbsp;11.66</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>0.006</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">gender 1</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-0.89</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-6.49&nbsp;–&nbsp;4.71</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.756</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">time c × arm cfam and<br>achess vs C</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-0.23</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-3.55&nbsp;–&nbsp;3.09</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.891</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">time c × arm cachess vs<br>fam</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-1.06</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-4.97&nbsp;–&nbsp;2.84</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.592</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cfam and achess vs C<br>× gender 1</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">3.67</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-8.34&nbsp;–&nbsp;15.67</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.549</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cachess vs fam ×<br>gender 1</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.48</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-13.11&nbsp;–&nbsp;14.07</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.944</td>
+</tr>
+
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">N <sub>study_id</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">167</td>
+</tr><tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">Observations</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">432</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">Marginal R<sup>2</sup> / Conditional R<sup>2</sup></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.442 / 0.810</td>
+</tr>
+
+</tbody></table>
+
+</div>
+</div></div>
+<p>Patient Gender (<code>gender_2</code>) for Partner</p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [16]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> edu_c <span class="sc">+</span> outpatient_yn_ever <span class="sc">+</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>       other_psych_treatment_yn <span class="sc">+</span> other_medications_yn <span class="sc">+</span> gender_2 <span class="sc">+</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>       arm_c<span class="sc">:</span>gender_2 <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table style="border-collapse:collapse; border:none;">
+<tbody><tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">&nbsp;</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">oq 45 scored</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">Predictors</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">Estimates</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">CI</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">p</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">(Intercept)</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">53.56</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">46.00&nbsp;–&nbsp;61.12</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>&lt;0.001</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">time c</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-0.89</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-2.28&nbsp;–&nbsp;0.50</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.209</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cfam and achess vs C</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">4.77</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-10.94&nbsp;–&nbsp;20.47</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.551</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cachess vs fam</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-8.98</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-26.17&nbsp;–&nbsp;8.21</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.305</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">oq45 0</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.71</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.60&nbsp;–&nbsp;0.81</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>&lt;0.001</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">edu c</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-2.14</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-4.23&nbsp;–&nbsp;-0.05</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>0.044</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">outpatient yn ever</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">7.97</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-1.37&nbsp;–&nbsp;17.31</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.094</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">other psych treatment yn</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">3.76</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-1.41&nbsp;–&nbsp;8.94</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.154</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">other medications yn</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">5.52</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">1.30&nbsp;–&nbsp;9.73</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>0.010</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">gender 2</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.30</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-4.08&nbsp;–&nbsp;4.69</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.892</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">time c × arm cfam and<br>achess vs C</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-1.51</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-4.53&nbsp;–&nbsp;1.51</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.325</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">time c × arm cachess vs<br>fam</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.78</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-2.55&nbsp;–&nbsp;4.10</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.647</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cfam and achess vs C<br>× gender 2</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-4.46</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-13.85&nbsp;–&nbsp;4.92</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.351</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cachess vs fam ×<br>gender 2</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">4.99</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-5.39&nbsp;–&nbsp;15.38</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.345</td>
+</tr>
+
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">N <sub>study_id</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">169</td>
+</tr><tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">Observations</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">449</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">Marginal R<sup>2</sup> / Conditional R<sup>2</sup></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.508 / 0.767</td>
+</tr>
+
+</tbody></table>
+
+</div>
+</div></div>
+<p>Patient Gender (<code>gender_2</code>) for Patient</p>
+<p><em>arm by gender interaction</em></p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [17]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> mat_yn <span class="sc">+</span> gender_2 <span class="sc">+</span> arm_c<span class="sc">:</span>gender_2 <span class="sc">+</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table style="border-collapse:collapse; border:none;">
+<tbody><tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">&nbsp;</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">oq 45 scored</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">Predictors</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">Estimates</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">CI</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">p</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">(Intercept)</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">46.28</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">37.91&nbsp;–&nbsp;54.66</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>&lt;0.001</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">time c</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-3.34</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-4.92&nbsp;–&nbsp;-1.76</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>&lt;0.001</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cfam and achess vs C</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">11.20</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-6.39&nbsp;–&nbsp;28.79</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.212</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cachess vs fam</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-13.95</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-34.02&nbsp;–&nbsp;6.12</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.173</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">oq45 0</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.69</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.59&nbsp;–&nbsp;0.80</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>&lt;0.001</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">mat yn</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">6.80</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">2.05&nbsp;–&nbsp;11.55</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>0.005</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">gender 2</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">4.76</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-0.18&nbsp;–&nbsp;9.71</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.059</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">time c × arm cfam and<br>achess vs C</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-0.23</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-3.55&nbsp;–&nbsp;3.09</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.893</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">time c × arm cachess vs<br>fam</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-1.08</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-4.98&nbsp;–&nbsp;2.82</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.587</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cfam and achess vs C<br>× gender 2</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-11.47</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-22.03&nbsp;–&nbsp;-0.91</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>0.033</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">arm cachess vs fam ×<br>gender 2</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">9.07</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-3.08&nbsp;–&nbsp;21.22</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.143</td>
+</tr>
+
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">N <sub>study_id</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">167</td>
+</tr><tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">Observations</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">432</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">Marginal R<sup>2</sup> / Conditional R<sup>2</sup></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.462 / 0.810</td>
+</tr>
+
+</tbody></table>
+
+</div>
+</div></div>
+<p><code>days_app_use</code> for Partner<br>
+<em>Too much missing data when app use added?</em></p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [18]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lmer(oq45_scored ~ time_c*arm_c + oq45_0 + edu_c + outpatient_yn_ever + </span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co">#        other_psych_treatment_yn + other_medications_yn + days_app_use_c +</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co">#        arm_c:days_app_use_c + (1 + time_c | study_id), </span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co">#      data = subset(data, dyad == 1)) |&gt; </span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   sjPlot::tab_model(show.re.var = F, show.icc = F)</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(days_app_use_c) <span class="sc">|&gt;</span> </span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">miss_var_summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  variable       n_miss pct_miss
+  &lt;chr&gt;           &lt;int&gt;    &lt;num&gt;
+1 days_app_use_c    304     65.5</code></pre>
+</div>
+</div></div>
+<p><code>days_app_use</code> for Patient<br>
+<em>Rank deficient error</em></p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [19]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lmer(oq45_scored ~ time_c*arm_c + oq45_0 + mat_yn + </span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co">#        arm_c:days_app_use_c + days_app_use_c +</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">#        (1 + time_c | study_id), data = subset(data, dyad == 2)) |&gt; </span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   sjPlot::tab_model(show.re.var = F, show.icc = F)</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(days_app_use_c) <span class="sc">|&gt;</span> </span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">miss_var_summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  variable       n_miss pct_miss
+  &lt;chr&gt;           &lt;int&gt;    &lt;num&gt;
+1 days_app_use_c    151     32.5</code></pre>
+</div>
+</div></div>
 </section>
 </section>
      </main>
