@@ -5,8 +5,6 @@ author:
   - name: John J. Curtin 
 date: last-modified
 bibliography: references.bib
-citation:
-  container-title: Journal of Important Findings 
 number-sections: false 
 editor_options: 
   chunk_output_type: console

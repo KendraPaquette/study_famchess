@@ -41,7 +41,7 @@ partner primary outcome = `oq45_scored`
 patient secondary outcome = `per_days_abstinent`   
 partner secondary outcomes = `relationsatisf_scored` and `abuse_scored`    
 
-*KW: Cannot run primary and secondary patient models for partners (outcomes don't exist). We could run primary and secondary partner models for patients, but why would we want to do this?*   
+*KW: Cannot run primary and secondary patient models for partners (outcomes don't exist). We could run primary and secondary partner models for patients, but does this make sense?*   
 
 List of potential covariate variable names: `race_white_only`, `age_c`, `edu_c`, `meetings_yn`, `outpatient_yn_ever`, `er_yn_ever`, `mat_yn`, `inpatient_yn_ever`, `other_psych_treatment_yn`, `other_medications_yn`      
 
@@ -79,102 +79,80 @@ tibble(error = residuals(model_patient_prim)) |>
 
 `race_white_only` - not significant
 ```{r}
-model_patient_prim_race <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
-                                  race_white_only + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_prim_race, show.re.var = F, show.icc = F, terms = c("race_white_only"))
+lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + race_white_only + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("race_white_only"))
 ```
 
 `age_c` - not significant
 ```{r}
-model_patient_prim_age <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
-                                  age_c + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_prim_age, show.re.var = F, show.icc = F, terms = c("age_c"))
+lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + age_c + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("age_c"))
 ```
 
 `edu_c` - not significant
 ```{r}
-model_patient_prim_edu <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
-                                  edu_c + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_prim_edu, show.re.var = F, show.icc = F, terms = c("edu_c"))
+lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + edu_c + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("edu_c"))
 ```
 
 `meetings_yn` - not significant
 ```{r}
-model_patient_prim_meetings <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
-                                  meetings_yn + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_prim_meetings, show.re.var = F, show.icc = F, terms = c("meetings_yn"))
+lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + meetings_yn + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("meetings_yn"))
 ```
 
 `outpatient_yn_ever` - not significant
 ```{r}
-model_patient_prim_outpatient <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
-                                  outpatient_yn_ever + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_prim_outpatient, show.re.var = F, show.icc = F, terms = c("outpatient_yn_ever"))
+lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + outpatient_yn_ever + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("outpatient_yn_ever"))
 ```
 
 `er_yn_ever` - **significant**
 ```{r}
-model_patient_prim_er <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
-                                er_yn_ever + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_prim_er, show.re.var = F, show.icc = F, terms = c("er_yn_ever"))
+lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + er_yn_ever + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("er_yn_ever"))
 ```
 
 `mat_yn` - not significant
 ```{r}
-model_patient_prim_mat <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
-                                mat_yn + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_prim_mat, show.re.var = F, show.icc = F, terms = c("mat_yn"))
+lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + mat_yn + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("mat_yn"))
 ```
 
 `inpatient_yn_ever` - **significant**
 ```{r}
-model_patient_prim_inpatient <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
-                                inpatient_yn_ever + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_prim_inpatient, show.re.var = F, show.icc = F, terms = c("inpatient_yn_ever"))
+lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + inpatient_yn_ever + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("inpatient_yn_ever"))
 ```
 
 `other_psych_treatment_yn` - not significant
 ```{r}
-model_patient_prim_psych <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
-                                other_psych_treatment_yn + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_prim_psych, show.re.var = F, show.icc = F, terms = c("other_psych_treatment_yn"))
+lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + other_psych_treatment_yn + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("other_psych_treatment_yn"))
 ```
 
 `other_medications_yn` - not significant
 ```{r}
-model_patient_prim_psych_meds <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
-                                other_medications_yn + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_prim_psych_meds, show.re.var = F, show.icc = F, terms = c("other_medications_yn"))
+lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + other_medications_yn + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("other_medications_yn"))
 ```
 
 
 ##### Final Model with Significant Covariates
 ```{r}
-model_patient_prim <- lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + 
-                             inpatient_yn_ever + er_yn_ever +
-                             (1 + time_c | study_id), data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_prim, show.re.var = F, show.icc = F)
+lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + inpatient_yn_ever + 
+       er_yn_ever + (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F)
 ```
 
 
@@ -192,148 +170,130 @@ tibble(error = residuals(model_partner_prim)) |>
 ```
 
 ##### Look for significant covariates (We will only include covariates that significantly predict the outcome).         
+*Checking for sig covariates for partner and patient dyads*
 
 `race_white_only` - not significant
 ```{r}
-model_partner_prim_race <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + race_white_only +
-                             (1 + time_c | study_id), data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_prim_race, show.re.var = F, show.icc = F, terms = c("race_white_only"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + race_white_only +
+       (1 + time_c | study_id), data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("race_white_only"))
 
-model_partner_prim_race <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + race_white_only +
-                             (1 + time_c | study_id), data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_prim_race, show.re.var = F, show.icc = F, terms = c("race_white_only"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + race_white_only +
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("race_white_only"))
 ```
 
 `age_c` - not significant
 ```{r}
-model_partner_prim_age <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + age_c +
-                             (1 + time_c | study_id), 
-                             data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_prim_age, show.re.var = F, show.icc = F, terms = c("age_c"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + age_c + (1 + time_c | study_id), 
+     data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("age_c"))
 
-model_partner_prim_age <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + age_c +
-                             (1 + time_c | study_id), 
-                             data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_prim_age, show.re.var = F, show.icc = F, terms = c("age_c"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + age_c + (1 + time_c | study_id), 
+     data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("age_c"))
 ```
 
 `edu_c` - **significant for partner but not patient**
 ```{r}
-model_partner_prim_edu <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + edu_c +
-                             (1 + time_c | study_id), 
-                             data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_prim_edu, show.re.var = F, show.icc = F, terms = c("edu_c"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + edu_c + (1 + time_c | study_id), 
+     data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("edu_c"))
 
-model_partner_prim_edu <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + edu_c +
-                             (1 + time_c | study_id), 
-                             data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_prim_edu, show.re.var = F, show.icc = F, terms = c("edu_c"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + edu_c + (1 + time_c | study_id), 
+     data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("edu_c"))
 ```
 
 `meetings_yn` - not significant
 ```{r}
-model_partner_prim_meetings <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + meetings_yn +
-                             (1 + time_c | study_id), 
-                             data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_prim_meetings, show.re.var = F, show.icc = F, terms = c("meetings_yn"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + meetings_yn + 
+       (1 + time_c | study_id), data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("meetings_yn"))
 
-model_partner_prim_meetings <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + meetings_yn +
-                             (1 + time_c | study_id), 
-                             data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_prim_meetings, show.re.var = F, show.icc = F, terms = c("meetings_yn"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + meetings_yn +
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("meetings_yn"))
 ```
 
-`outpatient_yn_ever` - **significant for partner but not patient**
+`outpatient_yn_ever` - **significant for partner** Not significant for patient
 ```{r}
-model_partner_prim_outpatient <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
-                                       outpatient_yn_ever + (1 + time_c | study_id), 
-                                 data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_prim_outpatient, show.re.var = F, show.icc = F, terms = c("outpatient_yn_ever"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + outpatient_yn_ever + 
+       (1 + time_c | study_id), data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("outpatient_yn_ever"))
 
-model_partner_prim_outpatient <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
-                                       outpatient_yn_ever + (1 + time_c | study_id), 
-                                 data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_prim_outpatient, show.re.var = F, show.icc = F, terms = c("outpatient_yn_ever"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + outpatient_yn_ever + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("outpatient_yn_ever"))
 ```
 
 `er_yn_ever` - Not significant
 ```{r}
-model_partner_prim_er <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
-                              er_yn_ever + (1 + time_c | study_id), 
-                          data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_prim_er, show.re.var = F, show.icc = F, terms = c("er_yn_ever"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + er_yn_ever + 
+       (1 + time_c | study_id), data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("er_yn_ever"))
 
-model_partner_prim_er <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
-                              er_yn_ever + (1 + time_c | study_id), 
-                          data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_prim_er, show.re.var = F, show.icc = F, terms = c("er_yn_ever"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + er_yn_ever + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("er_yn_ever"))
 ```
 
 `mat_yn` - not significant for partner, **significant for patient**
 ```{r}
-model_partner_prim_mat <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
-                              mat_yn + (1 + time_c | study_id), 
-                          data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_prim_mat, show.re.var = F, show.icc = F, terms = c("mat_yn"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + mat_yn + (1 + time_c | study_id), 
+     data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("mat_yn"))
 
-model_partner_prim_mat <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
-                              mat_yn + (1 + time_c | study_id), 
-                          data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_prim_mat, show.re.var = F, show.icc = F, terms = c("mat_yn"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + mat_yn + (1 + time_c | study_id), 
+     data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("mat_yn"))
 ```
 
 `inpatient_yn_ever` - not significant 
 ```{r}
-model_partner_prim_inpatient <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
-                              inpatient_yn_ever + (1 + time_c | study_id), 
-                          data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_prim_inpatient, show.re.var = F, show.icc = F, terms = c("inpatient_yn_ever"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + inpatient_yn_ever + 
+       (1 + time_c | study_id), data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("inpatient_yn_ever"))
 
-model_partner_prim_inpatient <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
-                              inpatient_yn_ever + (1 + time_c | study_id), 
-                          data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_prim_inpatient, show.re.var = F, show.icc = F, terms = c("inpatient_yn_ever"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + inpatient_yn_ever + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("inpatient_yn_ever"))
 ```
 
-`other_psych_treatment_yn` - **significant for partner, but not for patient**
+`other_psych_treatment_yn` - **significant for partner** not significant for patient
 ```{r}
-model_partner_prim_psych <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
-                              other_psych_treatment_yn + (1 + time_c | study_id), 
-                          data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_prim_psych, show.re.var = F, show.icc = F, terms = c("other_psych_treatment_yn"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + other_psych_treatment_yn + 
+       (1 + time_c | study_id), data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("other_psych_treatment_yn"))
 
-model_partner_prim_psych <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
-                              other_psych_treatment_yn + (1 + time_c | study_id), 
-                          data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_prim_psych, show.re.var = F, show.icc = F, terms = c("other_psych_treatment_yn"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + other_psych_treatment_yn + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("other_psych_treatment_yn"))
 ```
 
-`other_medications_yn` - **significant for partner but not for patient**
+`other_medications_yn` - **significant for partner** not significant for patient
 ```{r}
-model_partner_prim_psych_meds <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
-                              other_medications_yn + (1 + time_c | study_id), 
-                          data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_prim_psych_meds, show.re.var = F, show.icc = F, terms = c("other_medications_yn"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + other_medications_yn + 
+       (1 + time_c | study_id), data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("other_medications_yn"))
 
-model_partner_prim_psych_meds <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + 
-                              other_medications_yn + (1 + time_c | study_id), 
-                          data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_prim_psych_meds, show.re.var = F, show.icc = F, terms = c("other_medications_yn"))
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + other_medications_yn + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("other_medications_yn"))
 ```
 
 
 ##### Final Model with Significant Covariates
 ```{r}
-model_partner_prim <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + edu_c +
-                             outpatient_yn_ever + other_psych_treatment_yn +
-                             other_medications_yn +
-                             (1 + time_c | study_id), data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_prim, show.re.var = F, show.icc = F)
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + edu_c + outpatient_yn_ever + 
+       other_psych_treatment_yn + other_medications_yn + 
+       (1 + time_c | study_id), data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F)
 
 
-model_partner_prim <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + mat_yn +
-                             (1 + time_c | study_id), data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_prim, show.re.var = F, show.icc = F)
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + mat_yn +
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F)
 ```
 
 
@@ -356,101 +316,80 @@ tibble(error = residuals(model_patient_sec)) |>
 
 `race_white_only` - not significant
 ```{r}
-model_patient_sec_race <- lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + 
-                                  race_white_only + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_sec_race, show.re.var = F, show.icc = F, terms = c("race_white_only"))
+lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + race_white_only + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("race_white_only"))
 ```
 
 `age_c` - not significant
 ```{r}
-model_patient_sec_age <- lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + 
-                                  age_c + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_sec_age, show.re.var = F, show.icc = F, terms = c("age_c"))
+lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + age_c + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("age_c"))
 ```
 
 `edu_c` - not significant
 ```{r}
-model_patient_sec_edu <- lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + 
-                                  edu_c + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_sec_edu, show.re.var = F, show.icc = F, terms = c("edu_c"))
+lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + edu_c + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("edu_c"))
 ```
 
 `meetings_yn` - **significant**
 ```{r}
-model_patient_sec_meetings <- lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + 
-                                  meetings_yn + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_sec_meetings, show.re.var = F, show.icc = F, terms = c("meetings_yn"))
+lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + meetings_yn + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("meetings_yn"))
 ```
 
 `outpatient_yn_ever` - **significant**
 ```{r}
-model_patient_sec_outpatient <- lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + 
-                                  outpatient_yn_ever + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_sec_outpatient, show.re.var = F, show.icc = F, terms = c("outpatient_yn_ever"))
+lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + outpatient_yn_ever + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("outpatient_yn_ever"))
 ```
 
 `er_yn_ever` - Not significant
 ```{r}
-model_patient_sec_er <- lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + 
-                                  er_yn_ever + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_sec_er, show.re.var = F, show.icc = F, terms = c("er_yn_ever"))
+lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + er_yn_ever + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("er_yn_ever"))
 ```
 
 `mat_yn` - not significant
 ```{r}
-model_patient_sec_mat <- lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + 
-                                  mat_yn + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_sec_mat, show.re.var = F, show.icc = F, terms = c("mat_yn"))
+lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + mat_yn + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |>  
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("mat_yn"))
 ```
 
 `inpatient_yn_ever` - **significant**
 ```{r}
-model_patient_sec_inpatient <- lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + 
-                                  inpatient_yn_ever + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_sec_inpatient, show.re.var = F, show.icc = F, terms = c("inpatient_yn_ever"))
+lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + inpatient_yn_ever + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("inpatient_yn_ever"))
 ```
 
 `other_psych_treatment_yn` - not significant
 ```{r}
-model_patient_sec_psych <- lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + 
-                                  other_psych_treatment_yn + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_sec_psych, show.re.var = F, show.icc = F, terms = c("other_psych_treatment_yn"))
+lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + other_psych_treatment_yn + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("other_psych_treatment_yn"))
 ```
 
 `other_medications_yn` - not significant
 ```{r}
-model_patient_sec_psych_meds <- lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + 
-                                  other_medications_yn + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-
-sjPlot::tab_model(model_patient_sec_psych_meds, show.re.var = F, show.icc = F, terms = c("other_medications_yn"))
+lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + other_medications_yn + 
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("other_medications_yn"))
 ```
 
 ##### Final Model with Significant Covariates
 ```{r}
-model_patient_sec <- lmer(per_days_abstinent ~ time_c*arm_c + pda_0 +
-                            outpatient_yn_ever + meetings_yn +
-                            inpatient_yn_ever + (1 + time_c | study_id), 
-                                data = subset(data, dyad == 2))
-sjPlot::tab_model(model_patient_sec, show.re.var = F, show.icc = F)
+lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + outpatient_yn_ever + 
+       meetings_yn + inpatient_yn_ever + (1 + time_c | study_id), 
+     data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F)
 ```
 
 #### Secondary Partner Outcome 1: `relationsatisf_scored`
@@ -468,153 +407,132 @@ tibble(error = residuals(model_partner_sec_1)) |>
 ##### Look for significant covariates
 `race_white_only` - not significant
 ```{r}
-model_partner_sec_1_race <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + race_white_only +
-                             (1 + time_c | study_id), data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_sec_1_race, show.re.var = F, show.icc = F, terms = c("race_white_only"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + race_white_only +
+       (1 + time_c | study_id), data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("race_white_only"))
 
-model_partner_sec_1_race <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + race_white_only +
-                             (1 + time_c | study_id), data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_sec_1_race, show.re.var = F, show.icc = F, terms = c("race_white_only"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + race_white_only +
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("race_white_only"))
 ```
 
 `age_c` - not significant
 ```{r}
-model_partner_sec_1_age <-  lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + age_c +
-                             (1 + time_c | study_id), data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_sec_1_age, show.re.var = F, show.icc = F, terms = c("age_c"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + age_c +
+       (1 + time_c | study_id), data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("age_c"))
 
-model_partner_sec_1_age <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + age_c +
-                             (1 + time_c | study_id), data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_sec_1_age, show.re.var = F, show.icc = F, terms = c("age_c"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + age_c +
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("age_c"))
 ```
 
-`edu_c` - **significant for patient but not partner**
+`edu_c` - **significant for patient** not significant for partner
 ```{r}
-model_partner_sec_1_edu <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + edu_c +
-                             (1 + time_c | study_id), data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_sec_1_edu, show.re.var = F, show.icc = F, terms = c("edu_c"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + edu_c +
+       (1 + time_c | study_id), data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("edu_c"))
 
-model_partner_sec_1_edu <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + edu_c +
-                             (1 + time_c | study_id), data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_sec_1_edu, show.re.var = F, show.icc = F, terms = c("edu_c"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + edu_c +
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("edu_c"))
 ```
 
 `meetings_yn` - not significant
 ```{r}
-model_partner_sec_1_meetings <-lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + meetings_yn +
-                             (1 + time_c | study_id), data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_sec_1_meetings, show.re.var = F, show.icc = F, terms = c("meetings_yn"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + meetings_yn +
+       (1 + time_c | study_id), data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("meetings_yn"))
 
-model_partner_sec_1_meetings <-lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + meetings_yn +
-                             (1 + time_c | study_id), data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_sec_1_meetings, show.re.var = F, show.icc = F, terms = c("meetings_yn"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + meetings_yn +
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("meetings_yn"))
 ```
 
 `outpatient_yn_ever` - Not significant
 ```{r}
-model_partner_sec_1_outpatient <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + outpatient_yn_ever +
-                             (1 + time_c | study_id), data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_sec_1_outpatient, show.re.var = F, show.icc = F, terms = c("outpatient_yn_ever"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + 
+       outpatient_yn_ever + (1 + time_c | study_id), 
+     data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("outpatient_yn_ever"))
 
-model_partner_sec_1_outpatient <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + outpatient_yn_ever +
-                             (1 + time_c | study_id), data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_sec_1_outpatient, show.re.var = F, show.icc = F, terms = c("outpatient_yn_ever"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + 
+       outpatient_yn_ever + (1 + time_c | study_id), 
+     data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("outpatient_yn_ever"))
 ```
 
 `er_yn_ever` - Not significant
 ```{r}
-model_partner_sec_1_er <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + er_yn_ever +
-                             (1 + time_c | study_id), data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_sec_1_er, show.re.var = F, show.icc = F, terms = c("er_yn_ever"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + er_yn_ever +
+       (1 + time_c | study_id), data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("er_yn_ever"))
 
-model_partner_sec_1_er <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + er_yn_ever +
-                             (1 + time_c | study_id), data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_sec_1_er, show.re.var = F, show.icc = F, terms = c("er_yn_ever"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + er_yn_ever +
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("er_yn_ever"))
 ```
 
 `mat_yn` - not significant 
 ```{r}
-model_partner_sec_1_mat <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + mat_yn +
-                             (1 + time_c | study_id), data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_sec_1_mat, show.re.var = F, show.icc = F, terms = c("mat_yn"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + mat_yn +
+       (1 + time_c | study_id), data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("mat_yn"))
 
-model_partner_sec_1_mat <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + mat_yn +
-                             (1 + time_c | study_id), data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_sec_1_mat, show.re.var = F, show.icc = F, terms = c("mat_yn"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + mat_yn +
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("mat_yn"))
 ```
 
-`inpatient_yn_ever` - **significant for partner not patient**
+`inpatient_yn_ever` - **significant for partner** not significant for patient
 ```{r}
-model_partner_sec_1_inpatient <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + inpatient_yn_ever +
-                             (1 + time_c | study_id), 
-                             data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_sec_1_inpatient, show.re.var = F, show.icc = F, terms = c("inpatient_yn_ever"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + 
+       inpatient_yn_ever + (1 + time_c | study_id), 
+     data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("inpatient_yn_ever"))
 
-model_partner_sec_1_inpatient <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + inpatient_yn_ever +
-                             (1 + time_c | study_id), 
-                             data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_sec_1_inpatient, show.re.var = F, show.icc = F, terms = c("inpatient_yn_ever"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + 
+       inpatient_yn_ever + (1 + time_c | study_id), 
+     data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("inpatient_yn_ever"))
 ```
 
 `other_psych_treatment_yn` - not significant
 ```{r}
-model_partner_sec_1_psych <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + other_psych_treatment_yn +
-                             (1 + time_c | study_id), 
-                             data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_sec_1_psych, show.re.var = F, show.icc = F, terms = c("other_psych_treatment_yn"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + 
+       other_psych_treatment_yn + (1 + time_c | study_id),
+     data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("other_psych_treatment_yn"))
 
-model_partner_sec_1_psych <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + other_psych_treatment_yn +
-                             (1 + time_c | study_id), 
-                             data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_sec_1_psych, show.re.var = F, show.icc = F, terms = c("other_psych_treatment_yn"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + 
+       other_psych_treatment_yn + (1 + time_c | study_id), 
+     data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("other_psych_treatment_yn"))
 ```
 
 `other_medications_yn` - Not significant
 ```{r}
-model_partner_sec_1_psych_meds <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + other_medications_yn +
-                             (1 + time_c | study_id), 
-                             data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_sec_1_psych_meds, show.re.var = F, show.icc = F, terms = c("other_medications_yn"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + 
+       other_medications_yn + (1 + time_c | study_id), 
+     data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("other_medications_yn"))
 
-model_partner_sec_1_psych_meds <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + other_medications_yn +
-                             (1 + time_c | study_id), 
-                             data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_sec_1_psych_meds, show.re.var = F, show.icc = F, terms = c("other_medications_yn"))
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + 
+       other_medications_yn + (1 + time_c | study_id), 
+     data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("other_medications_yn"))
 ```
 
 ##### Final Model with Significant Covariates
 ```{r}
-model_partner_sec_1 <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + inpatient_yn_ever +
-                             (1 + time_c | study_id), 
-                             data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_sec_1, show.re.var = F, show.icc = F)
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + 
+       inpatient_yn_ever + (1 + time_c | study_id), 
+     data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F)
 
-model_partner_sec_1 <- lmer(relationsatisf_scored ~ time_c*arm_c + 
-                                   relationsatisf_0 + edu_c +
-                             (1 + time_c | study_id), 
-                             data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_sec_1, show.re.var = F, show.icc = F)
+lmer(relationsatisf_scored ~ time_c*arm_c + relationsatisf_0 + edu_c +
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F)
 ```
 
 
