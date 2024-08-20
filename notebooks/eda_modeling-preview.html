@@ -257,7 +257,7 @@
 partner primary outcome = <code>oq45_scored</code></p>
 <p>patient secondary outcome = <code>per_days_abstinent</code><br>
 partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_scored</code></p>
-<p><em>KW: Cannot run primary and secondary patient models for partners (outcomes don’t exist). We could run primary and secondary partner models for patients, but why would we want to do this?</em></p>
+<p><em>KW: Cannot run primary and secondary patient models for partners (outcomes don’t exist). We could run primary and secondary partner models for patients, but does this make sense?</em></p>
 <p>List of potential covariate variable names: <code>race_white_only</code>, <code>age_c</code>, <code>edu_c</code>, <code>meetings_yn</code>, <code>outpatient_yn_ever</code>, <code>er_yn_ever</code>, <code>mat_yn</code>, <code>inpatient_yn_ever</code>, <code>other_psych_treatment_yn</code>, <code>other_medications_yn</code></p>
 <p>Set contrasts</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [3]:</pre></div><div class="cell">
@@ -303,11 +303,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 <h5 class="anchored" data-anchor-id="look-for-significant-covariates-we-will-only-include-covariates-that-significantly-predict-the-outcome.">Look for significant covariates (We will only include covariates that significantly predict the outcome).</h5>
 <p><code>race_white_only</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [5]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>model_patient_prim_race <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                                  race_white_only <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_prim_race, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"race_white_only"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> race_white_only <span class="sc">+</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"race_white_only"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -345,11 +343,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>age_c</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [6]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>model_patient_prim_age <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                                  age_c <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_prim_age, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"age_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> age_c <span class="sc">+</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"age_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -387,11 +383,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>edu_c</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [7]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>model_patient_prim_edu <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                                  edu_c <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_prim_edu, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"edu_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> edu_c <span class="sc">+</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"edu_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -429,11 +423,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>meetings_yn</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [8]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>model_patient_prim_meetings <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                                  meetings_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_prim_meetings, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"meetings_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> meetings_yn <span class="sc">+</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"meetings_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -471,11 +463,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>outpatient_yn_ever</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [9]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>model_patient_prim_outpatient <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                                  outpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_prim_outpatient, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"outpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> outpatient_yn_ever <span class="sc">+</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"outpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -513,11 +503,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>er_yn_ever</code> - <strong>significant</strong></p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [10]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>model_patient_prim_er <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                                er_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_prim_er, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"er_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> er_yn_ever <span class="sc">+</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"er_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -555,11 +543,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>mat_yn</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [11]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>model_patient_prim_mat <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                                mat_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_prim_mat, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"mat_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> mat_yn <span class="sc">+</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"mat_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -597,11 +583,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>inpatient_yn_ever</code> - <strong>significant</strong></p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [12]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>model_patient_prim_inpatient <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> </span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                                inpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_prim_inpatient, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"inpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> inpatient_yn_ever <span class="sc">+</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"inpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -639,11 +623,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>other_psych_treatment_yn</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [13]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>model_patient_prim_psych <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                                other_psych_treatment_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_prim_psych, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_psych_treatment_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> other_psych_treatment_yn <span class="sc">+</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_psych_treatment_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -681,11 +663,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>other_medications_yn</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [14]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>model_patient_prim_psych_meds <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                                other_medications_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_prim_psych_meds, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_medications_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> other_medications_yn <span class="sc">+</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_medications_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -725,11 +705,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 <section id="final-model-with-significant-covariates" class="level5">
 <h5 class="anchored" data-anchor-id="final-model-with-significant-covariates">Final Model with Significant Covariates</h5>
 <div class="cell-container"><div class="cell-decorator"><pre>In [15]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>model_patient_prim <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                             inpatient_yn_ever <span class="sc">+</span> er_yn_ever <span class="sc">+</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_prim, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_heavy_drink_days <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> hdd_0 <span class="sc">+</span> inpatient_yn_ever <span class="sc">+</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>       er_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -836,11 +814,12 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <section id="look-for-significant-covariates-we-will-only-include-covariates-that-significantly-predict-the-outcome.-1" class="level5">
 <h5 class="anchored" data-anchor-id="look-for-significant-covariates-we-will-only-include-covariates-that-significantly-predict-the-outcome.-1">Look for significant covariates (We will only include covariates that significantly predict the outcome).</h5>
+<p><em>Checking for sig covariates for partner and patient dyads</em></p>
 <p><code>race_white_only</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [17]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_race <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> race_white_only <span class="sc">+</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_race, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"race_white_only"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> race_white_only <span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"race_white_only"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -875,9 +854,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_race <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> race_white_only <span class="sc">+</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_race, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"race_white_only"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> race_white_only <span class="sc">+</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"race_white_only"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -915,10 +894,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>age_c</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [18]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_age <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> age_c <span class="sc">+</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_age, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"age_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> age_c <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"age_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -953,10 +931,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_age <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> age_c <span class="sc">+</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_age, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"age_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> age_c <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"age_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -994,10 +971,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>edu_c</code> - <strong>significant for partner but not patient</strong></p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [19]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_edu <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> edu_c <span class="sc">+</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_edu, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"edu_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> edu_c <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"edu_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1032,10 +1008,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_edu <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> edu_c <span class="sc">+</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_edu, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"edu_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> edu_c <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"edu_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1073,10 +1048,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>meetings_yn</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [20]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_meetings <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> meetings_yn <span class="sc">+</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_meetings, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"meetings_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> meetings_yn <span class="sc">+</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"meetings_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1111,10 +1085,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_meetings <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> meetings_yn <span class="sc">+</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_meetings, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"meetings_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> meetings_yn <span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"meetings_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1150,12 +1123,11 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 
 </div>
 </div></div>
-<p><code>outpatient_yn_ever</code> - <strong>significant for partner but not patient</strong></p>
+<p><code>outpatient_yn_ever</code> - <strong>significant for partner</strong> Not significant for patient</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [21]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_outpatient <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> </span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>                                       outpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_outpatient, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"outpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> outpatient_yn_ever <span class="sc">+</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"outpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1190,10 +1162,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_outpatient <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> </span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>                                       outpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_outpatient, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"outpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> outpatient_yn_ever <span class="sc">+</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"outpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1231,10 +1202,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>er_yn_ever</code> - Not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [22]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_er <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> </span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>                              er_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_er, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"er_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> er_yn_ever <span class="sc">+</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"er_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1269,10 +1239,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_er <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> </span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>                              er_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_er, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"er_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> er_yn_ever <span class="sc">+</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"er_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1310,10 +1279,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>mat_yn</code> - not significant for partner, <strong>significant for patient</strong></p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [23]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_mat <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> </span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                              mat_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_mat, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"mat_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> mat_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"mat_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1348,10 +1316,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_mat <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> </span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>                              mat_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_mat, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"mat_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> mat_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"mat_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1389,10 +1356,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>inpatient_yn_ever</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [24]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_inpatient <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> </span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                              inpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_inpatient, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"inpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> inpatient_yn_ever <span class="sc">+</span> </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"inpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1427,10 +1393,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_inpatient <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> </span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>                              inpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_inpatient, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"inpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> inpatient_yn_ever <span class="sc">+</span> </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"inpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1466,12 +1431,11 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 
 </div>
 </div></div>
-<p><code>other_psych_treatment_yn</code> - <strong>significant for partner, but not for patient</strong></p>
+<p><code>other_psych_treatment_yn</code> - <strong>significant for partner</strong> not significant for patient</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [25]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_psych <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> </span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>                              other_psych_treatment_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_psych, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_psych_treatment_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> other_psych_treatment_yn <span class="sc">+</span> </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_psych_treatment_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1506,10 +1470,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_psych <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> </span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>                              other_psych_treatment_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_psych, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_psych_treatment_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> other_psych_treatment_yn <span class="sc">+</span> </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_psych_treatment_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1545,12 +1508,11 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 
 </div>
 </div></div>
-<p><code>other_medications_yn</code> - <strong>significant for partner but not for patient</strong></p>
+<p><code>other_medications_yn</code> - <strong>significant for partner</strong> not significant for patient</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [26]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_psych_meds <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> </span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>                              other_medications_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_psych_meds, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_medications_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> other_medications_yn <span class="sc">+</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_medications_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1585,10 +1547,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim_psych_meds <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> </span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>                              other_medications_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim_psych_meds, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_medications_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> other_medications_yn <span class="sc">+</span> </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_medications_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1628,11 +1589,10 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 <section id="final-model-with-significant-covariates-1" class="level5">
 <h5 class="anchored" data-anchor-id="final-model-with-significant-covariates-1">Final Model with Significant Covariates</h5>
 <div class="cell-container"><div class="cell-decorator"><pre>In [27]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> edu_c <span class="sc">+</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>                             outpatient_yn_ever <span class="sc">+</span> other_psych_treatment_yn <span class="sc">+</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>                             other_medications_yn <span class="sc">+</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> edu_c <span class="sc">+</span> outpatient_yn_ever <span class="sc">+</span> </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>       other_psych_treatment_yn <span class="sc">+</span> other_medications_yn <span class="sc">+</span> </span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1727,9 +1687,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>model_partner_prim <span class="ot">&lt;-</span> <span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> mat_yn <span class="sc">+</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_prim, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(oq45_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> oq45_0 <span class="sc">+</span> mat_yn <span class="sc">+</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1832,11 +1792,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 <h5 class="anchored" data-anchor-id="look-for-significant-covariates">Look for significant covariates</h5>
 <p><code>race_white_only</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [29]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>model_patient_sec_race <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> </span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>                                  race_white_only <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_sec_race, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"race_white_only"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> race_white_only <span class="sc">+</span> </span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"race_white_only"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1874,11 +1832,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>age_c</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [30]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>model_patient_sec_age <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> </span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>                                  age_c <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_sec_age, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"age_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> age_c <span class="sc">+</span> </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"age_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1916,11 +1872,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>edu_c</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [31]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>model_patient_sec_edu <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> </span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>                                  edu_c <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_sec_edu, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"edu_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> edu_c <span class="sc">+</span> </span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"edu_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -1958,11 +1912,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>meetings_yn</code> - <strong>significant</strong></p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [32]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>model_patient_sec_meetings <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> </span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>                                  meetings_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_sec_meetings, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"meetings_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> meetings_yn <span class="sc">+</span> </span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"meetings_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2000,11 +1952,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>outpatient_yn_ever</code> - <strong>significant</strong></p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [33]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>model_patient_sec_outpatient <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> </span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>                                  outpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_sec_outpatient, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"outpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> outpatient_yn_ever <span class="sc">+</span> </span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"outpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2042,11 +1992,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>er_yn_ever</code> - Not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [34]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>model_patient_sec_er <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> </span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>                                  er_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_sec_er, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"er_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> er_yn_ever <span class="sc">+</span> </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"er_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2084,11 +2032,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>mat_yn</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [35]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>model_patient_sec_mat <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> </span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>                                  mat_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_sec_mat, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"mat_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> mat_yn <span class="sc">+</span> </span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span>  </span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"mat_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2126,11 +2072,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>inpatient_yn_ever</code> - <strong>significant</strong></p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [36]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>model_patient_sec_inpatient <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> </span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>                                  inpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_sec_inpatient, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"inpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> inpatient_yn_ever <span class="sc">+</span> </span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"inpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2168,11 +2112,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>other_psych_treatment_yn</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [37]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>model_patient_sec_psych <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> </span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>                                  other_psych_treatment_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_sec_psych, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_psych_treatment_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> other_psych_treatment_yn <span class="sc">+</span> </span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_psych_treatment_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2210,11 +2152,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>other_medications_yn</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [38]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>model_patient_sec_psych_meds <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> </span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>                                  other_medications_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_sec_psych_meds, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_medications_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> other_medications_yn <span class="sc">+</span> </span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_medications_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2254,11 +2194,10 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 <section id="final-model-with-significant-covariates-2" class="level5">
 <h5 class="anchored" data-anchor-id="final-model-with-significant-covariates-2">Final Model with Significant Covariates</h5>
 <div class="cell-container"><div class="cell-decorator"><pre>In [39]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>model_patient_sec <span class="ot">&lt;-</span> <span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span></span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>                            outpatient_yn_ever <span class="sc">+</span> meetings_yn <span class="sc">+</span></span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>                            inpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_patient_sec, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(per_days_abstinent <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> pda_0 <span class="sc">+</span> outpatient_yn_ever <span class="sc">+</span> </span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>       meetings_yn <span class="sc">+</span> inpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2372,10 +2311,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 <h5 class="anchored" data-anchor-id="look-for-significant-covariates-1">Look for significant covariates</h5>
 <p><code>race_white_only</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [41]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_race <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> race_white_only <span class="sc">+</span></span>
-<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_race, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"race_white_only"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> race_white_only <span class="sc">+</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"race_white_only"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2410,10 +2348,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_race <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> race_white_only <span class="sc">+</span></span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_race, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"race_white_only"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> race_white_only <span class="sc">+</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"race_white_only"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2451,10 +2388,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>age_c</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [42]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_age <span class="ot">&lt;-</span>  <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> age_c <span class="sc">+</span></span>
-<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_age, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"age_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> age_c <span class="sc">+</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"age_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2489,10 +2425,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_age <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> age_c <span class="sc">+</span></span>
-<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_age, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"age_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> age_c <span class="sc">+</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"age_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2528,12 +2463,11 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 
 </div>
 </div></div>
-<p><code>edu_c</code> - <strong>significant for patient but not partner</strong></p>
+<p><code>edu_c</code> - <strong>significant for patient</strong> not significant for partner</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [43]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_edu <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> edu_c <span class="sc">+</span></span>
-<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_edu, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"edu_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> edu_c <span class="sc">+</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"edu_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2568,10 +2502,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_edu <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> edu_c <span class="sc">+</span></span>
-<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_edu, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"edu_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> edu_c <span class="sc">+</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"edu_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2609,10 +2542,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>meetings_yn</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [44]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_meetings <span class="ot">&lt;-</span><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> meetings_yn <span class="sc">+</span></span>
-<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_meetings, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"meetings_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> meetings_yn <span class="sc">+</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"meetings_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2647,10 +2579,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_meetings <span class="ot">&lt;-</span><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> meetings_yn <span class="sc">+</span></span>
-<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_meetings, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"meetings_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> meetings_yn <span class="sc">+</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"meetings_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2688,10 +2619,10 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>outpatient_yn_ever</code> - Not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [45]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_outpatient <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> outpatient_yn_ever <span class="sc">+</span></span>
-<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_outpatient, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"outpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> </span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>       outpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"outpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2726,10 +2657,10 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_outpatient <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> outpatient_yn_ever <span class="sc">+</span></span>
-<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_outpatient, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"outpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> </span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>       outpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"outpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2767,10 +2698,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>er_yn_ever</code> - Not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [46]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_er <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> er_yn_ever <span class="sc">+</span></span>
-<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_er, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"er_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> er_yn_ever <span class="sc">+</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"er_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2805,10 +2735,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_er <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> er_yn_ever <span class="sc">+</span></span>
-<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_er, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"er_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> er_yn_ever <span class="sc">+</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"er_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2846,10 +2775,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>mat_yn</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [47]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_mat <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> mat_yn <span class="sc">+</span></span>
-<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_mat, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"mat_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> mat_yn <span class="sc">+</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"mat_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2884,10 +2812,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_mat <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> mat_yn <span class="sc">+</span></span>
-<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_mat, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"mat_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> mat_yn <span class="sc">+</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"mat_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2923,13 +2850,12 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 
 </div>
 </div></div>
-<p><code>inpatient_yn_ever</code> - <strong>significant for partner not patient</strong></p>
+<p><code>inpatient_yn_ever</code> - <strong>significant for partner</strong> not significant for patient</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [48]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_inpatient <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> inpatient_yn_ever <span class="sc">+</span></span>
-<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_inpatient, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"inpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> </span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>       inpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"inpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -2964,11 +2890,10 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_inpatient <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> inpatient_yn_ever <span class="sc">+</span></span>
-<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_inpatient, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"inpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> </span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>       inpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"inpatient_yn_ever"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -3006,11 +2931,10 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>other_psych_treatment_yn</code> - not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [49]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_psych <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> other_psych_treatment_yn <span class="sc">+</span></span>
-<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_psych, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_psych_treatment_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> </span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>       other_psych_treatment_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id),</span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_psych_treatment_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -3045,11 +2969,10 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_psych <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> other_psych_treatment_yn <span class="sc">+</span></span>
-<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_psych, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_psych_treatment_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> </span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>       other_psych_treatment_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_psych_treatment_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -3087,11 +3010,10 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </div></div>
 <p><code>other_medications_yn</code> - Not significant</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [50]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_psych_meds <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> other_medications_yn <span class="sc">+</span></span>
-<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_psych_meds, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_medications_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> </span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>       other_medications_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_medications_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -3126,11 +3048,10 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1_psych_meds <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> other_medications_yn <span class="sc">+</span></span>
-<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1_psych_meds, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_medications_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> </span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>       other_medications_yn <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F, <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"other_medications_yn"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -3170,11 +3091,10 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 <section id="final-model-with-significant-covariates-3" class="level5">
 <h5 class="anchored" data-anchor-id="final-model-with-significant-covariates-3">Final Model with Significant Covariates</h5>
 <div class="cell-container"><div class="cell-decorator"><pre>In [51]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> inpatient_yn_ever <span class="sc">+</span></span>
-<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> </span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>       inpatient_yn_ever <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -3251,11 +3171,9 @@ partner secondary outcomes = <code>relationsatisf_scored</code> and <code>abuse_
 </tbody></table>
 
 </div>
-<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>model_partner_sec_1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> </span>
-<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>                                   relationsatisf_0 <span class="sc">+</span> edu_c <span class="sc">+</span></span>
-<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>                             (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), </span>
-<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>))</span>
-<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(model_partner_sec_1, <span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(relationsatisf_scored <span class="sc">~</span> time_c<span class="sc">*</span>arm_c <span class="sc">+</span> relationsatisf_0 <span class="sc">+</span> edu_c <span class="sc">+</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>       (<span class="dv">1</span> <span class="sc">+</span> time_c <span class="sc">|</span> study_id), <span class="at">data =</span> <span class="fu">subset</span>(data, dyad <span class="sc">==</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>  sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(<span class="at">show.re.var =</span> F, <span class="at">show.icc =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table style="border-collapse:collapse; border:none;">
 <tbody><tr>
@@ -4294,7 +4212,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>  </div> <!-- /content -->  <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","loop":false,"selector":".lightbox","openEffect":"zoom","descPosition":"bottom"});
+</script>  </div> <!-- /content -->  <script>var lightboxQuarto = GLightbox({"selector":".lightbox","openEffect":"zoom","loop":false,"closeEffect":"zoom","descPosition":"bottom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {
