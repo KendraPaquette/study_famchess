@@ -727,12 +727,14 @@ sjPlot::tab_model(model_partner_sec_2, show.re.var = F, show.icc = F)
 
 ### Check Assumptions for Analyses of Mediators
 
-**KW: mediators only for primary outcomes**   
+**KW: mediators only for primary outcomes and ACHESS vs. FamCHESS contrasts**   
 
-List of mediators: 
+List of Patient mediators: `socrates_scored`    
+List of Partner mediators: `peersupport_scored`, `treatmentskills_scored`
 
 ### Check Assumptions for Analyses of Moderators 
 
 **KW: moderators only for primary outcomes**   
 
-List of moderators:
+List of Patient moderators: `dsm5_criteria`    
+List of Partner moderators: `gender`, `days_app_use`

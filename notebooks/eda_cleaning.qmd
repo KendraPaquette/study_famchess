@@ -304,6 +304,9 @@ Check stratification variables in arms - patient gender identity and alcohol use
 DSM5 criteria: 1 = severe, 2 = moderate, 3 = mild    
 Group: 0 = patient control, 1 = patient achess, 2 = patient famchess,  
 ```{r}
+data <- data |> 
+  left_join(dsm |> select(study_id, dsm5_criteria), by = "study_id")
+
 data |> 
   filter(dyad == 2) |> 
   group_by(study_id) |> 
@@ -314,8 +317,6 @@ data |>
   filter(dyad == 2) |> 
   group_by(study_id) |> 
   slice(1) |> 
-  left_join(dsm |> 
-              select(study_id, dsm5_criteria), by = "study_id") |> 
   tabyl(group, dsm5_criteria)
 ```
 
