@@ -152,16 +152,21 @@ From Protocol Paper:
 Note these moderators differ from figure that list the following:   
 
 Patient moderators: `dsm5_criteria`    
+Partner moderators: `gender`, `days_app_use`   
 
+### Patient Primary Outcome
+
+Patient moderators: `dsm5_criteria`
 ```{r}
 lmer(per_heavy_drink_days ~ time_c*arm_c + hdd_0 + inpatient_yn_ever + 
-       er_yn_ever + dsm5_criteria + arm_c*dsm5_criteria +
+       er_yn_ever + dsm5_criteria + arm_c:dsm5_criteria +
        (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
   sjPlot::tab_model(show.re.var = F, show.icc = F)
 ```
 
+### Partner Primary Outcome
 
-List of Partner moderators: `gender`, `days_app_use`   
+Partner moderators: `gender`, `days_app_use`   
 
 *Add separately into model.*   
 
@@ -191,54 +196,67 @@ data <- data |>
   left_join(gender, by = "dyad_id") 
 ```
 
-Partner Gender for Partner
+Partner Gender (`gender_1`) for Partner
 ```{r}
-model_partner_prim_mod <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + edu_c +
-                             outpatient_yn_ever + other_psych_treatment_yn +
-                             other_medications_yn +
-                              gender_1 + arm_c*gender_1 +
-                             (1 + time_c | study_id), data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_prim_mod, show.re.var = F, show.icc = F)
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + edu_c + outpatient_yn_ever + 
+       other_psych_treatment_yn + other_medications_yn + gender_1 + 
+       arm_c:gender_1 + (1 + time_c | study_id), 
+     data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F)
 ```
 
-Partner Gender for Patient
+Partner Gender (`gender_1`) for Patient
 ```{r}
-model_partner_prim_mod_px <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + mat_yn +
-                              gender_1 + arm_c*gender_1 +
-                             (1 + time_c | study_id), data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_prim_mod_px, show.re.var = F, show.icc = F)
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + mat_yn + gender_1 + arm_c:gender_1 +
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F)
 ```
 
-Patient Gender for Partner
+Patient Gender (`gender_2`) for Partner
 ```{r}
-model_partner_prim_mod <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + edu_c +
-                             outpatient_yn_ever + other_psych_treatment_yn +
-                             other_medications_yn +
-                              gender_2 + arm_c*gender_2 +
-                             (1 + time_c | study_id), data = subset(data, dyad == 1))
-sjPlot::tab_model(model_partner_prim_mod, show.re.var = F, show.icc = F)
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + edu_c + outpatient_yn_ever + 
+       other_psych_treatment_yn + other_medications_yn + gender_2 + 
+       arm_c:gender_2 + (1 + time_c | study_id), 
+     data = subset(data, dyad == 1)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F)
 ```
 
-Patient Gender for Patient
+Patient Gender (`gender_2`) for Patient    
+
+*arm by gender interaction*
 ```{r}
-model_partner_prim_mod_px <- lmer(oq45_scored ~ time_c*arm_c + oq45_0 + mat_yn +
-                              gender_2 + arm_c*gender_2 +
-                             (1 + time_c | study_id), data = subset(data, dyad == 2))
-sjPlot::tab_model(model_partner_prim_mod_px, show.re.var = F, show.icc = F)
+lmer(oq45_scored ~ time_c*arm_c + oq45_0 + mat_yn + gender_2 + arm_c:gender_2 +
+       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F)
 ```
 
+`days_app_use` for Partner     
 *Too much missing data when app use added?*
 ```{r}
-model_partner_prim_mod <- lmer(oq45_scored ~ time_c*arm_c*days_app_use_c + oq45_0 + edu_c +
-                             outpatient_yn_ever + other_psych_treatment_yn +
-                             other_medications_yn +
-                             (1 + time_c | study_id), data = subset(data, dyad == 1))
+# lmer(oq45_scored ~ time_c*arm_c + oq45_0 + edu_c + outpatient_yn_ever + 
+#        other_psych_treatment_yn + other_medications_yn + days_app_use_c +
+#        arm_c:days_app_use_c + (1 + time_c | study_id), 
+#      data = subset(data, dyad == 1)) |> 
+#   sjPlot::tab_model(show.re.var = F, show.icc = F)
 
 data |> 
-  select(days_app_use, days_app_use_c) |> 
+  filter(dyad == 1) |> 
+  select(days_app_use_c) |> 
   naniar::miss_var_summary()
 ```
 
-*Run for patient dyad?* 
+`days_app_use` for Patient    
+*Rank deficient error*
+```{r}
+# lmer(oq45_scored ~ time_c*arm_c + oq45_0 + mat_yn + 
+#        arm_c:days_app_use_c + days_app_use_c +
+#        (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
+#   sjPlot::tab_model(show.re.var = F, show.icc = F)
+
+data |> 
+  filter(dyad == 2) |> 
+  select(days_app_use_c) |> 
+  naniar::miss_var_summary()
+```
 
 
