@@ -32,6 +32,49 @@ data <- read_csv(here::here(path_data, "famchess_data_ana.csv"),
                  show_col_types = FALSE)
 ```
 
+### Center variables for modeling EDA
+
+Center non-binary covariates: age and edu
+
+```{r}
+data <- data |> 
+  mutate(age_c = age - mean(age, na.rm = TRUE))
+```
+
+*KW: education is not continuous. Is centering best transformation? Maybe instead pick a certain level? Centering on mean for now*
+```{r}
+sjlabelled::get_labels(data$edu)
+
+mean(data$edu, na.rm = TRUE)
+
+tabyl(data$edu)
+
+data <- data |> 
+  mutate(edu_c = edu - mean(edu, na.rm = TRUE))
+```
+
+Center baseline values of outcomes   
+
+```{r}
+data <- data |> 
+  mutate(hdd_0 = hdd_0 - mean(hdd_0, na.rm = TRUE),
+         pda_0 = pda_0 - mean(pda_0, na.rm = TRUE),
+         oq45_0 = oq45_0 - mean(oq45_0, na.rm = TRUE),
+         relationsatisf_0 = relationsatisf_0 - mean(relationsatisf_0, na.rm = TRUE),
+         abuse_0 = abuse_0 - mean(abuse_0, na.rm = TRUE))
+```
+
+Center time at the end of the intervention period (8 months).  
+
+```{r}
+sjlabelled::get_labels(data$time)
+
+tabyl(data$time)
+
+data <- data |> 
+  mutate(time_c = time - 2)
+```
+
 
 ### Check Assumptions for Analyses of Study Arm Effects 
 
