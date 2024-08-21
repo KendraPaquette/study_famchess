@@ -253,6 +253,37 @@
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>dsm <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_sav</span>(here<span class="sc">::</span><span class="fu">here</span>(path_data, <span class="st">"FamCHESS_DSM5.sav"</span>)) <span class="sc">|&gt;</span> </span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="co"># for stratification check</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
+<p>Change labeled classes to factor, clean up names, and merge data</p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [3]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dyad =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(dyad, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">arm =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(arm, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">group =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(group, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">time =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(time, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">gender =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(gender, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">edu =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(edu, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">ethnicity =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(ethnicity, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">income =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(income, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">partner_relationship =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(partner_relationship, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">employment =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(employment, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">meetings_yn =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(meetings_yn, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">outpatient_yn_ever =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(outpatient_yn_ever, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">other_psych_treatment_yn =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(other_psych_treatment_yn, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">er_yn_ever =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(er_yn_ever, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">mat_yn =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(mat_yn, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">healthservice_6 =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(healthservice_6, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>         <span class="at">inpatient_yn_ever =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(inpatient_yn_ever, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">r_eadmits_yn =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(r_eadmits_yn, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">relationship_status =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(relationship_status, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">readmits_yn =</span> r_eadmits_yn,</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>         <span class="at">other_medications_yn =</span> healthservice_6)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(dsm <span class="sc">|&gt;</span> </span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mutate</span>(<span class="at">dsm5_criteria =</span> sjlabelled<span class="sc">::</span><span class="fu">as_label</span>(dsm5_criteria, <span class="at">keep.labels =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(study_id, dsm5_criteria), <span class="at">by =</span> <span class="st">"study_id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div>
 <p>Remove participants with inaccurate data (from Olivia’s script):</p>
 <ul>
 <li>167PT (baseline and 4 month): FAM passed away after baseline</li>
@@ -260,110 +291,79 @@
 <li>365PT (noted on 1 timepoint): Answered relationship questions about her dog, not her son</li>
 <li>365FAM (noted on 1 timepoint): Answered relationship questions about romantic partner, not his mom</li>
 </ul>
-<div class="cell-container"><div class="cell-decorator"><pre>In [3]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>study_id <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"167PT"</span>, <span class="st">"208FAM"</span>, <span class="st">"208PT"</span>, <span class="st">"365PT"</span>, <span class="st">"365FAM"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<p>Recode variables (from Olivia’s script)</p>
-<p>195PT: reported prefer not to say for gender on baseline but reported male in TLFB data. Changing to male to match TLFB.</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [4]:</pre></div><div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gender =</span> <span class="fu">if_else</span>(study_id <span class="sc">==</span> <span class="st">"195PT"</span>, <span class="dv">2</span>, gender))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>study_id <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"167PT"</span>, <span class="st">"208FAM"</span>, <span class="st">"208PT"</span>, <span class="st">"365PT"</span>, <span class="st">"365FAM"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div>
+<p>195PT: reported prefer not to say for gender on baseline but reported male in TLFB data. Changing to male to match TLFB.</p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [5]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gender =</span> <span class="fu">if_else</span>(study_id <span class="sc">==</span> <span class="st">"195PT"</span>, <span class="st">"Man"</span>, gender))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
 <p>Gender - 2 levels (male / non-male) - TLFB is also coded this way</p>
 <ul>
 <li>500PT: non-binary</li>
 <li>128FAM: Transgender women</li>
 </ul>
-<p><em>KW: currently setting these two people to Non-male, however, I saw this in scales/measures doc - not enough non-man/ women responses to have 3rd level. For patients, those who don’t fall into groups set to missing</em></p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [5]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gender_original =</span> gender, </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">gender =</span> <span class="fu">if_else</span>(gender <span class="sc">!=</span> <span class="dv">2</span>, <span class="dv">1</span>, gender),</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">gender =</span> sjlabelled<span class="sc">::</span><span class="fu">set_labels</span>(gender, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Non-male"</span>, <span class="st">"Male"</span>))) </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(data<span class="sc">$</span>gender_original)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [6]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gender_original =</span> <span class="fu">factor</span>(gender), </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">gender =</span> <span class="fu">if_else</span>(gender <span class="sc">!=</span> <span class="st">"Man"</span>, <span class="st">"non-male"</span>, <span class="st">"male"</span>),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">gender =</span> <span class="fu">factor</span>(gender, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"non-male"</span>, <span class="st">"male"</span>)))</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(data<span class="sc">$</span>gender_original)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> data$gender_original   n     percent valid_percent
-                    1 775 0.567765568   0.569434240
-                    2 580 0.424908425   0.426157237
-                    3   2 0.001465201   0.001469508
-                    5   4 0.002930403   0.002939015
-                   NA   4 0.002930403            NA</code></pre>
+                  Man 580 0.424908425   0.426157237
+           Non-binary   4 0.002930403   0.002939015
+    Transgender woman   2 0.001465201   0.001469508
+                Woman 775 0.567765568   0.569434240
+                 &lt;NA&gt;   4 0.002930403            NA</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(data<span class="sc">$</span>gender)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(data<span class="sc">$</span>gender)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> data$gender   n     percent valid_percent
-           1 781 0.572161172     0.5738428
-           2 580 0.424908425     0.4261572
-          NA   4 0.002930403            NA</code></pre>
+    non-male 781 0.572161172     0.5738428
+        male 580 0.424908425     0.4261572
+        &lt;NA&gt;   4 0.002930403            NA</code></pre>
 </div>
 </div></div>
 <p>Create binary covariate for race/ethnicity defined as: White only (non-Hispanic) vs.&nbsp;not White only</p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [6]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">race_white_only =</span> <span class="fu">if_else</span>(ethnicity <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> race_1 <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                                     race_2 <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> race_3 <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                                     race_4 <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> race_5 <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                                     race_6 <span class="sc">==</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(data<span class="sc">$</span>race_white_only)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [7]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">race_white_only =</span> <span class="fu">as.factor</span>(<span class="fu">if_else</span>(ethnicity <span class="sc">==</span> <span class="st">"No"</span> <span class="sc">&amp;</span> race_1 <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                                     race_2 <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> race_3 <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                                     race_4 <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> race_5 <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                                     race_6 <span class="sc">==</span> <span class="dv">0</span>, <span class="st">"Yes"</span>, <span class="st">"No"</span>)))</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(data<span class="sc">$</span>race_white_only)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> data$race_white_only    n     percent valid_percent
-                    0  335 0.245421245     0.2461425
-                    1 1026 0.751648352     0.7538575
-                   NA    4 0.002930403            NA</code></pre>
+                   No  335 0.245421245     0.2461425
+                  Yes 1026 0.751648352     0.7538575
+                 &lt;NA&gt;    4 0.002930403            NA</code></pre>
 </div>
 </div></div>
-<p>Center non-binary covariates: age and edu</p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [7]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_c =</span> age <span class="sc">-</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<p><em>KW: education is not continuous. Is centering best transformation? Maybe instead pick a certain level? Centering on mean for now</em></p>
+<p>Recode data to have baseline scores of outcomes as variables for covariates</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [8]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sjlabelled<span class="sc">::</span><span class="fu">get_labels</span>(data<span class="sc">$</span>edu)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "8th grade or less"                     
-[2] "Some high school, but did not graduate"
-[3] "High school graduate or GED"           
-[4] "Some college or 2 year degree"         
-[5] "4-year college graduate"               
-[6] "More than 4-year college degree"       </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data<span class="sc">$</span>edu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 4.274798</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(data<span class="sc">$</span>edu)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> data$edu   n     percent valid_percent
-        1   8 0.005860806   0.005878031
-        2  42 0.030769231   0.030859662
-        3 266 0.194871795   0.195444526
-        4 510 0.373626374   0.374724467
-        5 322 0.235897436   0.236590742
-        6 213 0.156043956   0.156502572
-       NA   4 0.002930403            NA</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">edu_c =</span> edu <span class="sc">-</span> <span class="fu">mean</span>(edu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>baseline_values <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span>  </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(time <span class="sc">==</span> <span class="st">"Baseline"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(study_id, </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">hdd_0 =</span> per_heavy_drink_days, </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">pda_0 =</span> per_days_abstinent, </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">oq45_0 =</span> oq45_scored, </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">relationsatisf_0 =</span> relationsatisf_scored, </span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">abuse_0 =</span> abuse_scored)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(time <span class="sc">!=</span> <span class="st">"Baseline"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(baseline_values, <span class="at">by =</span> <span class="st">"study_id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
-<p>Recode data to have baseline scores of outcomes as covariate</p>
-<p><em>KW: 36 study ids provided baseline info but no data at later time points</em></p>
+<p><em>KW: 36 study_ids provided baseline info but no data at later time points - remove study_ids and corresponding dyad (53 participants in total)?</em></p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [9]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>baseline_values <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span>  </span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(time <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(study_id, </span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">hdd_0 =</span> per_heavy_drink_days, </span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">pda_0 =</span> per_days_abstinent, </span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">oq45_0 =</span> oq45_scored, </span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">relationsatisf_0 =</span> relationsatisf_scored, </span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">abuse_0 =</span> abuse_scored)</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>baseline_values <span class="sc">|&gt;</span> </span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>study_id <span class="sc">%in%</span> <span class="fu">subset</span>(data, time <span class="sc">!=</span> <span class="dv">0</span>)<span class="sc">$</span>study_id) <span class="sc">|&gt;</span> </span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>baseline_values <span class="sc">|&gt;</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>study_id <span class="sc">%in%</span> <span class="fu">subset</span>(data, time <span class="sc">!=</span> <span class="st">"Baseline"</span>)<span class="sc">$</span>study_id) <span class="sc">|&gt;</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 36 × 6
    study_id hdd_0 pda_0 oq45_0 relationsatisf_0 abuse_0
@@ -407,26 +407,19 @@
 </div>
 </div></div>
 <div class="cell-container"><div class="cell-decorator"><pre>In [10]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(time <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(baseline_values, <span class="at">by =</span> <span class="st">"study_id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<p><em>KW: confirm this is okay with John - remove 36 individuals with only baseline data</em></p>
-<p><em>KW: Remove partners too?</em></p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [11]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dyad_ids <span class="ot">&lt;-</span> baseline_values <span class="sc">|&gt;</span> </span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dyad_id =</span> <span class="fu">str_sub</span>(study_id, <span class="dv">1</span>, <span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>study_id <span class="sc">%in%</span> <span class="fu">subset</span>(data, time <span class="sc">!=</span> <span class="dv">0</span>)<span class="sc">$</span>study_id) <span class="sc">|&gt;</span> </span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(dyad_id) <span class="sc">|&gt;</span> </span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dyad_id =</span> <span class="fu">str_sub</span>(study_id, <span class="dv">1</span>, <span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad_id <span class="sc">%in%</span> dyad_ids) <span class="sc">|&gt;</span> </span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(study_id, dyad_id) <span class="sc">|&gt;</span> </span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(dyad_id) <span class="sc">|&gt;</span> </span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dyad_ids <span class="ot">&lt;-</span> baseline_values <span class="sc">|&gt;</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dyad_id =</span> <span class="fu">str_sub</span>(study_id, <span class="dv">1</span>, <span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>study_id <span class="sc">%in%</span> <span class="fu">subset</span>(data, time <span class="sc">!=</span> <span class="st">"Baseline"</span>)<span class="sc">$</span>study_id) <span class="sc">|&gt;</span> </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(dyad_id) <span class="sc">|&gt;</span> </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dyad_id =</span> <span class="fu">str_sub</span>(study_id, <span class="dv">1</span>, <span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad_id <span class="sc">%in%</span> dyad_ids) <span class="sc">|&gt;</span> </span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(study_id, dyad_id) <span class="sc">|&gt;</span> </span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(dyad_id) <span class="sc">|&gt;</span> </span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 53 × 2
    study_id dyad_id
@@ -485,149 +478,133 @@
 52 362PT    362    
 53 362FAM   362    </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dyad_id =</span> <span class="fu">str_sub</span>(study_id, <span class="dv">1</span>, <span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>dyad_id <span class="sc">%in%</span> dyad_ids) <span class="sc">|&gt;</span> </span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>dyad_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<p>Center baseline values of outcomes</p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [12]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hdd_0 =</span> hdd_0 <span class="sc">-</span> <span class="fu">mean</span>(hdd_0, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">pda_0 =</span> pda_0 <span class="sc">-</span> <span class="fu">mean</span>(pda_0, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">oq45_0 =</span> oq45_0 <span class="sc">-</span> <span class="fu">mean</span>(oq45_0, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">relationsatisf_0 =</span> relationsatisf_0 <span class="sc">-</span> <span class="fu">mean</span>(relationsatisf_0, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">abuse_0 =</span> abuse_0 <span class="sc">-</span> <span class="fu">mean</span>(abuse_0, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<p>Center time at the end of the intervention period (8 months).</p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [13]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>sjlabelled<span class="sc">::</span><span class="fu">get_labels</span>(data<span class="sc">$</span>time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Baseline" "4 Month"  "8 Month"  "12 Month"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(data<span class="sc">$</span>time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> data$time   n   percent
-         1 328 0.3534483
-         2 315 0.3394397
-         3 285 0.3071121</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time_c =</span> time <span class="sc">-</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dyad_id =</span> <span class="fu">str_sub</span>(study_id, <span class="dv">1</span>, <span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>dyad_id <span class="sc">%in%</span> dyad_ids) <span class="sc">|&gt;</span> </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>dyad_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
 </section>
 <section id="eda" class="level3">
 <h3 class="anchored" data-anchor-id="eda">EDA</h3>
 <p>Remove vars not used in analyses (e.g., keep scale score and remove individual items).</p>
 <p><em>KW: COVID acute/residual symptoms was originally listed as covariate but was removed per measures doc (Participants interpreted question differently).</em></p>
-<p><em>KW: phq, promis, loneliness, coping, interaction scales not scored or in measures doc. Removed from analyses data set.</em></p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [14]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(treatmentskills_1<span class="sc">:</span>treatmentskills_18_recode,</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>            oq45_1<span class="sc">:</span>oq45_45, alcoholproblems_1<span class="sc">:</span>alcoholproblems_15, </span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>            relationsatisf_1<span class="sc">:</span>relationsatisf_8, phq_1<span class="sc">:</span>phq_8, </span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>            abuse_1<span class="sc">:</span>abuse_16_yes, promis29_1<span class="sc">:</span>promis29_8, </span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>            abuse_physical_scored<span class="sc">:</span>abuse_psychological_scored, gender_open,</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>            loneliness_1<span class="sc">:</span>loneliness_8, healthservice_1, healthservice_2,</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>            healthservice_3,healthservice_4,healthservice_5, </span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>            healthservice_5a_1<span class="sc">:</span>healthservice_5c, </span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>            healthservice_6a_1<span class="sc">:</span>healthservice_8a, healthservice_8b, </span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>            healthservice_9a, healthservice_9b, bonding_1<span class="sc">:</span>bonding_5, </span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>            socrates_1<span class="sc">:</span>socrates_20, coping_1<span class="sc">:</span>coping_25, </span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>            drinkinggoals<span class="sc">:</span>drinkinggoal_7_text, covid_1<span class="sc">:</span>covid_3f,</span>
-<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>            interaction_1<span class="sc">:</span>interaction_20, drink_druguse_1<span class="sc">:</span>drinkdruguse_8d,</span>
-<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>            employmentstatus<span class="sc">:</span>notemployed_open, ethnicity<span class="sc">:</span>race_open, </span>
-<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>            livewith_1<span class="sc">:</span>livewith_open, er_yn, outpatient_yn, </span>
-<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>            inpatient_yn, n_days, mean_drinks_per_day, per_drink_days, </span>
-<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>            covid_scored,redcap_event_name, recruitment_id)) <span class="sc">|&gt;</span> </span>
-<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">other_medications_yn =</span> healthservice_6,</span>
-<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">readmits_yn =</span> r_eadmits_yn) <span class="sc">|&gt;</span>  <span class="co"># renaming for descriptive/consistency</span></span>
-<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(study_id) <span class="sc">|&gt;</span> </span>
-<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><em>KW: phq, promis, alcohol problems, loneliness, coping, interaction scales not scored or in measures doc. Removed from analyses data set.</em></p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [11]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(treatmentskills_1<span class="sc">:</span>treatmentskills_18_recode,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>            oq45_1<span class="sc">:</span>oq45_45, alcoholproblems_1<span class="sc">:</span>alcoholproblems_15, </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>            relationsatisf_1<span class="sc">:</span>relationsatisf_8, phq_1<span class="sc">:</span>phq_8, </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>            abuse_1<span class="sc">:</span>abuse_16_yes, promis29_1<span class="sc">:</span>promis29_8, </span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>            abuse_physical_scored<span class="sc">:</span>abuse_psychological_scored, gender_open,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>            loneliness_1<span class="sc">:</span>loneliness_8, healthservice_1, healthservice_2,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>            healthservice_3,healthservice_4,healthservice_5, </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>            healthservice_5a_1<span class="sc">:</span>healthservice_5c, </span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>            healthservice_6a_1<span class="sc">:</span>healthservice_8a, healthservice_8b, </span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>            healthservice_9a, healthservice_9b, bonding_1<span class="sc">:</span>bonding_5, </span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>            socrates_1<span class="sc">:</span>socrates_20, coping_1<span class="sc">:</span>coping_25, </span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>            drinkinggoals<span class="sc">:</span>drinkinggoal_7_text, covid_1<span class="sc">:</span>covid_3f,</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>            interaction_1<span class="sc">:</span>interaction_20, drink_druguse_1<span class="sc">:</span>drinkdruguse_8d,</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>            employmentstatus<span class="sc">:</span>notemployed_open, ethnicity<span class="sc">:</span>race_open, </span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>            livewith_1<span class="sc">:</span>livewith_open, er_yn, outpatient_yn, </span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>            inpatient_yn, n_days, mean_drinks_per_day, per_drink_days, </span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>            covid_scored,redcap_event_name, recruitment_id, </span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>            socrates_recognition_scored, socrates_ambivalence_scored)) <span class="sc">|&gt;</span> </span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(study_id) <span class="sc">|&gt;</span> </span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 928
-Columns: 44
-$ study_id                    &lt;chr&gt; "100FAM", "100FAM", "100FAM", "100PT", "10…
-$ dyad                        &lt;dbl+lbl&gt; 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 1,…
-$ arm                         &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 2,…
-$ group                       &lt;dbl+lbl&gt; 4, 4, 4, 1, 1, 1, 3, 3, 3, 0, 0, 0, 5,…
-$ time_string                 &lt;chr&gt; "4 Month", "8 Month", "12 Month", "12 Mont…
-$ time                        &lt;dbl+lbl&gt; 1, 2, 3, 3, 1, 2, 1, 2, 3, 1, 2, 3, 1,…
-$ comments                    &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""…
-$ gender                      &lt;dbl+lbl&gt; 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 1,…
-$ age                         &lt;dbl&gt; 55, 55, 55, 56, 56, 56, 62, 62, 62, 66, 66…
-$ edu                         &lt;dbl+lbl&gt; 4, 4, 4, 3, 3, 3, 4, 4, 4, 3, 3, 3, 6,…
-$ income                      &lt;dbl+lbl&gt; 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4,…
-$ partner_relationship        &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5,…
-$ employment                  &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,…
-$ days_app_use                &lt;dbl&gt; NA, NA, NA, 8, 32, 12, NA, NA, NA, NA, NA,…
-$ per_days_abstinent          &lt;dbl&gt; NA, NA, NA, 0.0, 0.0, 0.0, NA, NA, NA, 98.…
-$ per_heavy_drink_days        &lt;dbl&gt; NA, NA, NA, 100.0, 90.8, 100.0, NA, NA, NA…
-$ meetings_yn                 &lt;dbl+lbl&gt; 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0,…
-$ outpatient_yn_ever          &lt;dbl+lbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-$ other_psych_treatment_yn    &lt;dbl+lbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,…
-$ er_yn_ever                  &lt;dbl+lbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-$ mat_yn                      &lt;dbl+lbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-$ other_medications_yn        &lt;dbl+lbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,…
-$ inpatient_yn_ever           &lt;dbl+lbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-$ readmits_yn                 &lt;dbl+lbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
-$ relationship_status         &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-$ relationship_status_open    &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""…
-$ oq45_scored                 &lt;dbl&gt; 48, 58, 64, 48, 68, 70, 26, 37, 40, 44, 44…
-$ relationsatisf_scored       &lt;dbl&gt; 15, 9, 30, 24, 22, 20, 30, 29, 32, 25, 25,…
-$ abuse_scored                &lt;dbl&gt; 4, 7, 8, 15, 4, 2, 4, 0, 2, 0, NA, NA, 2, …
-$ treatmentskills_scored      &lt;dbl&gt; 2.888889, 2.722222, 3.277778, NA, NA, NA, …
-$ peersupport_scored          &lt;dbl&gt; 3.4, 2.6, 2.8, 2.4, 2.2, 2.8, 2.8, 3.6, 2.…
-$ socrates_scored             &lt;dbl&gt; NA, NA, NA, 33, 34, 24, NA, NA, NA, 39, 37…
-$ socrates_recognition_scored &lt;dbl&gt; NA, NA, NA, 34, 32, 34, NA, NA, NA, 35, 35…
-$ socrates_ambivalence_scored &lt;dbl&gt; NA, NA, NA, 17, 18, 17, NA, NA, NA, 13, 14…
-$ gender_original             &lt;dbl+lbl&gt; 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 1,…
-$ race_white_only             &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, …
-$ age_c                       &lt;dbl&gt; 7.456153, 7.456153, 7.456153, 8.456153, 8.…
-$ edu_c                       &lt;dbl&gt; -0.2747979, -0.2747979, -0.2747979, -1.274…
-$ hdd_0                       &lt;dbl&gt; NA, NA, NA, 51.00129, 51.00129, 51.00129, …
-$ pda_0                       &lt;dbl&gt; NA, NA, NA, -37.4819, -37.4819, -37.4819, …
-$ oq45_0                      &lt;dbl&gt; -6.7124324, -6.7124324, -6.7124324, 0.2875…
-$ relationsatisf_0            &lt;dbl&gt; -1.52, -1.52, -1.52, -3.52, -3.52, -3.52, …
-$ abuse_0                     &lt;dbl&gt; 4.5461538, 4.5461538, 4.5461538, -2.453846…
-$ time_c                      &lt;dbl&gt; -1, 0, 1, 1, -1, 0, -1, 0, 1, -1, 0, 1, -1…</code></pre>
+Columns: 40
+$ study_id                 &lt;chr&gt; "100FAM", "100FAM", "100FAM", "100PT", "100PT…
+$ dyad                     &lt;fct&gt; Partner, Partner, Partner, Patient, Patient, …
+$ arm                      &lt;fct&gt; ACHESS, ACHESS, ACHESS, ACHESS, ACHESS, ACHES…
+$ group                    &lt;fct&gt; ACHESS Partner, ACHESS Partner, ACHESS Partne…
+$ time_string              &lt;chr&gt; "4 Month", "8 Month", "12 Month", "12 Month",…
+$ time                     &lt;fct&gt; 4 Month, 8 Month, 12 Month, 12 Month, 4 Month…
+$ comments                 &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", "", "…
+$ gender                   &lt;fct&gt; non-male, non-male, non-male, male, male, mal…
+$ age                      &lt;dbl&gt; 55, 55, 55, 56, 56, 56, 62, 62, 62, 66, 66, 6…
+$ edu                      &lt;fct&gt; "Some college or 2 year degree", "Some colleg…
+$ income                   &lt;fct&gt; "$35,000 to $49,999", "$35,000 to $49,999", "…
+$ partner_relationship     &lt;fct&gt; Romantic partner/spouse, Romantic partner/spo…
+$ employment               &lt;fct&gt; Yes, Yes, Yes, Yes, Yes, Yes, No, No, No, No,…
+$ days_app_use             &lt;dbl&gt; NA, NA, NA, 8, 32, 12, NA, NA, NA, NA, NA, NA…
+$ per_days_abstinent       &lt;dbl&gt; NA, NA, NA, 0.0, 0.0, 0.0, NA, NA, NA, 98.5, …
+$ per_heavy_drink_days     &lt;dbl&gt; NA, NA, NA, 100.0, 90.8, 100.0, NA, NA, NA, 1…
+$ meetings_yn              &lt;fct&gt; No, No, No, No, No, No, No, Yes, No, Yes, Yes…
+$ outpatient_yn_ever       &lt;fct&gt; No, No, No, No, No, No, No, No, No, No, No, N…
+$ other_psych_treatment_yn &lt;fct&gt; No, No, No, No, No, No, No, No, No, Yes, No, …
+$ er_yn_ever               &lt;fct&gt; No, No, No, No, No, No, No, No, No, No, No, N…
+$ mat_yn                   &lt;fct&gt; No, No, No, No, No, No, No, No, No, No, No, N…
+$ other_medications_yn     &lt;fct&gt; No, No, No, No, No, No, No, No, No, Yes, No, …
+$ inpatient_yn_ever        &lt;fct&gt; No, No, No, No, No, No, No, No, No, No, No, N…
+$ readmits_yn              &lt;fct&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+$ relationship_status      &lt;fct&gt; "Still together (e.g., as a romantic couple, …
+$ relationship_status_open &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", "", "…
+$ oq45_scored              &lt;dbl&gt; 48, 58, 64, 48, 68, 70, 26, 37, 40, 44, 44, 5…
+$ relationsatisf_scored    &lt;dbl&gt; 15, 9, 30, 24, 22, 20, 30, 29, 32, 25, 25, 23…
+$ abuse_scored             &lt;dbl&gt; 4, 7, 8, 15, 4, 2, 4, 0, 2, 0, NA, NA, 2, 11,…
+$ treatmentskills_scored   &lt;dbl&gt; 2.888889, 2.722222, 3.277778, NA, NA, NA, 3.0…
+$ peersupport_scored       &lt;dbl&gt; 3.4, 2.6, 2.8, 2.4, 2.2, 2.8, 2.8, 3.6, 2.4, …
+$ socrates_scored          &lt;dbl&gt; NA, NA, NA, 33, 34, 24, NA, NA, NA, 39, 37, 3…
+$ dsm5_criteria            &lt;fct&gt; NA, NA, NA, Severe (6 or more symptoms), Seve…
+$ gender_original          &lt;fct&gt; Woman, Woman, Woman, Man, Man, Man, Woman, Wo…
+$ race_white_only          &lt;fct&gt; No, No, No, No, No, No, Yes, Yes, Yes, Yes, Y…
+$ hdd_0                    &lt;dbl&gt; NA, NA, NA, 100.0, 100.0, 100.0, NA, NA, NA, …
+$ pda_0                    &lt;dbl&gt; NA, NA, NA, 0.0, 0.0, 0.0, NA, NA, NA, 93.4, …
+$ oq45_0                   &lt;dbl&gt; 53, 53, 53, 60, 60, 60, 79, 79, 79, 71, 71, 7…
+$ relationsatisf_0         &lt;dbl&gt; 21, 21, 21, 19, 19, 19, 32, 32, 32, 24, 24, 2…
+$ abuse_0                  &lt;dbl&gt; 9, 9, 9, 2, 2, 2, 17, 17, 17, 8, 8, 8, 5, 5, …</code></pre>
 </div>
 </div></div>
+<p><code>time_string</code> matches <code>time</code> - remove <code>time_string</code></p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [12]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(time, time_string)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     time 12 Month 4 Month 8 Month
+ Baseline        0       0       0
+  4 Month        0     328       0
+  8 Month        0       0     315
+ 12 Month      285       0       0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>time_string)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div>
 <p>Number of participants</p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [15]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(study_id) <span class="sc">|&gt;</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">length</span>() <span class="co"># 340</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [13]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(study_id) <span class="sc">|&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">length</span>() <span class="co"># 340</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 340</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="co"># partner</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(study_id) <span class="sc">|&gt;</span> </span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">length</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="st">"Partner"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(study_id) <span class="sc">|&gt;</span> </span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">length</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 170</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span> <span class="co"># patient</span></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(study_id) <span class="sc">|&gt;</span> </span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">length</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="st">"Patient"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(study_id) <span class="sc">|&gt;</span> </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">length</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 170</code></pre>
 </div>
 </div></div>
 <p>Complete dyad (patient + partner) for all participants</p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [16]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(study_id) <span class="sc">|&gt;</span> </span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dyad_id =</span> <span class="fu">str_sub</span>(study_id, <span class="dv">1</span>, <span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(dyad_id) <span class="sc">|&gt;</span> </span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">!=</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [14]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(study_id) <span class="sc">|&gt;</span> </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dyad_id =</span> <span class="fu">str_sub</span>(study_id, <span class="dv">1</span>, <span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(dyad_id) <span class="sc">|&gt;</span> </span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">!=</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 0 × 2
 # Groups:   dyad_id [0]
@@ -635,58 +612,53 @@ $ time_c                      &lt;dbl&gt; -1, 0, 1, 1, -1, 0, -1, 0, 1, -1, 0, 1
 </div>
 </div></div>
 <p>Missing data</p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [17]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">miss_var_summary</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [15]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">miss_var_summary</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 44 × 3
-   variable                    n_miss pct_miss
-   &lt;chr&gt;                        &lt;int&gt;    &lt;num&gt;
- 1 readmits_yn                    903   97.3  
- 2 abuse_scored                   680   73.3  
- 3 abuse_0                        538   58.0  
- 4 per_days_abstinent             498   53.7  
- 5 per_heavy_drink_days           498   53.7  
- 6 socrates_scored                493   53.1  
- 7 socrates_recognition_scored    493   53.1  
- 8 socrates_ambivalence_scored    493   53.1  
- 9 treatmentskills_scored         479   51.6  
-10 hdd_0                          464   50    
-11 pda_0                          464   50    
-12 days_app_use                   455   49.0  
-13 other_medications_yn            42    4.53 
-14 mat_yn                          39    4.20 
-15 peersupport_scored              39    4.20 
-16 meetings_yn                     36    3.88 
-17 other_psych_treatment_yn        36    3.88 
-18 relationship_status             35    3.77 
-19 oq45_scored                     35    3.77 
-20 relationsatisf_scored           35    3.77 
-21 income                          15    1.62 
-22 age                              6    0.647
-23 age_c                            6    0.647
-24 gender                           3    0.323
-25 edu                              3    0.323
-26 partner_relationship             3    0.323
-27 employment                       3    0.323
-28 gender_original                  3    0.323
-29 race_white_only                  3    0.323
-30 edu_c                            3    0.323
-31 oq45_0                           3    0.323
-32 relationsatisf_0                 3    0.323
-33 study_id                         0    0    
-34 dyad                             0    0    
-35 arm                              0    0    
-36 group                            0    0    
-37 time_string                      0    0    
-38 time                             0    0    
-39 comments                         0    0    
-40 outpatient_yn_ever               0    0    
-41 er_yn_ever                       0    0    
-42 inpatient_yn_ever                0    0    
-43 relationship_status_open         0    0    
-44 time_c                           0    0    </code></pre>
+<pre><code># A tibble: 39 × 3
+   variable                 n_miss pct_miss
+   &lt;chr&gt;                     &lt;int&gt;    &lt;num&gt;
+ 1 readmits_yn                 903   97.3  
+ 2 abuse_scored                680   73.3  
+ 3 abuse_0                     538   58.0  
+ 4 per_days_abstinent          498   53.7  
+ 5 per_heavy_drink_days        498   53.7  
+ 6 socrates_scored             493   53.1  
+ 7 treatmentskills_scored      479   51.6  
+ 8 dsm5_criteria               467   50.3  
+ 9 hdd_0                       464   50    
+10 pda_0                       464   50    
+11 days_app_use                455   49.0  
+12 other_medications_yn         42    4.53 
+13 mat_yn                       39    4.20 
+14 peersupport_scored           39    4.20 
+15 meetings_yn                  36    3.88 
+16 other_psych_treatment_yn     36    3.88 
+17 relationship_status          35    3.77 
+18 oq45_scored                  35    3.77 
+19 relationsatisf_scored        35    3.77 
+20 income                       15    1.62 
+21 age                           6    0.647
+22 gender                        3    0.323
+23 edu                           3    0.323
+24 partner_relationship          3    0.323
+25 employment                    3    0.323
+26 gender_original               3    0.323
+27 race_white_only               3    0.323
+28 oq45_0                        3    0.323
+29 relationsatisf_0              3    0.323
+30 study_id                      0    0    
+31 dyad                          0    0    
+32 arm                           0    0    
+33 group                         0    0    
+34 time                          0    0    
+35 comments                      0    0    
+36 outpatient_yn_ever            0    0    
+37 er_yn_ever                    0    0    
+38 inpatient_yn_ever             0    0    
+39 relationship_status_open      0    0    </code></pre>
 </div>
 </div></div>
 <p>Missing data for just patients</p>
@@ -695,186 +667,161 @@ $ time_c                      &lt;dbl&gt; -1, 0, 1, 1, -1, 0, -1, 0, 1, -1, 0, 1
 <li>abuse and readmits have high missing data</li>
 <li>Why days_app_use missing so high?</li>
 </ul>
-<div class="cell-container"><div class="cell-decorator"><pre>In [18]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">miss_var_summary</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [16]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="st">"Patient"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">miss_var_summary</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 44 × 3
-   variable                    n_miss pct_miss
-   &lt;chr&gt;                        &lt;int&gt;    &lt;num&gt;
- 1 treatmentskills_scored         464  100    
- 2 readmits_yn                    440   94.8  
- 3 abuse_scored                   370   79.7  
- 4 abuse_0                        291   62.7  
- 5 days_app_use                   151   32.5  
- 6 per_days_abstinent              34    7.33 
- 7 per_heavy_drink_days            34    7.33 
- 8 other_medications_yn            30    6.47 
- 9 mat_yn                          29    6.25 
-10 socrates_scored                 29    6.25 
-11 socrates_recognition_scored     29    6.25 
-12 socrates_ambivalence_scored     29    6.25 
-13 peersupport_scored              28    6.03 
-14 meetings_yn                     26    5.60 
-15 other_psych_treatment_yn        26    5.60 
-16 relationship_status             25    5.39 
-17 oq45_scored                     25    5.39 
-18 relationsatisf_scored           25    5.39 
-19 income                          12    2.59 
-20 age                              6    1.29 
-21 age_c                            6    1.29 
-22 gender                           3    0.647
-23 edu                              3    0.647
-24 partner_relationship             3    0.647
-25 employment                       3    0.647
-26 gender_original                  3    0.647
-27 race_white_only                  3    0.647
-28 edu_c                            3    0.647
-29 oq45_0                           3    0.647
-30 relationsatisf_0                 3    0.647
-31 study_id                         0    0    
-32 dyad                             0    0    
-33 arm                              0    0    
-34 group                            0    0    
-35 time_string                      0    0    
-36 time                             0    0    
-37 comments                         0    0    
-38 outpatient_yn_ever               0    0    
-39 er_yn_ever                       0    0    
-40 inpatient_yn_ever                0    0    
-41 relationship_status_open         0    0    
-42 hdd_0                            0    0    
-43 pda_0                            0    0    
-44 time_c                           0    0    </code></pre>
+<pre><code># A tibble: 39 × 3
+   variable                 n_miss pct_miss
+   &lt;chr&gt;                     &lt;int&gt;    &lt;num&gt;
+ 1 treatmentskills_scored      464  100    
+ 2 readmits_yn                 440   94.8  
+ 3 abuse_scored                370   79.7  
+ 4 abuse_0                     291   62.7  
+ 5 days_app_use                151   32.5  
+ 6 per_days_abstinent           34    7.33 
+ 7 per_heavy_drink_days         34    7.33 
+ 8 other_medications_yn         30    6.47 
+ 9 mat_yn                       29    6.25 
+10 socrates_scored              29    6.25 
+11 peersupport_scored           28    6.03 
+12 meetings_yn                  26    5.60 
+13 other_psych_treatment_yn     26    5.60 
+14 relationship_status          25    5.39 
+15 oq45_scored                  25    5.39 
+16 relationsatisf_scored        25    5.39 
+17 income                       12    2.59 
+18 age                           6    1.29 
+19 gender                        3    0.647
+20 edu                           3    0.647
+21 partner_relationship          3    0.647
+22 employment                    3    0.647
+23 dsm5_criteria                 3    0.647
+24 gender_original               3    0.647
+25 race_white_only               3    0.647
+26 oq45_0                        3    0.647
+27 relationsatisf_0              3    0.647
+28 study_id                      0    0    
+29 dyad                          0    0    
+30 arm                           0    0    
+31 group                         0    0    
+32 time                          0    0    
+33 comments                      0    0    
+34 outpatient_yn_ever            0    0    
+35 er_yn_ever                    0    0    
+36 inpatient_yn_ever             0    0    
+37 relationship_status_open      0    0    
+38 hdd_0                         0    0    
+39 pda_0                         0    0    </code></pre>
 </div>
 </div></div>
-<p>Remove <code>readmits_yn</code> as covariate due to low endorsement</p>
-<p><em>KW: not sure why so many NAs</em></p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [19]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>sjlabelled<span class="sc">::</span><span class="fu">get_labels</span>(data<span class="sc">$</span>readmits_yn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "No"  "Yes"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>readmits_yn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Remove <code>readmits_yn</code> as covariate due to high missing data</p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [17]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>readmits_yn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
 <p>Missing data for partners</p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [20]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">miss_var_summary</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [18]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="st">"Partner"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">miss_var_summary</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 43 × 3
-   variable                    n_miss pct_miss
-   &lt;chr&gt;                        &lt;int&gt;    &lt;num&gt;
- 1 per_days_abstinent             464  100    
- 2 per_heavy_drink_days           464  100    
- 3 socrates_scored                464  100    
- 4 socrates_recognition_scored    464  100    
- 5 socrates_ambivalence_scored    464  100    
- 6 hdd_0                          464  100    
- 7 pda_0                          464  100    
- 8 abuse_scored                   310   66.8  
- 9 days_app_use                   304   65.5  
-10 abuse_0                        247   53.2  
-11 treatmentskills_scored          15    3.23 
-12 other_medications_yn            12    2.59 
-13 peersupport_scored              11    2.37 
-14 meetings_yn                     10    2.16 
-15 other_psych_treatment_yn        10    2.16 
-16 mat_yn                          10    2.16 
-17 relationship_status             10    2.16 
-18 oq45_scored                     10    2.16 
-19 relationsatisf_scored           10    2.16 
-20 income                           3    0.647
-21 study_id                         0    0    
-22 dyad                             0    0    
-23 arm                              0    0    
-24 group                            0    0    
-25 time_string                      0    0    
-26 time                             0    0    
-27 comments                         0    0    
-28 gender                           0    0    
-29 age                              0    0    
-30 edu                              0    0    
-31 partner_relationship             0    0    
-32 employment                       0    0    
-33 outpatient_yn_ever               0    0    
-34 er_yn_ever                       0    0    
-35 inpatient_yn_ever                0    0    
-36 relationship_status_open         0    0    
-37 gender_original                  0    0    
-38 race_white_only                  0    0    
-39 age_c                            0    0    
-40 edu_c                            0    0    
-41 oq45_0                           0    0    
-42 relationsatisf_0                 0    0    
-43 time_c                           0    0    </code></pre>
+<pre><code># A tibble: 38 × 3
+   variable                 n_miss pct_miss
+   &lt;chr&gt;                     &lt;int&gt;    &lt;num&gt;
+ 1 per_days_abstinent          464  100    
+ 2 per_heavy_drink_days        464  100    
+ 3 socrates_scored             464  100    
+ 4 dsm5_criteria               464  100    
+ 5 hdd_0                       464  100    
+ 6 pda_0                       464  100    
+ 7 abuse_scored                310   66.8  
+ 8 days_app_use                304   65.5  
+ 9 abuse_0                     247   53.2  
+10 treatmentskills_scored       15    3.23 
+11 other_medications_yn         12    2.59 
+12 peersupport_scored           11    2.37 
+13 meetings_yn                  10    2.16 
+14 other_psych_treatment_yn     10    2.16 
+15 mat_yn                       10    2.16 
+16 relationship_status          10    2.16 
+17 oq45_scored                  10    2.16 
+18 relationsatisf_scored        10    2.16 
+19 income                        3    0.647
+20 study_id                      0    0    
+21 dyad                          0    0    
+22 arm                           0    0    
+23 group                         0    0    
+24 time                          0    0    
+25 comments                      0    0    
+26 gender                        0    0    
+27 age                           0    0    
+28 edu                           0    0    
+29 partner_relationship          0    0    
+30 employment                    0    0    
+31 outpatient_yn_ever            0    0    
+32 er_yn_ever                    0    0    
+33 inpatient_yn_ever             0    0    
+34 relationship_status_open      0    0    
+35 gender_original               0    0    
+36 race_white_only               0    0    
+37 oq45_0                        0    0    
+38 relationsatisf_0              0    0    </code></pre>
 </div>
 </div></div>
+<p><em>KW: Why abuse and days_app_use so high for partners and patients?</em></p>
 <p>Participants in each arm</p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [19]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(study_id) <span class="sc">|&gt;</span> </span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(arm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                arm   n   percent
+ Smartphone Control 108 0.3176471
+             ACHESS 118 0.3470588
+           FAMCHESS 114 0.3352941</code></pre>
+</div>
+</div></div>
+<p>Check stratification variables in arms</p>
+<p>patient gender identity</p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [20]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="st">"Patient"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(study_id) <span class="sc">|&gt;</span> </span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(arm, gender)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                arm non-male male NA_
+ Smartphone Control       22   31   1
+             ACHESS       26   33   0
+           FAMCHESS       23   34   0</code></pre>
+</div>
+</div></div>
+<p>alcohol use severity (moderate or severe AUD vs mild)</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [21]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(study_id) <span class="sc">|&gt;</span> </span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(arm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="st">"Patient"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dsm5_criteria =</span> <span class="fu">if_else</span>(dsm5_criteria <span class="sc">==</span> <span class="st">"Mild (2-3 symptoms)"</span>, </span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"Mild"</span>, <span class="st">"Moderate/Severe"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(study_id) <span class="sc">|&gt;</span> </span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(arm, dsm5_criteria)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> arm   n   percent
-   0 108 0.3176471
-   1 118 0.3470588
-   2 114 0.3352941</code></pre>
+<pre><code>                arm Mild Moderate/Severe NA_
+ Smartphone Control    1              52   1
+             ACHESS    0              59   0
+           FAMCHESS    1              56   0</code></pre>
 </div>
 </div></div>
-<p>Check stratification variables in arms - patient gender identity and alcohol use severity (moderate or severe AUD)</p>
-<p>DSM5 criteria: 1 = severe, 2 = moderate, 3 = mild<br>
-Group: 0 = patient control, 1 = patient achess, 2 = patient famchess,</p>
+<p>Study Notes</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [22]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(dsm <span class="sc">|&gt;</span> <span class="fu">select</span>(study_id, dsm5_criteria), <span class="at">by =</span> <span class="st">"study_id"</span>)</span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(study_id) <span class="sc">|&gt;</span> </span>
-<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(group, gender)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> group  1  2 NA_
-     0 22 31   1
-     1 26 33   0
-     2 23 34   0</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(study_id) <span class="sc">|&gt;</span> </span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(group, dsm5_criteria)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> group  1 2 3 NA_
-     0 51 1 1   1
-     1 58 1 0   0
-     2 50 6 1   0</code></pre>
-</div>
-</div></div>
-<p>Demographic and study related variables</p>
-<p>Time string matches time</p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [23]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(time, time_string)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> time 12 Month 4 Month 8 Month
-    1        0     328       0
-    2        0       0     315
-    3      285       0       0</code></pre>
-</div>
-</div></div>
-<p><em>KW: discuss with John if we need to do anything with these notes</em></p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [24]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>comments <span class="sc">==</span> <span class="st">""</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(comments)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>comments <span class="sc">==</span> <span class="st">""</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(comments)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "Missing TLFB"                                                                                                                                                                                       
  [2] "Missing TLFB"                                                                                                                                                                                       
@@ -942,82 +889,65 @@ attr(,"display_width")
 </div>
 </div></div>
 <p>Income</p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [25]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>sjlabelled<span class="sc">::</span><span class="fu">get_labels</span>(data<span class="sc">$</span>income)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [23]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(data<span class="sc">$</span>income)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Less than $25,000"    "$25,000 to $34,999"   "$35,000 to $49,999"  
-[4] "$50,000 to $74,999"   "$75,000 to $99,999"   "$100,000 to $149,999"
-[7] "$150,000 to $199,999" "$200,000 or more"    </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(data<span class="sc">$</span>income)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> data$income   n    percent valid_percent
-           1 177 0.19073276    0.19386637
-           2  57 0.06142241    0.06243154
-           3  91 0.09806034    0.09967141
-           4 192 0.20689655    0.21029573
-           5 160 0.17241379    0.17524644
-           6 144 0.15517241    0.15772180
-           7  65 0.07004310    0.07119387
-           8  27 0.02909483    0.02957284
-          NA  15 0.01616379            NA</code></pre>
+<pre><code>          data$income   n    percent valid_percent
+    Less than $25,000 177 0.19073276    0.19386637
+   $25,000 to $34,999  57 0.06142241    0.06243154
+   $35,000 to $49,999  91 0.09806034    0.09967141
+   $50,000 to $74,999 192 0.20689655    0.21029573
+   $75,000 to $99,999 160 0.17241379    0.17524644
+ $100,000 to $149,999 144 0.15517241    0.15772180
+ $150,000 to $199,999  65 0.07004310    0.07119387
+     $200,000 or more  27 0.02909483    0.02957284
+                 &lt;NA&gt;  15 0.01616379            NA</code></pre>
 </div>
 </div></div>
 <p>Partner relationship</p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [26]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>sjlabelled<span class="sc">::</span><span class="fu">get_labels</span>(data<span class="sc">$</span>partner_relationship)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Romantic partner/spouse" "Parent"                 
-[3] "Adult child"             "Other family member"    
-[5] "Friend"                  "Recovery Coach"         </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(data<span class="sc">$</span>partner_relationship)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [24]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(data<span class="sc">$</span>partner_relationship)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> data$partner_relationship   n     percent valid_percent
-                         1 614 0.661637931   0.663783784
-                         2  74 0.079741379   0.080000000
-                         3  73 0.078663793   0.078918919
-                         4  98 0.105603448   0.105945946
-                         5  63 0.067887931   0.068108108
-                         6   3 0.003232759   0.003243243
-                        NA   3 0.003232759            NA</code></pre>
+   Romantic partner/spouse 614 0.661637931   0.663783784
+                    Parent  74 0.079741379   0.080000000
+               Adult child  73 0.078663793   0.078918919
+       Other family member  98 0.105603448   0.105945946
+                    Friend  63 0.067887931   0.068108108
+            Recovery Coach   3 0.003232759   0.003243243
+                      &lt;NA&gt;   3 0.003232759            NA</code></pre>
 </div>
 </div></div>
 <p>Employment</p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [27]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>sjlabelled<span class="sc">::</span><span class="fu">get_labels</span>(data<span class="sc">$</span>employment)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "No"  "Yes"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(data<span class="sc">$</span>employment)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [25]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(data<span class="sc">$</span>employment)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> data$employment   n     percent valid_percent
-               0 315 0.339439655     0.3405405
-               1 610 0.657327586     0.6594595
-              NA   3 0.003232759            NA</code></pre>
+              No 315 0.339439655     0.3405405
+             Yes 610 0.657327586     0.6594595
+            &lt;NA&gt;   3 0.003232759            NA</code></pre>
 </div>
 </div></div>
 <p>Relationship status with partner</p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [28]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>sjlabelled<span class="sc">::</span><span class="fu">get_labels</span>(data<span class="sc">$</span>relationship_status)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [26]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(data<span class="sc">$</span>relationship_status)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Still together (e.g., as a romantic couple, as family, as friends)"
-[2] "Split up but still working on this project together"               
-[3] "Split up and not working on this project together"                 
-[4] "Other"                                                             </code></pre>
+<pre><code>                                           data$relationship_status   n
+ Still together (e.g., as a romantic couple, as family, as friends) 762
+                Split up but still working on this project together  62
+                  Split up and not working on this project together  24
+                                                              Other  45
+                                                               &lt;NA&gt;  35
+    percent valid_percent
+ 0.82112069    0.85330347
+ 0.06681034    0.06942889
+ 0.02586207    0.02687570
+ 0.04849138    0.05039194
+ 0.03771552            NA</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(data<span class="sc">$</span>relationship_status)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> data$relationship_status   n    percent valid_percent
-                        1 762 0.82112069    0.85330347
-                        2  62 0.06681034    0.06942889
-                        3  24 0.02586207    0.02687570
-                        4  45 0.04849138    0.05039194
-                       NA  35 0.03771552            NA</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(relationship_status <span class="sc">==</span> <span class="dv">4</span> <span class="sc">&amp;</span> relationship_status_open <span class="sc">!=</span> <span class="st">""</span>) <span class="sc">|&gt;</span></span>
-<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(relationship_status_open)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(relationship_status <span class="sc">==</span> <span class="st">"Other"</span> <span class="sc">&amp;</span> relationship_status_open <span class="sc">!=</span> <span class="st">""</span>) <span class="sc">|&gt;</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(relationship_status_open)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "Still friends but he is unsure how much if at all she is using the app"                                                                         
  [2] "parent"                                                                                                                                         
@@ -1063,11 +993,11 @@ attr(,"display_width")
 </div>
 </div></div>
 <p>univariate descriptives of covariates, mediators, moderators and outcome variables</p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [29]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(age, edu, days_app_use<span class="sc">:</span>abuse_0, <span class="sc">-</span>gender_original, <span class="sc">-</span>age_c, </span>
-<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>relationship_status, <span class="sc">-</span> relationship_status_open) <span class="sc">|&gt;</span> </span>
-<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a>  skimr<span class="sc">::</span><span class="fu">skim</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [27]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(age, edu, days_app_use<span class="sc">:</span>abuse_0, <span class="sc">-</span>gender_original, </span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>relationship_status, <span class="sc">-</span> relationship_status_open) <span class="sc">|&gt;</span> </span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>  skimr<span class="sc">::</span><span class="fu">skim</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <caption>Data summary</caption>
@@ -1082,7 +1012,7 @@ attr(,"display_width")
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Number of columns</td>
-<td style="text-align: left;">27</td>
+<td style="text-align: left;">25</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">_______________________</td>
@@ -1093,33 +1023,140 @@ attr(,"display_width")
 <td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">numeric</td>
-<td style="text-align: left;">27</td>
+<td style="text-align: left;">factor</td>
+<td style="text-align: left;">10</td>
 </tr>
 <tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">15</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">________________________</td>
 <td style="text-align: left;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Group variables</td>
 <td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 9%">
+<col style="width: 13%">
+<col style="width: 7%">
+<col style="width: 8%">
+<col style="width: 37%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: left;">ordered</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: left;">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">edu</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">Som: 344, 4-y: 219, Hig: 182, Mor: 148</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">meetings_yn</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">0.96</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">No: 735, Yes: 157</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">outpatient_yn_ever</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">No: 760, Yes: 168</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">other_psych_treatment_yn</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">0.96</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">No: 747, Yes: 145</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">er_yn_ever</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">No: 728, Yes: 200</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">mat_yn</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">0.96</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">No: 800, Yes: 89</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">other_medications_yn</td>
+<td style="text-align: right;">42</td>
+<td style="text-align: right;">0.95</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">No: 579, Yes: 307</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">inpatient_yn_ever</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">No: 833, Yes: 95</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">dsm5_criteria</td>
+<td style="text-align: right;">467</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Sev: 433, Mod: 22, Mil: 6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">race_white_only</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Yes: 704, No: 221</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Variable type: numeric</strong></p>
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
-<col style="width: 27%">
-<col style="width: 9%">
-<col style="width: 13%">
-<col style="width: 5%">
-<col style="width: 5%">
+<col style="width: 25%">
+<col style="width: 10%">
+<col style="width: 15%">
 <col style="width: 6%">
 <col style="width: 6%">
-<col style="width: 5%">
-<col style="width: 5%">
+<col style="width: 3%">
+<col style="width: 6%">
+<col style="width: 6%">
 <col style="width: 6%">
 <col style="width: 5%">
+<col style="width: 6%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1143,155 +1180,51 @@ attr(,"display_width")
 <td style="text-align: right;">0.99</td>
 <td style="text-align: right;">47.62</td>
 <td style="text-align: right;">13.59</td>
-<td style="text-align: right;">21.00</td>
+<td style="text-align: right;">21</td>
 <td style="text-align: right;">37.00</td>
 <td style="text-align: right;">47.50</td>
 <td style="text-align: right;">58.00</td>
-<td style="text-align: right;">89.00</td>
+<td style="text-align: right;">89</td>
 <td style="text-align: left;">▅▇▇▃▁</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">edu</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">4.28</td>
-<td style="text-align: right;">1.08</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">4.00</td>
-<td style="text-align: right;">4.00</td>
-<td style="text-align: right;">5.00</td>
-<td style="text-align: right;">6.00</td>
-<td style="text-align: left;">▁▅▇▅▃</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">days_app_use</td>
 <td style="text-align: right;">455</td>
 <td style="text-align: right;">0.51</td>
 <td style="text-align: right;">41.14</td>
 <td style="text-align: right;">38.05</td>
-<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">6.00</td>
 <td style="text-align: right;">32.00</td>
 <td style="text-align: right;">74.00</td>
-<td style="text-align: right;">161.00</td>
+<td style="text-align: right;">161</td>
 <td style="text-align: left;">▇▃▃▂▁</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">per_days_abstinent</td>
 <td style="text-align: right;">498</td>
 <td style="text-align: right;">0.46</td>
 <td style="text-align: right;">60.96</td>
 <td style="text-align: right;">37.45</td>
-<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">29.98</td>
 <td style="text-align: right;">71.05</td>
 <td style="text-align: right;">98.20</td>
-<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">100</td>
 <td style="text-align: left;">▅▂▂▃▇</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">per_heavy_drink_days</td>
 <td style="text-align: right;">498</td>
 <td style="text-align: right;">0.46</td>
 <td style="text-align: right;">24.20</td>
 <td style="text-align: right;">33.27</td>
-<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">0.00</td>
 <td style="text-align: right;">5.65</td>
 <td style="text-align: right;">34.35</td>
-<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">100</td>
 <td style="text-align: left;">▇▂▁▁▂</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">meetings_yn</td>
-<td style="text-align: right;">36</td>
-<td style="text-align: right;">0.96</td>
-<td style="text-align: right;">0.18</td>
-<td style="text-align: right;">0.38</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: left;">▇▁▁▁▂</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">outpatient_yn_ever</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">0.18</td>
-<td style="text-align: right;">0.39</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: left;">▇▁▁▁▂</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">other_psych_treatment_yn</td>
-<td style="text-align: right;">36</td>
-<td style="text-align: right;">0.96</td>
-<td style="text-align: right;">0.16</td>
-<td style="text-align: right;">0.37</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: left;">▇▁▁▁▂</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">er_yn_ever</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">0.22</td>
-<td style="text-align: right;">0.41</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: left;">▇▁▁▁▂</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">mat_yn</td>
-<td style="text-align: right;">39</td>
-<td style="text-align: right;">0.96</td>
-<td style="text-align: right;">0.10</td>
-<td style="text-align: right;">0.30</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: left;">▇▁▁▁▁</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">other_medications_yn</td>
-<td style="text-align: right;">42</td>
-<td style="text-align: right;">0.95</td>
-<td style="text-align: right;">0.35</td>
-<td style="text-align: right;">0.48</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: left;">▇▁▁▁▅</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">inpatient_yn_ever</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">0.10</td>
-<td style="text-align: right;">0.30</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: left;">▇▁▁▁▁</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">oq45_scored</td>
@@ -1299,11 +1232,11 @@ attr(,"display_width")
 <td style="text-align: right;">0.96</td>
 <td style="text-align: right;">55.33</td>
 <td style="text-align: right;">25.33</td>
-<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">37.00</td>
 <td style="text-align: right;">54.00</td>
 <td style="text-align: right;">71.00</td>
-<td style="text-align: right;">140.00</td>
+<td style="text-align: right;">140</td>
 <td style="text-align: left;">▃▇▆▂▁</td>
 </tr>
 <tr class="even">
@@ -1312,11 +1245,11 @@ attr(,"display_width")
 <td style="text-align: right;">0.96</td>
 <td style="text-align: right;">21.64</td>
 <td style="text-align: right;">6.40</td>
-<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">18.00</td>
 <td style="text-align: right;">22.00</td>
 <td style="text-align: right;">26.00</td>
-<td style="text-align: right;">36.00</td>
+<td style="text-align: right;">36</td>
 <td style="text-align: left;">▁▂▆▇▃</td>
 </tr>
 <tr class="odd">
@@ -1325,11 +1258,11 @@ attr(,"display_width")
 <td style="text-align: right;">0.27</td>
 <td style="text-align: right;">4.40</td>
 <td style="text-align: right;">7.35</td>
-<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">1.00</td>
 <td style="text-align: right;">2.00</td>
 <td style="text-align: right;">6.00</td>
-<td style="text-align: right;">72.00</td>
+<td style="text-align: right;">72</td>
 <td style="text-align: left;">▇▁▁▁▁</td>
 </tr>
 <tr class="even">
@@ -1338,11 +1271,11 @@ attr(,"display_width")
 <td style="text-align: right;">0.48</td>
 <td style="text-align: right;">3.11</td>
 <td style="text-align: right;">0.51</td>
-<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">2.83</td>
 <td style="text-align: right;">3.13</td>
 <td style="text-align: right;">3.47</td>
-<td style="text-align: right;">4.00</td>
+<td style="text-align: right;">4</td>
 <td style="text-align: left;">▁▁▃▇▅</td>
 </tr>
 <tr class="odd">
@@ -1351,11 +1284,11 @@ attr(,"display_width")
 <td style="text-align: right;">0.96</td>
 <td style="text-align: right;">2.92</td>
 <td style="text-align: right;">1.17</td>
-<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">2.00</td>
 <td style="text-align: right;">2.80</td>
 <td style="text-align: right;">3.80</td>
-<td style="text-align: right;">5.00</td>
+<td style="text-align: right;">5</td>
 <td style="text-align: left;">▆▇▇▅▅</td>
 </tr>
 <tr class="even">
@@ -1364,396 +1297,148 @@ attr(,"display_width")
 <td style="text-align: right;">0.47</td>
 <td style="text-align: right;">32.36</td>
 <td style="text-align: right;">7.06</td>
-<td style="text-align: right;">10.00</td>
+<td style="text-align: right;">10</td>
 <td style="text-align: right;">28.00</td>
 <td style="text-align: right;">33.00</td>
 <td style="text-align: right;">39.00</td>
-<td style="text-align: right;">40.00</td>
+<td style="text-align: right;">40</td>
 <td style="text-align: left;">▁▁▃▅▇</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">socrates_recognition_scored</td>
-<td style="text-align: right;">493</td>
-<td style="text-align: right;">0.47</td>
-<td style="text-align: right;">25.84</td>
-<td style="text-align: right;">6.70</td>
-<td style="text-align: right;">7.00</td>
-<td style="text-align: right;">22.00</td>
-<td style="text-align: right;">26.00</td>
-<td style="text-align: right;">31.00</td>
-<td style="text-align: right;">35.00</td>
-<td style="text-align: left;">▁▂▆▇▇</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">socrates_ambivalence_scored</td>
-<td style="text-align: right;">493</td>
-<td style="text-align: right;">0.47</td>
-<td style="text-align: right;">13.48</td>
-<td style="text-align: right;">4.25</td>
-<td style="text-align: right;">4.00</td>
-<td style="text-align: right;">11.00</td>
-<td style="text-align: right;">14.00</td>
-<td style="text-align: right;">17.00</td>
-<td style="text-align: right;">20.00</td>
-<td style="text-align: left;">▂▃▅▇▆</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">race_white_only</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">0.76</td>
-<td style="text-align: right;">0.43</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: left;">▂▁▁▁▇</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">edu_c</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">0.01</td>
-<td style="text-align: right;">1.08</td>
-<td style="text-align: right;">-3.27</td>
-<td style="text-align: right;">-0.27</td>
-<td style="text-align: right;">-0.27</td>
-<td style="text-align: right;">0.73</td>
-<td style="text-align: right;">1.73</td>
-<td style="text-align: left;">▁▅▇▅▃</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">hdd_0</td>
 <td style="text-align: right;">464</td>
 <td style="text-align: right;">0.50</td>
-<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">49.00</td>
 <td style="text-align: right;">36.11</td>
-<td style="text-align: right;">-49.00</td>
-<td style="text-align: right;">-32.70</td>
-<td style="text-align: right;">-6.90</td>
-<td style="text-align: right;">39.70</td>
-<td style="text-align: right;">51.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">16.30</td>
+<td style="text-align: right;">42.10</td>
+<td style="text-align: right;">88.70</td>
+<td style="text-align: right;">100</td>
 <td style="text-align: left;">▇▆▃▃▇</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">pda_0</td>
 <td style="text-align: right;">464</td>
 <td style="text-align: right;">0.50</td>
-<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">37.48</td>
 <td style="text-align: right;">33.84</td>
-<td style="text-align: right;">-37.48</td>
-<td style="text-align: right;">-35.81</td>
-<td style="text-align: right;">-4.18</td>
-<td style="text-align: right;">30.32</td>
-<td style="text-align: right;">62.52</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.67</td>
+<td style="text-align: right;">33.30</td>
+<td style="text-align: right;">67.80</td>
+<td style="text-align: right;">100</td>
 <td style="text-align: left;">▇▂▂▃▂</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">oq45_0</td>
 <td style="text-align: right;">3</td>
 <td style="text-align: right;">1.00</td>
-<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">59.71</td>
 <td style="text-align: right;">24.41</td>
-<td style="text-align: right;">-55.71</td>
-<td style="text-align: right;">-18.71</td>
-<td style="text-align: right;">-1.71</td>
-<td style="text-align: right;">15.29</td>
-<td style="text-align: right;">73.29</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">41.00</td>
+<td style="text-align: right;">58.00</td>
+<td style="text-align: right;">75.00</td>
+<td style="text-align: right;">133</td>
 <td style="text-align: left;">▂▇▇▃▁</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">relationsatisf_0</td>
 <td style="text-align: right;">3</td>
 <td style="text-align: right;">1.00</td>
-<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">22.52</td>
 <td style="text-align: right;">5.01</td>
-<td style="text-align: right;">-18.52</td>
-<td style="text-align: right;">-2.52</td>
-<td style="text-align: right;">0.48</td>
-<td style="text-align: right;">3.48</td>
-<td style="text-align: right;">12.48</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">20.00</td>
+<td style="text-align: right;">23.00</td>
+<td style="text-align: right;">26.00</td>
+<td style="text-align: right;">35</td>
 <td style="text-align: left;">▁▂▇▇▂</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">abuse_0</td>
 <td style="text-align: right;">538</td>
 <td style="text-align: right;">0.42</td>
-<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">4.45</td>
 <td style="text-align: right;">4.55</td>
-<td style="text-align: right;">-4.45</td>
-<td style="text-align: right;">-3.45</td>
-<td style="text-align: right;">-1.45</td>
-<td style="text-align: right;">2.30</td>
-<td style="text-align: right;">19.55</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">6.75</td>
+<td style="text-align: right;">24</td>
 <td style="text-align: left;">▇▃▁▁▁</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div></div>
-<p>Bivariate correlations for Patient</p>
-<p><em>KW: simplify?</em></p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [30]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(age, edu, days_app_use<span class="sc">:</span>abuse_0, <span class="sc">-</span>gender_original, <span class="sc">-</span>age_c,</span>
-<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>treatmentskills_scored, <span class="sc">-</span>relationship_status, </span>
-<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>relationship_status_open) <span class="sc">|&gt;</span> </span>
-<span id="cb81-6"><a href="#cb81-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb81-7"><a href="#cb81-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Bivariate correlations with <strong>Patient Primary Outcome</strong> <code>per_heavy_drink_days</code></p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [28]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>cor_patient <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="st">"Patient"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(per_heavy_drink_days, gender<span class="sc">:</span>race_white_only, </span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span><span class="fu">c</span>(relationship_status_open, gender_original, treatmentskills_scored)) <span class="sc">|&gt;</span> </span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.factor), as.numeric)) <span class="sc">|&gt;</span> </span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>cor_patient[,<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                              age   edu days_app_use per_days_abstinent
-age                          1.00  0.04         0.21              -0.16
-edu                          0.04  1.00        -0.01               0.00
-days_app_use                 0.21 -0.01         1.00               0.02
-per_days_abstinent          -0.16  0.00         0.02               1.00
-per_heavy_drink_days         0.03 -0.13        -0.14              -0.75
-meetings_yn                 -0.17 -0.07        -0.03               0.21
-outpatient_yn_ever          -0.25 -0.05        -0.19               0.18
-other_psych_treatment_yn    -0.04  0.03         0.04               0.09
-er_yn_ever                  -0.01 -0.22        -0.01               0.06
-mat_yn                      -0.10 -0.02        -0.05               0.02
-other_medications_yn         0.08  0.21        -0.13               0.00
-inpatient_yn_ever           -0.18 -0.03        -0.19               0.15
-oq45_scored                 -0.13 -0.15        -0.13              -0.28
-relationsatisf_scored       -0.12  0.09         0.09               0.12
-abuse_scored                 0.10  0.05        -0.14              -0.03
-peersupport_scored          -0.12 -0.03        -0.09               0.34
-socrates_scored             -0.09 -0.05         0.08               0.50
-socrates_recognition_scored -0.01 -0.12         0.04              -0.14
-socrates_ambivalence_scored  0.11 -0.05         0.18              -0.38
-race_white_only              0.21  0.16         0.07               0.14
-edu_c                        0.04  1.00        -0.01               0.00
-hdd_0                       -0.03 -0.29        -0.23              -0.41
-pda_0                       -0.14  0.09         0.09               0.58
-oq45_0                      -0.29 -0.19        -0.18              -0.09
-relationsatisf_0            -0.13 -0.06         0.05               0.11
-abuse_0                     -0.15 -0.16        -0.14               0.11
-                            per_heavy_drink_days meetings_yn outpatient_yn_ever
-age                                         0.03       -0.17              -0.25
-edu                                        -0.13       -0.07              -0.05
-days_app_use                               -0.14       -0.03              -0.19
-per_days_abstinent                         -0.75        0.21               0.18
-per_heavy_drink_days                        1.00       -0.12              -0.10
-meetings_yn                                -0.12        1.00               0.39
-outpatient_yn_ever                         -0.10        0.39               1.00
-other_psych_treatment_yn                   -0.07        0.23               0.34
-er_yn_ever                                 -0.08        0.09               0.23
-mat_yn                                      0.01        0.19               0.30
-other_medications_yn                       -0.02        0.07               0.15
-inpatient_yn_ever                          -0.08        0.26               0.49
-oq45_scored                                 0.30        0.14               0.09
-relationsatisf_scored                      -0.12       -0.05               0.01
-abuse_scored                               -0.04        0.16               0.09
-peersupport_scored                         -0.23        0.34               0.15
-socrates_scored                            -0.43        0.24               0.16
-socrates_recognition_scored                 0.27        0.22               0.05
-socrates_ambivalence_scored                 0.33       -0.07              -0.15
-race_white_only                            -0.06       -0.06              -0.15
-edu_c                                      -0.13       -0.07              -0.05
-hdd_0                                       0.51        0.02               0.06
-pda_0                                      -0.42        0.15               0.05
-oq45_0                                      0.12        0.24               0.12
-relationsatisf_0                           -0.07       -0.02               0.12
-abuse_0                                    -0.13        0.25               0.18
-                            other_psych_treatment_yn er_yn_ever mat_yn
-age                                            -0.04      -0.01  -0.10
-edu                                             0.03      -0.22  -0.02
-days_app_use                                    0.04      -0.01  -0.05
-per_days_abstinent                              0.09       0.06   0.02
-per_heavy_drink_days                           -0.07      -0.08   0.01
-meetings_yn                                     0.23       0.09   0.19
-outpatient_yn_ever                              0.34       0.23   0.30
-other_psych_treatment_yn                        1.00       0.10   0.15
-er_yn_ever                                      0.10       1.00   0.23
-mat_yn                                          0.15       0.23   1.00
-other_medications_yn                            0.32      -0.03   0.22
-inpatient_yn_ever                               0.09       0.30   0.35
-oq45_scored                                     0.13       0.21   0.21
-relationsatisf_scored                          -0.04      -0.07   0.00
-abuse_scored                                   -0.01       0.18   0.00
-peersupport_scored                              0.17       0.02   0.04
-socrates_scored                                 0.12       0.08   0.06
-socrates_recognition_scored                    -0.04       0.09   0.11
-socrates_ambivalence_scored                    -0.20      -0.02   0.02
-race_white_only                                 0.00      -0.22   0.02
-edu_c                                           0.03      -0.22  -0.02
-hdd_0                                          -0.07       0.11   0.01
-pda_0                                           0.06      -0.06   0.07
-oq45_0                                          0.10       0.29   0.16
-relationsatisf_0                               -0.02      -0.02   0.01
-abuse_0                                         0.03      -0.01  -0.04
-                            other_medications_yn inpatient_yn_ever oq45_scored
-age                                         0.08             -0.18       -0.13
-edu                                         0.21             -0.03       -0.15
-days_app_use                               -0.13             -0.19       -0.13
-per_days_abstinent                          0.00              0.15       -0.28
-per_heavy_drink_days                       -0.02             -0.08        0.30
-meetings_yn                                 0.07              0.26        0.14
-outpatient_yn_ever                          0.15              0.49        0.09
-other_psych_treatment_yn                    0.32              0.09        0.13
-er_yn_ever                                 -0.03              0.30        0.21
-mat_yn                                      0.22              0.35        0.21
-other_medications_yn                        1.00              0.08        0.09
-inpatient_yn_ever                           0.08              1.00        0.18
-oq45_scored                                 0.09              0.18        1.00
-relationsatisf_scored                       0.08             -0.04       -0.37
-abuse_scored                               -0.08              0.02       -0.06
-peersupport_scored                          0.13              0.14       -0.13
-socrates_scored                             0.02              0.13       -0.28
-socrates_recognition_scored                 0.05              0.09        0.24
-socrates_ambivalence_scored                -0.05             -0.16        0.17
-race_white_only                             0.16             -0.06       -0.10
-edu_c                                       0.21             -0.03       -0.15
-hdd_0                                      -0.04              0.08        0.27
-pda_0                                       0.06              0.03       -0.20
-oq45_0                                     -0.09              0.20        0.62
-relationsatisf_0                            0.11              0.03       -0.21
-abuse_0                                    -0.20             -0.13       -0.07
-                            relationsatisf_scored abuse_scored
-age                                         -0.12         0.10
-edu                                          0.09         0.05
-days_app_use                                 0.09        -0.14
-per_days_abstinent                           0.12        -0.03
-per_heavy_drink_days                        -0.12        -0.04
-meetings_yn                                 -0.05         0.16
-outpatient_yn_ever                           0.01         0.09
-other_psych_treatment_yn                    -0.04        -0.01
-er_yn_ever                                  -0.07         0.18
-mat_yn                                       0.00         0.00
-other_medications_yn                         0.08        -0.08
-inpatient_yn_ever                           -0.04         0.02
-oq45_scored                                 -0.37        -0.06
-relationsatisf_scored                        1.00        -0.16
-abuse_scored                                -0.16         1.00
-peersupport_scored                           0.08         0.01
-socrates_scored                              0.23         0.06
-socrates_recognition_scored                 -0.10         0.05
-socrates_ambivalence_scored                 -0.02         0.22
-race_white_only                             -0.04        -0.21
-edu_c                                        0.09         0.05
-hdd_0                                       -0.14        -0.03
-pda_0                                        0.07         0.03
-oq45_0                                      -0.23         0.18
-relationsatisf_0                             0.57        -0.18
-abuse_0                                     -0.28         0.33
-                            peersupport_scored socrates_scored
-age                                      -0.12           -0.09
-edu                                      -0.03           -0.05
-days_app_use                             -0.09            0.08
-per_days_abstinent                        0.34            0.50
-per_heavy_drink_days                     -0.23           -0.43
-meetings_yn                               0.34            0.24
-outpatient_yn_ever                        0.15            0.16
-other_psych_treatment_yn                  0.17            0.12
-er_yn_ever                                0.02            0.08
-mat_yn                                    0.04            0.06
-other_medications_yn                      0.13            0.02
-inpatient_yn_ever                         0.14            0.13
-oq45_scored                              -0.13           -0.28
-relationsatisf_scored                     0.08            0.23
-abuse_scored                              0.01            0.06
-peersupport_scored                        1.00            0.39
-socrates_scored                           0.39            1.00
-socrates_recognition_scored               0.11            0.04
-socrates_ambivalence_scored              -0.14           -0.11
-race_white_only                          -0.02            0.02
-edu_c                                    -0.03           -0.05
-hdd_0                                    -0.09           -0.17
-pda_0                                     0.15            0.21
-oq45_0                                    0.07           -0.01
-relationsatisf_0                          0.10            0.17
-abuse_0                                   0.04            0.08
-                            socrates_recognition_scored
-age                                               -0.01
-edu                                               -0.12
-days_app_use                                       0.04
-per_days_abstinent                                -0.14
-per_heavy_drink_days                               0.27
-meetings_yn                                        0.22
-outpatient_yn_ever                                 0.05
-other_psych_treatment_yn                          -0.04
-er_yn_ever                                         0.09
-mat_yn                                             0.11
-other_medications_yn                               0.05
-inpatient_yn_ever                                  0.09
-oq45_scored                                        0.24
-relationsatisf_scored                             -0.10
-abuse_scored                                       0.05
-peersupport_scored                                 0.11
-socrates_scored                                    0.04
-socrates_recognition_scored                        1.00
-socrates_ambivalence_scored                        0.56
-race_white_only                                   -0.01
-edu_c                                             -0.12
-hdd_0                                              0.14
-pda_0                                              0.01
-oq45_0                                             0.20
-relationsatisf_0                                   0.02
-abuse_0                                           -0.03
-                            socrates_ambivalence_scored race_white_only edu_c
-age                                                0.11            0.21  0.04
-edu                                               -0.05            0.16  1.00
-days_app_use                                       0.18            0.07 -0.01
-per_days_abstinent                                -0.38            0.14  0.00
-per_heavy_drink_days                               0.33           -0.06 -0.13
-meetings_yn                                       -0.07           -0.06 -0.07
-outpatient_yn_ever                                -0.15           -0.15 -0.05
-other_psych_treatment_yn                          -0.20            0.00  0.03
-er_yn_ever                                        -0.02           -0.22 -0.22
-mat_yn                                             0.02            0.02 -0.02
-other_medications_yn                              -0.05            0.16  0.21
-inpatient_yn_ever                                 -0.16           -0.06 -0.03
-oq45_scored                                        0.17           -0.10 -0.15
-relationsatisf_scored                             -0.02           -0.04  0.09
-abuse_scored                                       0.22           -0.21  0.05
-peersupport_scored                                -0.14           -0.02 -0.03
-socrates_scored                                   -0.11            0.02 -0.05
-socrates_recognition_scored                        0.56           -0.01 -0.12
-socrates_ambivalence_scored                        1.00           -0.08 -0.05
-race_white_only                                   -0.08            1.00  0.16
-edu_c                                             -0.05            0.16  1.00
-hdd_0                                              0.20           -0.10 -0.29
-pda_0                                             -0.19            0.09  0.09
-oq45_0                                             0.10           -0.20 -0.19
-relationsatisf_0                                   0.00           -0.10 -0.06
-abuse_0                                            0.04           -0.14 -0.16
-                            hdd_0 pda_0 oq45_0 relationsatisf_0 abuse_0
-age                         -0.03 -0.14  -0.29            -0.13   -0.15
-edu                         -0.29  0.09  -0.19            -0.06   -0.16
-days_app_use                -0.23  0.09  -0.18             0.05   -0.14
-per_days_abstinent          -0.41  0.58  -0.09             0.11    0.11
-per_heavy_drink_days         0.51 -0.42   0.12            -0.07   -0.13
-meetings_yn                  0.02  0.15   0.24            -0.02    0.25
-outpatient_yn_ever           0.06  0.05   0.12             0.12    0.18
-other_psych_treatment_yn    -0.07  0.06   0.10            -0.02    0.03
-er_yn_ever                   0.11 -0.06   0.29            -0.02   -0.01
-mat_yn                       0.01  0.07   0.16             0.01   -0.04
-other_medications_yn        -0.04  0.06  -0.09             0.11   -0.20
-inpatient_yn_ever            0.08  0.03   0.20             0.03   -0.13
-oq45_scored                  0.27 -0.20   0.62            -0.21   -0.07
-relationsatisf_scored       -0.14  0.07  -0.23             0.57   -0.28
-abuse_scored                -0.03  0.03   0.18            -0.18    0.33
-peersupport_scored          -0.09  0.15   0.07             0.10    0.04
-socrates_scored             -0.17  0.21  -0.01             0.17    0.08
-socrates_recognition_scored  0.14  0.01   0.20             0.02   -0.03
-socrates_ambivalence_scored  0.20 -0.19   0.10             0.00    0.04
-race_white_only             -0.10  0.09  -0.20            -0.10   -0.14
-edu_c                       -0.29  0.09  -0.19            -0.06   -0.16
-hdd_0                        1.00 -0.75   0.22            -0.06   -0.02
-pda_0                       -0.75  1.00  -0.13             0.05    0.12
-oq45_0                       0.22 -0.13   1.00            -0.27    0.22
-relationsatisf_0            -0.06  0.05  -0.27             1.00   -0.25
-abuse_0                     -0.02  0.12   0.22            -0.25    1.00</code></pre>
+<pre><code>    per_heavy_drink_days                   gender                      age 
+                    1.00                    -0.03                     0.03 
+                     edu                   income     partner_relationship 
+                   -0.13                    -0.19                    -0.06 
+              employment             days_app_use       per_days_abstinent 
+                   -0.03                    -0.14                    -0.75 
+             meetings_yn       outpatient_yn_ever other_psych_treatment_yn 
+                   -0.12                    -0.10                    -0.07 
+              er_yn_ever                   mat_yn     other_medications_yn 
+                   -0.08                     0.01                    -0.02 
+       inpatient_yn_ever      relationship_status              oq45_scored 
+                   -0.08                     0.03                     0.30 
+   relationsatisf_scored             abuse_scored       peersupport_scored 
+                   -0.12                    -0.04                    -0.23 
+         socrates_scored            dsm5_criteria          race_white_only 
+                   -0.43                    -0.09                    -0.06 </code></pre>
+</div>
+</div></div>
+<p>Bivariate correlations with <strong>Partner Primary Outcome</strong> <code>oq45_scored</code></p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [29]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>cor_partner <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="st">"Partner"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(oq45_scored, gender<span class="sc">:</span>race_white_only, </span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span><span class="fu">c</span>(relationship_status_open, gender_original, </span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>            socrates_scored, dsm5_criteria, per_days_abstinent, </span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>            per_heavy_drink_days)) <span class="sc">|&gt;</span> </span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.factor), as.numeric)) <span class="sc">|&gt;</span> </span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a>cor_partner[,<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             oq45_scored                   gender                      age 
+                    1.00                    -0.01                    -0.13 
+                     edu                   income     partner_relationship 
+                   -0.18                    -0.09                    -0.11 
+              employment             days_app_use              meetings_yn 
+                    0.07                    -0.14                     0.04 
+      outpatient_yn_ever other_psych_treatment_yn               er_yn_ever 
+                    0.12                     0.19                     0.05 
+                  mat_yn     other_medications_yn        inpatient_yn_ever 
+                    0.09                     0.26                     0.16 
+     relationship_status    relationsatisf_scored             abuse_scored 
+                   -0.01                    -0.42                     0.36 
+  treatmentskills_scored       peersupport_scored          race_white_only 
+                   -0.20                    -0.01                     0.00 </code></pre>
 </div>
 </div></div>
 </section>
 <section id="save-out-processed-data-for-analyses" class="level3">
 <h3 class="anchored" data-anchor-id="save-out-processed-data-for-analyses">Save out processed data for analyses</h3>
-<div class="cell-container"><div class="cell-decorator"><pre>In [31]:</pre></div><div class="cell">
-<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(path_data, <span class="st">"famchess_data_ana.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [30]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(path_data, <span class="st">"famchess_data_ana.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
 </section>
 </section>

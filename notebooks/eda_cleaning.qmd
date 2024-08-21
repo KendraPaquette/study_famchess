@@ -37,6 +37,39 @@ dsm <- haven::read_sav(here::here(path_data, "FamCHESS_DSM5.sav")) |>
   clean_names() # for stratification check
 ```
 
+Change labeled classes to factor, clean up names, and merge data
+```{r}
+data <- data |> 
+  mutate(dyad = sjlabelled::as_label(dyad, keep.labels = TRUE),
+         arm = sjlabelled::as_label(arm, keep.labels = TRUE),
+         group = sjlabelled::as_label(group, keep.labels = TRUE),
+         time = sjlabelled::as_label(time, keep.labels = TRUE),
+         gender = sjlabelled::as_label(gender, keep.labels = TRUE),
+         edu = sjlabelled::as_label(edu, keep.labels = TRUE),
+         ethnicity = sjlabelled::as_label(ethnicity, keep.labels = TRUE),
+         income = sjlabelled::as_label(income, keep.labels = TRUE),
+         partner_relationship = sjlabelled::as_label(partner_relationship, keep.labels = TRUE),
+         employment = sjlabelled::as_label(employment, keep.labels = TRUE),
+         meetings_yn = sjlabelled::as_label(meetings_yn, keep.labels = TRUE),
+         outpatient_yn_ever = sjlabelled::as_label(outpatient_yn_ever, keep.labels = TRUE),
+         other_psych_treatment_yn = sjlabelled::as_label(other_psych_treatment_yn, keep.labels = TRUE),
+         er_yn_ever = sjlabelled::as_label(er_yn_ever, keep.labels = TRUE),
+         mat_yn = sjlabelled::as_label(mat_yn, keep.labels = TRUE),
+         healthservice_6 = sjlabelled::as_label(healthservice_6, keep.labels = TRUE),
+         inpatient_yn_ever = sjlabelled::as_label(inpatient_yn_ever, keep.labels = TRUE),
+         r_eadmits_yn = sjlabelled::as_label(r_eadmits_yn, keep.labels = TRUE),
+         relationship_status = sjlabelled::as_label(relationship_status, keep.labels = TRUE)) |> 
+  rename(readmits_yn = r_eadmits_yn,
+         other_medications_yn = healthservice_6)
+
+
+data <- data |> 
+  left_join(dsm |> 
+              mutate(dsm5_criteria = sjlabelled::as_label(dsm5_criteria, keep.labels = TRUE)) |> 
+              select(study_id, dsm5_criteria), by = "study_id")
+```
+
+
 Remove participants with inaccurate data (from Olivia's script):  
 
 - 167PT (baseline and 4 month): FAM passed away after baseline
@@ -49,12 +82,10 @@ data <- data |>
   filter(!study_id %in% c("167PT", "208FAM", "208PT", "365PT", "365FAM"))
 ```
 
-Recode variables (from Olivia's script)     
-
 195PT: reported prefer not to say for gender on baseline but reported male in TLFB data. Changing to male to match TLFB.
 ```{r}
 data <- data |> 
-  mutate(gender = if_else(study_id == "195PT", 2, gender))
+  mutate(gender = if_else(study_id == "195PT", "Man", gender))
 ```
 
 
@@ -63,13 +94,11 @@ Gender - 2 levels (male / non-male) - TLFB is also coded this way
 - 500PT: non-binary
 - 128FAM: Transgender women
 
-*KW: currently setting these two people to Non-male, however, I saw this in scales/measures doc - not enough non-man/ women responses to have 3rd level. For patients, those who don’t fall into groups set to missing*
-
 ```{r}
 data <- data |> 
-  mutate(gender_original = gender, 
-         gender = if_else(gender != 2, 1, gender),
-         gender = sjlabelled::set_labels(gender, labels = c("Non-male", "Male"))) 
+  mutate(gender_original = factor(gender), 
+         gender = if_else(gender != "Man", "non-male", "male"),
+         gender = factor(gender, levels = c("non-male", "male")))
 
 tabyl(data$gender_original)
 tabyl(data$gender)
@@ -79,39 +108,21 @@ tabyl(data$gender)
 Create binary covariate for race/ethnicity defined as: White only (non-Hispanic) vs. not White only   
 ```{r}
 data <- data |> 
-  mutate(race_white_only = if_else(ethnicity == 0 & race_1 == 1 &
+  mutate(race_white_only = as.factor(if_else(ethnicity == "No" & race_1 == 1 &
                                      race_2 == 0 & race_3 == 0 &
                                      race_4 == 0 & race_5 == 0 &
-                                     race_6 == 0, 1, 0))
+                                     race_6 == 0, "Yes", "No")))
 
 tabyl(data$race_white_only)
 ```
 
-Center non-binary covariates: age and edu
 
-```{r}
-data <- data |> 
-  mutate(age_c = age - mean(age, na.rm = TRUE))
-```
 
-*KW: education is not continuous. Is centering best transformation? Maybe instead pick a certain level? Centering on mean for now*
-```{r}
-sjlabelled::get_labels(data$edu)
+Recode data to have baseline scores of outcomes as variables for covariates   
 
-mean(data$edu, na.rm = TRUE)
-
-tabyl(data$edu)
-
-data <- data |> 
-  mutate(edu_c = edu - mean(edu, na.rm = TRUE))
-```
-
-Recode data to have baseline scores of outcomes as covariate   
-
-*KW: 36 study ids provided baseline info but no data at later time points*
 ```{r}
 baseline_values <- data |>  
-  filter(time == 0) |> 
+  filter(time == "Baseline") |> 
   select(study_id, 
          hdd_0 = per_heavy_drink_days, 
          pda_0 = per_days_abstinent, 
@@ -119,26 +130,23 @@ baseline_values <- data |>
          relationsatisf_0 = relationsatisf_scored, 
          abuse_0 = abuse_scored)
 
-baseline_values |> 
-  filter(!study_id %in% subset(data, time != 0)$study_id) |> 
-  print(n = Inf)
-```
-
-
-```{r}
 data <- data |> 
-  filter(time != 0) |> 
+  filter(time != "Baseline") |> 
   full_join(baseline_values, by = "study_id")
 ```
 
-*KW: confirm this is okay with John - remove 36 individuals with only baseline data*   
 
-*KW: Remove partners too?*
+*KW: 36 study_ids provided baseline info but no data at later time points - remove study_ids and corresponding dyad (53 participants in total)?*
+```{r}
+baseline_values |> 
+  filter(!study_id %in% subset(data, time != "Baseline")$study_id) |> 
+  print(n = Inf)
+```
 
 ```{r}
 dyad_ids <- baseline_values |> 
   mutate(dyad_id = str_sub(study_id, 1, 3)) |> 
-  filter(!study_id %in% subset(data, time != 0)$study_id) |> 
+  filter(!study_id %in% subset(data, time != "Baseline")$study_id) |> 
   pull(dyad_id) |> 
   unique()
   
@@ -157,38 +165,13 @@ data <- data |>
 ```
 
 
-Center baseline values of outcomes   
-
-```{r}
-data <- data |> 
-  mutate(hdd_0 = hdd_0 - mean(hdd_0, na.rm = TRUE),
-         pda_0 = pda_0 - mean(pda_0, na.rm = TRUE),
-         oq45_0 = oq45_0 - mean(oq45_0, na.rm = TRUE),
-         relationsatisf_0 = relationsatisf_0 - mean(relationsatisf_0, na.rm = TRUE),
-         abuse_0 = abuse_0 - mean(abuse_0, na.rm = TRUE))
-```
-
-
-Center time at the end of the intervention period (8 months).  
-
-```{r}
-sjlabelled::get_labels(data$time)
-
-tabyl(data$time)
-
-data <- data |> 
-  mutate(time_c = time - 2)
-```
-
-
 ### EDA
 
 Remove vars not used in analyses (e.g., keep scale score and remove individual items).   
 
 *KW: COVID acute/residual symptoms was originally listed as covariate but was removed per measures doc (Participants interpreted question differently).*  
 
-*KW: phq, promis, loneliness, coping, interaction scales not scored or in measures doc. Removed from analyses data set.*  
-
+*KW: phq, promis, alcohol problems, loneliness, coping, interaction scales not scored or in measures doc. Removed from analyses data set.*  
 ```{r}
 data <- data |> 
   select(-c(treatmentskills_1:treatmentskills_18_recode,
@@ -207,11 +190,19 @@ data <- data |>
             employmentstatus:notemployed_open, ethnicity:race_open, 
             livewith_1:livewith_open, er_yn, outpatient_yn, 
             inpatient_yn, n_days, mean_drinks_per_day, per_drink_days, 
-            covid_scored,redcap_event_name, recruitment_id)) |> 
-  rename(other_medications_yn = healthservice_6,
-         readmits_yn = r_eadmits_yn) |>  # renaming for descriptive/consistency
+            covid_scored,redcap_event_name, recruitment_id, 
+            socrates_recognition_scored, socrates_ambivalence_scored)) |> 
   relocate(study_id) |> 
   glimpse()
+```
+
+`time_string` matches `time` - remove `time_string`
+```{r}
+data |> 
+  tabyl(time, time_string)
+
+data <- data |> 
+  select(-time_string)
 ```
 
 
@@ -223,13 +214,13 @@ data |>
   length() # 340
 
 data |> 
-  filter(dyad == 1) |> # partner
+  filter(dyad == "Partner") |>
   pull(study_id) |> 
   unique() |> 
   length()
 
 data |> 
-  filter(dyad == 2) |> # patient
+  filter(dyad == "Patient") |> 
   pull(study_id) |> 
   unique() |> 
   length()
@@ -263,31 +254,28 @@ Missing data for just patients
 
 ```{r}
 data |> 
-  filter(dyad == 2) |> 
+  filter(dyad == "Patient") |> 
   naniar::miss_var_summary() |> 
   print(n = Inf)
 ```
 
-Remove `readmits_yn` as covariate due to low endorsement    
+Remove `readmits_yn` as covariate due to high missing data   
 
-*KW: not sure why so many NAs*
 ```{r}
-sjlabelled::get_labels(data$readmits_yn)
-
 data <- data |> 
   select(-readmits_yn)
 ```
-
-
 
 Missing data for partners
 
 ```{r}
 data |> 
-  filter(dyad == 1) |> 
+  filter(dyad == "Partner") |> 
   naniar::miss_var_summary() |> 
   print(n = Inf)
 ```
+
+*KW: Why abuse and days_app_use so high for partners and patients?*
 
 
 Participants in each arm
@@ -299,36 +287,31 @@ data |>
 ```
 
 
-Check stratification variables in arms - patient gender identity and alcohol use severity (moderate or severe AUD)    
+Check stratification variables in arms 
 
-DSM5 criteria: 1 = severe, 2 = moderate, 3 = mild    
-Group: 0 = patient control, 1 = patient achess, 2 = patient famchess,  
-```{r}
-data <- data |> 
-  left_join(dsm |> select(study_id, dsm5_criteria), by = "study_id")
-
-data |> 
-  filter(dyad == 2) |> 
-  group_by(study_id) |> 
-  slice(1) |> 
-  tabyl(group, gender)
-
-data |> 
-  filter(dyad == 2) |> 
-  group_by(study_id) |> 
-  slice(1) |> 
-  tabyl(group, dsm5_criteria)
-```
-
-Demographic and study related variables    
-
-Time string matches time
+patient gender identity  
 ```{r}
 data |> 
-  tabyl(time, time_string)
+  filter(dyad == "Patient") |> 
+  group_by(study_id) |> 
+  slice(1) |> 
+  tabyl(arm, gender)
 ```
 
-*KW: discuss with John if we need to do anything with these notes*
+
+alcohol use severity (moderate or severe AUD vs mild)  
+```{r}
+data |> 
+  filter(dyad == "Patient") |>
+  mutate(dsm5_criteria = if_else(dsm5_criteria == "Mild (2-3 symptoms)", 
+                                 "Mild", "Moderate/Severe")) |> 
+  group_by(study_id) |> 
+  slice(1) |> 
+  tabyl(arm, dsm5_criteria)
+```
+
+
+Study Notes
 ```{r}
 data |> 
   filter(!comments == "") |> 
@@ -337,56 +320,65 @@ data |>
 
 Income
 ```{r}
-sjlabelled::get_labels(data$income)
-
 tabyl(data$income)
 ```
 
 Partner relationship
 ```{r}
-sjlabelled::get_labels(data$partner_relationship)
-
 tabyl(data$partner_relationship)
 ```
 
 Employment
 ```{r}
-sjlabelled::get_labels(data$employment)
-
 tabyl(data$employment)
 ```
 
 Relationship status with partner
 ```{r}
-sjlabelled::get_labels(data$relationship_status)
-
 tabyl(data$relationship_status)
 
 data |> 
-  filter(relationship_status == 4 & relationship_status_open != "") |>
+  filter(relationship_status == "Other" & relationship_status_open != "") |>
   pull(relationship_status_open)
 ```
 
 univariate descriptives of covariates, mediators, moderators and outcome variables
 ```{r}
 data |> 
-  select(age, edu, days_app_use:abuse_0, -gender_original, -age_c, 
+  select(age, edu, days_app_use:abuse_0, -gender_original, 
          -relationship_status, - relationship_status_open) |> 
   skimr::skim()
 ```
 
-Bivariate correlations for Patient  
-
-*KW: simplify?*    
+Bivariate correlations with **Patient Primary Outcome** `per_heavy_drink_days`
 
 ```{r}
-data |> 
-  filter(dyad == 2) |> 
-  select(age, edu, days_app_use:abuse_0, -gender_original, -age_c,
-         -treatmentskills_scored, -relationship_status, 
-         -relationship_status_open) |> 
+cor_patient <- data |> 
+  filter(dyad == "Patient") |> 
+  select(per_heavy_drink_days, gender:race_white_only, 
+         -c(relationship_status_open, gender_original, treatmentskills_scored)) |> 
+  mutate(across(where(is.factor), as.numeric)) |> 
   cor(use = "pairwise.complete.obs") |> 
   round(2)
+
+cor_patient[,1]
+```
+
+
+Bivariate correlations with **Partner Primary Outcome** `oq45_scored`
+
+```{r}
+cor_partner <- data |> 
+  filter(dyad == "Partner") |> 
+  select(oq45_scored, gender:race_white_only, 
+         -c(relationship_status_open, gender_original, 
+            socrates_scored, dsm5_criteria, per_days_abstinent, 
+            per_heavy_drink_days)) |> 
+  mutate(across(where(is.factor), as.numeric)) |> 
+  cor(use = "pairwise.complete.obs") |> 
+  round(2)
+
+cor_partner[,1]
 ```
 
 
