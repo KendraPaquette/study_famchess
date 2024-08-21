@@ -54,8 +54,9 @@ data <- data |>
          meetings_yn = sjlabelled::as_label(meetings_yn, keep.labels = TRUE),
          outpatient_yn_ever = sjlabelled::as_label(outpatient_yn_ever, 
                                                    keep.labels = TRUE),
-         other_psych_treatment_yn = sjlabelled::as_label(other_psych_treatment_yn,
-                                                         keep.labels = TRUE),
+         other_psych_treatment_yn = 
+           sjlabelled::as_label(other_psych_treatment_yn,
+                                keep.labels = TRUE),
          er_yn_ever = sjlabelled::as_label(er_yn_ever, keep.labels = TRUE),
          mat_yn = sjlabelled::as_label(mat_yn, keep.labels = TRUE),
          healthservice_6 = sjlabelled::as_label(healthservice_6, 
@@ -71,8 +72,9 @@ data <- data |>
 
 data <- data |> 
   left_join(dsm |> 
-              mutate(dsm5_criteria = sjlabelled::as_label(dsm5_criteria, 
-                                                          keep.labels = TRUE)) |> 
+              mutate(dsm5_criteria = 
+                       sjlabelled::as_label(dsm5_criteria,
+                                            keep.labels = TRUE)) |> 
               select(study_id, dsm5_criteria), by = "study_id")
 ```
 
