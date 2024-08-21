@@ -178,7 +178,9 @@ data <- data |>
 
 Remove vars not used in analyses (e.g., keep scale score and remove individual items).   
 
-*KW: COVID acute/residual symptoms was originally listed as covariate but was removed per measures doc (Participants interpreted question differently).*  
+*COVID acute/residual symptoms was originally listed as covariate but was removed per measures doc (Participants interpreted question differently).*  
+
+*readmits_yn removed as potential covariate due to low variability per measures doc.*
 
 *KW: phq, promis, alcohol problems, loneliness, coping, interaction scales not scored or in measures doc. Removed from analyses data set.*  
 ```{r}
@@ -200,7 +202,7 @@ data <- data |>
             livewith_1:livewith_open, er_yn, outpatient_yn, 
             inpatient_yn, n_days, mean_drinks_per_day, per_drink_days, 
             covid_scored,redcap_event_name, recruitment_id, 
-            socrates_recognition_scored, socrates_ambivalence_scored)) |> 
+            socrates_recognition_scored, socrates_ambivalence_scored, readmits_yn)) |> 
   relocate(study_id) |> 
   glimpse()
 ```
@@ -257,9 +259,8 @@ data |>
 
 Missing data for just patients     
 
-- treatmentskills not applicable to patients
-- abuse and readmits have high missing data
-- Why days_app_use missing so high? 
+- `treatmentskills` not applicable to patients
+- Why `abuse_scored`/`abuse_0` and `days_app_use` missing so high? 
 
 ```{r}
 data |> 
@@ -268,12 +269,6 @@ data |>
   print(n = Inf)
 ```
 
-Remove `readmits_yn` as covariate due to high missing data   
-
-```{r}
-data <- data |> 
-  select(-readmits_yn)
-```
 
 Missing data for partners
 
