@@ -369,7 +369,7 @@
 <span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(baseline_values, <span class="at">by =</span> <span class="st">"study_id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
 <p>36 study_ids provided baseline info but no data at later time points - remove study_ids</p>
-<p><em>Ask PIs about removing corresponding dyad (53 participants in total)?</em></p>
+<p><em>Ask PIs about removing corresponding dyad (53 participants in total). Given that we removed patient due to partner passing away after baseline I am removing corresponding dyad.</em></p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [9]:</pre></div><div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>baseline_values <span class="sc">|&gt;</span> </span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>study_id <span class="sc">%in%</span> <span class="fu">subset</span>(data, time <span class="sc">!=</span> <span class="st">"Baseline"</span>)<span class="sc">$</span>study_id) <span class="sc">|&gt;</span> </span>

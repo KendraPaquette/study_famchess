@@ -147,7 +147,7 @@ data <- data |>
 
 36 study_ids provided baseline info but no data at later time points - remove study_ids    
 
-*Ask PIs about removing corresponding dyad (53 participants in total)?*
+*Ask PIs about removing corresponding dyad (53 participants in total). Given that we removed patient due to partner passing away after baseline I am removing corresponding dyad.*
 ```{r}
 baseline_values |> 
   filter(!study_id %in% subset(data, time != "Baseline")$study_id) |> 
