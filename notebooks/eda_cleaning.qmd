@@ -145,7 +145,9 @@ data <- data |>
 ```
 
 
-*KW: 36 study_ids provided baseline info but no data at later time points - remove study_ids and corresponding dyad (53 participants in total)?*
+36 study_ids provided baseline info but no data at later time points - remove study_ids    
+
+*Ask PIs about removing corresponding dyad (53 participants in total)?*
 ```{r}
 baseline_values |> 
   filter(!study_id %in% subset(data, time != "Baseline")$study_id) |> 
@@ -182,7 +184,7 @@ Remove vars not used in analyses (e.g., keep scale score and remove individual i
 
 *readmits_yn removed as potential covariate due to low variability per measures doc.*
 
-*KW: phq, promis, alcohol problems, loneliness, coping, interaction scales not scored or in measures doc. Removed from analyses data set.*  
+*phq, promis, alcohol problems, loneliness, coping, interaction scales not scored or in measures doc. Removed from analyses data set. From Kasey: My understanding is that the measures document lists the scale items that will be our primary/secondary outcomes, mediators, and moderators. I think we scored those in the data set as exploratory items but not what we will be looking at directly for this paper.*  
 ```{r}
 data <- data |> 
   select(-c(treatmentskills_1:treatmentskills_18_recode,
@@ -260,7 +262,8 @@ data |>
 Missing data for just patients     
 
 - `treatmentskills` not applicable to patients
-- Why `abuse_scored`/`abuse_0` and `days_app_use` missing so high? 
+- `days_app_use` *Note from Kasey: For the days of app use it would only be for participants who received the app (we had three study arms, one where both PT and FAM recieved the app, one where only the PT received the app and one where neither received the app), so 50% is the MOST we should have of app use since half of the participants weren't able to get the app.*   
+- `abuse_scored`/`abuse_0` *Note from Kasey - They should only have a score if they said "yes" to having experienced abuse, so missing data would mean they had not experienced any.*
 
 ```{r}
 data |> 
@@ -278,8 +281,6 @@ data |>
   naniar::miss_var_summary() |> 
   print(n = Inf)
 ```
-
-*KW: Why abuse and days_app_use so high for partners and patients?*
 
 
 Participants in each arm
