@@ -48,24 +48,31 @@ data <- data |>
          edu = sjlabelled::as_label(edu, keep.labels = TRUE),
          ethnicity = sjlabelled::as_label(ethnicity, keep.labels = TRUE),
          income = sjlabelled::as_label(income, keep.labels = TRUE),
-         partner_relationship = sjlabelled::as_label(partner_relationship, keep.labels = TRUE),
+         partner_relationship = sjlabelled::as_label(partner_relationship, 
+                                                     keep.labels = TRUE),
          employment = sjlabelled::as_label(employment, keep.labels = TRUE),
          meetings_yn = sjlabelled::as_label(meetings_yn, keep.labels = TRUE),
-         outpatient_yn_ever = sjlabelled::as_label(outpatient_yn_ever, keep.labels = TRUE),
-         other_psych_treatment_yn = sjlabelled::as_label(other_psych_treatment_yn, keep.labels = TRUE),
+         outpatient_yn_ever = sjlabelled::as_label(outpatient_yn_ever, 
+                                                   keep.labels = TRUE),
+         other_psych_treatment_yn = sjlabelled::as_label(other_psych_treatment_yn,
+                                                         keep.labels = TRUE),
          er_yn_ever = sjlabelled::as_label(er_yn_ever, keep.labels = TRUE),
          mat_yn = sjlabelled::as_label(mat_yn, keep.labels = TRUE),
-         healthservice_6 = sjlabelled::as_label(healthservice_6, keep.labels = TRUE),
-         inpatient_yn_ever = sjlabelled::as_label(inpatient_yn_ever, keep.labels = TRUE),
+         healthservice_6 = sjlabelled::as_label(healthservice_6, 
+                                                keep.labels = TRUE),
+         inpatient_yn_ever = sjlabelled::as_label(inpatient_yn_ever, 
+                                                  keep.labels = TRUE),
          r_eadmits_yn = sjlabelled::as_label(r_eadmits_yn, keep.labels = TRUE),
-         relationship_status = sjlabelled::as_label(relationship_status, keep.labels = TRUE)) |> 
+         relationship_status = sjlabelled::as_label(relationship_status, 
+                                                    keep.labels = TRUE)) |> 
   rename(readmits_yn = r_eadmits_yn,
          other_medications_yn = healthservice_6)
 
 
 data <- data |> 
   left_join(dsm |> 
-              mutate(dsm5_criteria = sjlabelled::as_label(dsm5_criteria, keep.labels = TRUE)) |> 
+              mutate(dsm5_criteria = sjlabelled::as_label(dsm5_criteria, 
+                                                          keep.labels = TRUE)) |> 
               select(study_id, dsm5_criteria), by = "study_id")
 ```
 
