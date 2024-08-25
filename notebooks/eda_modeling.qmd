@@ -435,8 +435,9 @@ lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + inpatient_yn_ever +
 `other_psych_treatment_yn` - not significant
 ```{r}
 lmer(per_days_abstinent ~ time_c*arm_c + pda_0 + other_psych_treatment_yn + 
-       (1 + time_c | study_id), data = subset(data, dyad == 2)) |> 
-  sjPlot::tab_model(show.re.var = F, show.icc = F, terms = c("other_psych_treatment_yn"))
+       (1 + time_c | study_id), data = subset(data, dyad == "Patient")) |> 
+  sjPlot::tab_model(show.re.var = F, show.icc = F, 
+                    terms = c("other_psych_treatment_ynYes"))
 ```
 
 `other_medications_yn` - not significant
