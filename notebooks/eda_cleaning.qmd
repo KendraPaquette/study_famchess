@@ -147,7 +147,7 @@ data <- data |>
 
 36 study_ids provided baseline info but no data at later time points - remove study_ids    
 
-*Ask PIs about removing corresponding dyad (53 participants in total)?*
+*Ask PIs about removing corresponding dyad (53 participants in total). Given that we removed patient due to partner passing away after baseline I am removing corresponding dyad.*
 ```{r}
 baseline_values |> 
   filter(!study_id %in% subset(data, time != "Baseline")$study_id) |> 
@@ -263,7 +263,10 @@ Missing data for just patients
 
 - `treatmentskills` not applicable to patients
 - `days_app_use` *Note from Kasey: For the days of app use it would only be for participants who received the app (we had three study arms, one where both PT and FAM recieved the app, one where only the PT received the app and one where neither received the app), so 50% is the MOST we should have of app use since half of the participants weren't able to get the app.*   
-- `abuse_scored`/`abuse_0` *Note from Kasey - They should only have a score if they said "yes" to having experienced abuse, so missing data would mean they had not experienced any.*
+- `abuse_scored`/`abuse_0` *Note from Kasey - They should only have a score if they said "yes" to having experienced abuse, so missing data would mean they had not experienced any.*   
+     
+
+*KW: Discuss how to handle abuse. This is a composite measure - according to codebook: If a case does not contain responses to at least 70% of items, it should be counted as missing (no score computed).*
 
 ```{r}
 data |> 

@@ -1,0 +1,225 @@
+---
+title: famCHESS app use and no heavy drinking days
+author: Kendra Wyant
+editor_options: 
+  chunk_output_type: console
+---
+
+
+## Setup
+
+```{r}
+options(conflicts.policy = "depends.ok")
+suppressMessages(library(tidyverse))
+library(Matrix, exclude = c("expand", "pack", "unpack"))
+library(lme4)
+theme_set(theme_classic()) 
+
+devtools::source_url("https://github.com/jjcurtin/lab_support/blob/main/format_path.R?raw=true")
+path_data <- format_path("studydata/famchess")
+```
+
+
+## Data
+
+Read in and subset data
+```{r}
+data <- haven::read_sav(here::here(path_data, "Famchess_clean_combined_FINAL.sav")) |> 
+  janitor::clean_names() |> 
+  mutate(dyad = sjlabelled::as_label(dyad, keep.labels = TRUE),
+         arm = sjlabelled::as_label(arm, keep.labels = TRUE),
+         group = sjlabelled::as_label(group, keep.labels = TRUE),
+         time = sjlabelled::as_label(time, keep.labels = TRUE)) |> 
+  select(study_id, recruitment_id, dyad, arm, group, time, 
+         per_heavy_drink_days, days_app_use) |> 
+  glimpse()
+```
+
+Remove participants with inaccurate data (from Olivia's script):  
+
+- 167PT (baseline and 4 month): FAM passed away after baseline
+- 208FAM & 208PT (noted on all timepoints): Might be wholly unreliable since we suspect he is his own partner
+- 365PT (noted on 1 timepoint): Answered relationship questions about her dog, not her son
+- 365FAM (noted on 1 timepoint): Answered relationship questions about romantic partner, not his mom
+
+```{r}
+data <- data |> 
+  filter(!study_id %in% c("167PT", "208FAM", "208PT", "365PT", "365FAM"))
+```
+
+
+## Analyses
+
+### No Heavy Drinking Days (percent)
+
+Center time at the end of the intervention period (8 months). 
+```{r}
+data <- data |> 
+  mutate(time_c = as.numeric(time) - 3)
+```
+
+
+Calculate perc no heavy drinking days 
+```{r}
+data <- data |> 
+  mutate(per_no_heavy_drink_days = as.numeric(100 - per_heavy_drink_days))
+```
+
+#### Test for significant differences
+
+set contrasts
+```{r}
+col_names <- c("achess_and_fam_vs_control", "achess_vs_fam")
+arm_contrasts <- matrix(c(-2/3, 1/3, 1/3, 0, 1/2, -1/2),
+                          nrow = 3, ncol = 2,
+                          dimnames = list(levels(data$arm), col_names))
+
+data <- data |> 
+  mutate(arm_c = as.factor(arm))
+
+contrasts(data$arm_c) <- arm_contrasts
+contrasts(data$arm_c)
+```
+
+
+Fit model   
+
+```{r}
+m_no_heavy_drink <- lmer(per_no_heavy_drink_days ~ time_c*arm_c + 
+                             (1 | study_id), 
+                         data = subset(data, dyad == "Patient"))
+
+sjPlot::tab_model(m_no_heavy_drink, show.re.var = F, show.icc = F)
+```
+
+
+Effect size (partial eta squared) for time
+```{r}
+(sum(residuals(lm(per_no_heavy_drink_days ~ arm_c + time_c:arm_c, 
+                  data = subset(data, dyad == "Patient")))^2)- 
+   sum(residuals(m_no_heavy_drink)^2))/
+  sum(residuals(lm(per_no_heavy_drink_days ~ arm_c + time_c:arm_c, 
+                  data = subset(data, dyad == "Patient")))^2) 
+```
+
+
+#### Results 
+
+There was a significant main effect of time, $\text{95% CI}(b) = [8.17 - 11.43], t(194) = 9.8, p < .001, \eta_p^2 = .66$. For every one unit increase in time, percentage of no heavy drinking days increased by 9.8% when averaging across patient groups. There was not a significant main effect of patient group and there was not a significant interaction between patient group and time. 
+
+
+```{r}
+data |> 
+  filter(dyad == "Patient") |> 
+  group_by(group, time) |> 
+  summarise(mean_per_no_heavy_drink_days = 
+              mean(per_no_heavy_drink_days, na.rm = TRUE), .groups = "drop") |> 
+  ggplot(aes(x = time, y = mean_per_no_heavy_drink_days, group = group)) +
+  geom_line(aes(color = group)) +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(title = "Percent No Heavy Drinking Days over Time",
+       x = NULL,
+       y = "Mean % no heavy drinking days",
+       color = NULL)
+```
+
+
+
+
+### Days of technology use
+
+Subset data to only groups with app
+```{r}
+data_app <- data |> 
+  filter(group %in% c("ACHESS Patient", "FAMCHESS Patient", "FAMCHESS Partner")) |> 
+  mutate(group = factor(group, levels = c("ACHESS Patient", "FAMCHESS Patient", 
+                                            "FAMCHESS Partner")))
+```
+
+
+set contrasts 
+```{r}
+col_names <- c("achess_vs_famchess")
+group_contrasts <- matrix(c(1, -.5, -.5),
+                          nrow = 3, ncol = 1,
+                          dimnames = list(c(levels(data_app$group)), col_names))
+
+data_app <- data_app |> 
+  mutate(group_c = as.factor(group))
+
+contrasts(data_app$group_c) <- group_contrasts
+contrasts(data_app$group_c)
+```
+
+Fit model   
+
+```{r}
+m_days_app_use <- lmer(days_app_use ~ time_c*group_c + 
+                             (1 | study_id), 
+                         data = data_app)
+
+sjPlot::tab_model(m_days_app_use, show.re.var = F, show.icc = F)
+```
+
+Sig effect of group - set contrasts for other comparisons
+```{r}
+col_names <- c("famchess_px_vs_others", "famchess_part_vs_others")
+group_contrasts <- matrix(c(-.5, 1, -.5, -.5, -.5, 1),
+                          nrow = 3, ncol = 2,
+                          dimnames = list(c(levels(data_app$group)), col_names))
+
+data_app <- data_app |> 
+  mutate(group_c = as.factor(group))
+
+contrasts(data_app$group_c) <- group_contrasts
+contrasts(data_app$group_c)
+```
+
+```{r}
+m_days_app_use_post <- lmer(days_app_use ~ time_c + group_c + 
+                             (1 | study_id), 
+                         data = data_app)
+
+sjPlot::tab_model(m_days_app_use_post, show.re.var = F, show.icc = F)
+```
+
+Effect sizes for significant effects   
+
+Time
+```{r}
+(sum(residuals(lm(days_app_use ~ group_c + time_c:group_c, 
+                  data = data_app))^2)- 
+   sum(residuals(m_days_app_use)^2))/
+  sum(residuals(lm(days_app_use ~ group_c + time_c:group_c, 
+                  data = data_app))^2) 
+```
+
+Group
+```{r}
+(sum(residuals(lm(days_app_use ~ time_c + time_c:group_c, 
+                  data = data_app))^2)- 
+   sum(residuals(m_days_app_use)^2))/
+  sum(residuals(lm(days_app_use ~ time_c + time_c:group_c, 
+                  data = data_app))^2) 
+```
+
+
+#### Results 
+
+There was a significant main effect of time, $\text{95% CI}(b) = [-20.41 - -15.25], t(180) = -17.83, p < .001, \eta_p^2 = .67$. For every one unit increase in time, days of app usage decreased by about 18 days when averaging across app groups. There was a significant main effect of group, $\text{95% CI}(b) = [-16.43 - -1.58], t(180) = -9.01, p = .018, \eta_p^2 = .68$. Post hoc analyses revealed that patients given the famCHESS app used the app significantly more days than partners given the famCHESS app or patients given the ACHESS app when averaging over time, $\text{95% CI}(b) = [0.41 -14.47], t(180) = 7.44, p = .038$. On average participants given the famCHESS patient app used the app 7 more days than participants given the other two apps when averaging over time. There was not a significant interaction between group and time. 
+
+
+```{r}
+data_app |> 
+  group_by(group, time) |> 
+  summarise(mean_days_app_use = 
+              mean(days_app_use, na.rm = TRUE), .groups = "drop") |> 
+  filter(time != "Baseline") |> 
+  ggplot(aes(x = time, y = mean_days_app_use, group = group)) +
+  geom_line(aes(color = group)) +
+  scale_y_continuous(limits = c(0, 120)) +
+  labs(title = "Days of App Use over Time",
+       x = NULL,
+       y = "Mean days of app use",
+       color = NULL)
+```
