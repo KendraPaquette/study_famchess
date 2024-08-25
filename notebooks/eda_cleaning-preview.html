@@ -677,6 +677,7 @@ $ abuse_0                  &lt;dbl&gt; 9, 9, 9, 2, 2, 2, 17, 17, 17, 8, 8, 8, 5,
 </li>
 <li><code>abuse_scored</code>/<code>abuse_0</code> <em>Note from Kasey - They should only have a score if they said “yes” to having experienced abuse, so missing data would mean they had not experienced any.</em></li>
 </ul>
+<p><em>KW: Discuss how to handle abuse. This is a composite measure - according to codebook: If a case does not contain responses to at least 70% of items, it should be counted as missing (no score computed).</em></p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [16]:</pre></div><div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dyad <span class="sc">==</span> <span class="st">"Patient"</span>) <span class="sc">|&gt;</span> </span>
